@@ -816,34 +816,25 @@ export default function App() {
       {/* ========================================================================= */}
       {currentView === 'landing' && (
         <>
-          <section className="relative min-h-[calc(100dvh-5rem)] flex items-center justify-center overflow-hidden py-20 lg:py-0">
-            <div className="absolute inset-0 z-0">
+          <section className="relative min-h-[calc(100dvh-5rem)] flex items-center justify-center overflow-hidden py-20 lg:py-0 bg-slate-950">
+            <div className="absolute inset-0 z-0 bg-slate-950">
               <img 
                 src="/images/hero.webp" 
                 alt="Bariloche y Lago Nahuel Huapi"
+                loading="eager"
+                fetchPriority="high"
+                decoding="sync"
                 className="w-full h-full object-cover scale-105 filter brightness-95"
               />
               <div className="absolute inset-0 bg-gradient-to-b from-[#0F172A]/85 via-[#0F172A]/65 to-[#F8FAFC]" />
             </div>
 
             <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 relative z-10 space-y-8 pt-6">
-              <motion.div 
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                style={{ willChange: 'opacity, transform' }}
-                className="transform-gpu max-w-3xl space-y-6"
-              >
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.1, duration: 0.4 }}
-                  style={{ willChange: 'opacity, transform' }}
-                  className="transform-gpu inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700 text-xs font-mono text-slate-200 shadow-md"
-                >
+              <div className="max-w-3xl space-y-6">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700 text-xs font-mono text-slate-200 shadow-md">
                   <MapPin className="w-3.5 h-3.5 text-[#00A896]" />
                   <span>BARILOCHE · CORREDOR DE LOS LAGOS · CHILE</span>
-                </motion.div>
+                </div>
 
                 <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] text-white drop-shadow-md">
                   Descubrí Bariloche con <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-[#00A896]">Grupo Visión</span>
@@ -854,10 +845,7 @@ export default function App() {
                 </p>
 
                 <div className="pt-2">
-                  <motion.div 
-                    whileHover={{ y: -2 }}
-                    className="p-2.5 rounded-2xl bg-white/95 backdrop-blur-xl max-w-2xl border border-slate-200 shadow-2xl flex flex-col sm:flex-row items-center gap-3 transition-shadow"
-                  >
+                  <div className="p-2.5 rounded-2xl bg-white/95 backdrop-blur-xl max-w-2xl border border-slate-200 shadow-2xl flex flex-col sm:flex-row items-center gap-3">
                     <div className="flex items-center gap-3 w-full px-3 py-1">
                       <Search className="w-5 h-5 text-[#00A896] shrink-0" />
                       <input 
@@ -876,9 +864,9 @@ export default function App() {
                       <span>Buscar</span>
                       <ChevronRight className="w-4 h-4" />
                     </a>
-                  </motion.div>
+                  </div>
                 </div>
-              </motion.div>
+              </div>
 
               {/* Feature Cards Grid */}
               <div className="pt-8 border-t border-white/20 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono">
@@ -888,14 +876,9 @@ export default function App() {
                   { icon: Car, label: 'FLOTA PROPIA', title: 'Vans & Minibuses' },
                   { icon: Building2, label: 'OFICINAS', title: 'Centro Cívico & Central' }
                 ].map((item, idx) => (
-                  <motion.div 
+                  <div 
                     key={idx}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 + idx * 0.08, duration: 0.4 }}
-                    style={{ willChange: 'opacity, transform' }}
-                    whileHover={{ y: -4, scale: 1.02 }}
-                    className="transform-gpu p-4 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-lg flex items-center gap-3 cursor-default"
+                    className="p-4 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-lg flex items-center gap-3 cursor-default hover:-translate-y-1 hover:scale-[1.02] transition-transform duration-200"
                   >
                     <div className="w-10 h-10 rounded-xl bg-[#00A896]/10 border border-[#00A896]/20 flex items-center justify-center text-[#00A896] font-bold shrink-0">
                       <item.icon className="w-5 h-5" />
@@ -904,7 +887,7 @@ export default function App() {
                       <span className="text-slate-500 block text-[10px]">{item.label}</span>
                       <span className="text-slate-900 font-bold text-sm">{item.title}</span>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -944,20 +927,20 @@ export default function App() {
 
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center items-stretch max-w-7xl mx-auto">
-              {paginatedExcursions.map((item, index) => (
-                <motion.div
+              {paginatedExcursions.map((item) => (
+                <div
                   key={item.id}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.1 }}
-                  transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.25), ease: [0.16, 1, 0.3, 1] }}
-                  style={{ willChange: 'opacity, transform' }}
-                  whileHover={{ y: -6 }}
                   onClick={() => { setActiveExcursion(item); setIsExcursionModalOpen(true); }}
-                  className="transform-gpu group cursor-pointer rounded-3xl overflow-hidden bg-white border border-slate-200/90 shadow-md hover:shadow-2xl hover:shadow-[#00A896]/15 hover:border-[#00A896]/50 transition-all duration-300 flex flex-col justify-between h-full"
+                  className="group cursor-pointer rounded-3xl overflow-hidden bg-white border border-slate-200/90 shadow-md hover:shadow-2xl hover:shadow-[#00A896]/15 hover:border-[#00A896]/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full"
                 >
-                  <div className="relative h-60 w-full overflow-hidden shrink-0">
-                    <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                  <div className="relative h-60 w-full overflow-hidden shrink-0 bg-slate-200">
+                    <img 
+                      src={item.image} 
+                      alt={item.title} 
+                      loading="eager"
+                      decoding="async"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
                     <div className="absolute top-3 left-3 flex gap-2">
                       <span className="px-3 py-1 rounded-full bg-white/95 text-slate-900 text-[10px] font-mono font-bold shadow-md">{item.category}</span>
@@ -988,7 +971,7 @@ export default function App() {
                       </button>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
 
