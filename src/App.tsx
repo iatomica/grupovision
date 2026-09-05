@@ -610,8 +610,8 @@ export default function App() {
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col selection:bg-[#00A896] selection:text-white font-sans">
       
       {/* 1. TOP UTILITY BAR */}
-      <div className="bg-slate-100 border-b border-slate-200 py-2.5 px-6 text-xs text-slate-600 font-mono flex flex-wrap justify-between items-center gap-4">
-        <div className="flex items-center gap-4 flex-wrap">
+      <div className="bg-slate-100 border-b border-slate-200 py-2 px-4 sm:px-6 text-[11px] sm:text-xs text-slate-600 font-mono flex flex-wrap justify-between items-center gap-2 sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
           <span className="flex items-center gap-1.5 text-slate-800 font-semibold">
             <ShieldCheck className="w-3.5 h-3.5 text-[#00A896]" />
             GRUPO VISIÓN EVT · Legajo 12044
@@ -623,7 +623,7 @@ export default function App() {
           </span>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           {/* Notifications Bell */}
           {userRole && (
             <button
@@ -632,7 +632,7 @@ export default function App() {
               title="Notificaciones & Menciones"
             >
               <Bell className="w-3.5 h-3.5 text-[#00A896]" />
-              <span className="font-bold text-[11px]">Notificaciones</span>
+              <span className="font-bold text-[11px] hidden sm:inline">Notificaciones</span>
               {unreadNotificationsCount > 0 && (
                 <span className="w-4 h-4 rounded-full bg-rose-500 text-white font-mono text-[9px] font-bold flex items-center justify-center">
                   {unreadNotificationsCount}
@@ -642,13 +642,13 @@ export default function App() {
           )}
 
           {userRole ? (
-            <div className="flex items-center gap-3">
-              <span className="px-2.5 py-1 rounded-md bg-[#00A896]/10 text-[#00A896] font-bold text-[11px] flex items-center gap-1">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-[#00A896]/10 text-[#00A896] font-bold text-[10px] sm:text-[11px] flex items-center gap-1">
                 <User className="w-3 h-3" /> {userName}
               </span>
               <button 
                 onClick={handleLogout} 
-                className="hover:text-red-600 font-semibold flex items-center gap-1 transition-colors"
+                className="hover:text-red-600 font-semibold flex items-center gap-1 transition-colors text-[11px] sm:text-xs"
               >
                 <LogOut className="w-3.5 h-3.5" /> Salir
               </button>
@@ -656,7 +656,7 @@ export default function App() {
           ) : (
             <button 
               onClick={() => setCurrentView('login')}
-              className="hover:text-[#00A896] flex items-center gap-1 font-bold transition-colors text-slate-800"
+              className="hover:text-[#00A896] flex items-center gap-1 font-bold transition-colors text-slate-800 text-[11px] sm:text-xs"
             >
               <Lock className="w-3.5 h-3.5 text-[#00A896]" /> Acceder
             </button>
@@ -665,24 +665,21 @@ export default function App() {
       </div>
 
       {/* 2. MAIN HEADER NAVIGATION */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 h-20 flex items-center shadow-sm">
-        <div className="max-w-7xl w-full mx-auto px-6 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 h-16 sm:h-20 flex items-center shadow-sm">
+        <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 flex items-center justify-between gap-3">
           
           {/* Logo */}
           <a 
             href="#" 
             onClick={(e) => { e.preventDefault(); setCurrentView('landing'); }} 
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-2.5 group shrink-0"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#00A896] to-[#028090] flex items-center justify-center shadow-md shadow-[#00A896]/20 group-hover:scale-105 transition-transform duration-300">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#00A896] to-[#028090] flex items-center justify-center shadow-md shadow-[#00A896]/20 group-hover:scale-105 transition-transform duration-300">
               <Globe className="w-5 h-5 text-white" />
             </div>
-            <div>
-              <span className="font-black text-xl tracking-tight text-slate-900 flex items-center gap-1">
-                GRUPO VISIÓN <span className="text-[#00A896] text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-[#00A896]/10 border border-[#00A896]/20">TURISMO</span>
-              </span>
-              <span className="text-[10px] uppercase tracking-widest text-slate-500 block font-mono">San Carlos de Bariloche</span>
-            </div>
+            <span className="font-black text-lg sm:text-xl tracking-tight text-slate-900 whitespace-nowrap">
+              GRUPO VISIÓN
+            </span>
           </a>
 
           {/* Full Desktop Navigation Header */}
@@ -717,12 +714,12 @@ export default function App() {
           </nav>
 
           {/* Right Action Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <a 
               href="https://wa.me/5492944235278?text=Hola!%20Deseo%20consultar%20por%20excursiones%20en%20Bariloche" 
               target="_blank"
               rel="noreferrer"
-              className="hidden sm:inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-black font-extrabold text-xs px-4 py-2.5 rounded-xl transition-all shadow-sm"
+              className="hidden sm:inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-black font-extrabold text-xs px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl transition-all shadow-sm shrink-0"
             >
               <MessageCircle className="w-4 h-4 fill-current" />
               <span>WhatsApp Directo</span>
@@ -731,17 +728,17 @@ export default function App() {
             {userRole ? (
               <button
                 onClick={() => setCurrentView(userRole === 'admin' ? 'admin-board' : userRole === 'asesor' ? 'advisor-board' : 'traveler-board')}
-                className="inline-flex items-center gap-2 bg-[#00A896] hover:bg-[#028090] text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-md shadow-[#00A896]/20"
+                className="inline-flex items-center gap-1.5 sm:gap-2 bg-[#00A896] hover:bg-[#028090] text-white font-bold text-[11px] sm:text-xs px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl transition-all shadow-md shadow-[#00A896]/20 shrink-0"
               >
-                <Sliders className="w-4 h-4" />
+                <Sliders className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 <span>Panel {userRole === 'admin' ? 'Operativo' : userRole === 'asesor' ? 'Asesor' : 'VIP'}</span>
               </button>
             ) : (
               <button
                 onClick={() => setCurrentView('login')}
-                className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-md"
+                className="inline-flex items-center gap-1.5 sm:gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-[11px] sm:text-xs px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl transition-all shadow-md shrink-0"
               >
-                <Lock className="w-4 h-4 text-[#00A896]" />
+                <Lock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00A896]" />
                 <span>Acceder</span>
               </button>
             )}
@@ -749,9 +746,10 @@ export default function App() {
             {/* Mobile Menu Button */}
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-              className="md:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100"
+              className="md:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 active:scale-95 transition-all shrink-0"
+              aria-label="Abrir menú"
             >
-              <Menu className="w-6 h-6" />
+              {isMobileMenuOpen ? <X className="w-5 h-5 text-slate-900" /> : <Menu className="w-5 h-5 text-slate-900" />}
             </button>
           </div>
 
@@ -765,13 +763,50 @@ export default function App() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="md:hidden bg-white border-b border-slate-200 overflow-hidden px-6 py-4 space-y-3 text-sm font-semibold text-slate-800"
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="transform-gpu md:hidden bg-white border-b border-slate-200 overflow-hidden px-4 py-4 sm:px-6 space-y-3 text-sm font-semibold text-slate-800 shadow-xl"
           >
-            <a href="#excursiones" onClick={() => { setCurrentView('landing'); setIsMobileMenuOpen(false); }} className="block py-2 border-b border-slate-100">Excursiones</a>
-            <a href="#corredor" onClick={() => { setCurrentView('landing'); setIsMobileMenuOpen(false); }} className="block py-2 border-b border-slate-100">Corredor de los Lagos</a>
-            <a href="#nosotros" onClick={() => { setCurrentView('landing'); setIsMobileMenuOpen(false); }} className="block py-2 border-b border-slate-100">Quiénes Somos</a>
-            <button onClick={() => { setIsMobileMenuOpen(false); setIsOfficeModalOpen(true); }} className="block py-2 text-left w-full text-[#00A896]">Ver Sucursales & Horarios</button>
-            <button onClick={() => { setIsMobileMenuOpen(false); setCurrentView('login'); }} className="block py-2 text-left w-full text-slate-900 font-bold">Acceder al Sistema</button>
+            <a 
+              href="#excursiones" 
+              onClick={() => { setCurrentView('landing'); setIsMobileMenuOpen(false); }} 
+              className="py-2.5 border-b border-slate-100 flex items-center justify-between text-slate-800 hover:text-[#00A896]"
+            >
+              <span>Excursiones & Servicios</span>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </a>
+            <a 
+              href="#corredor" 
+              onClick={() => { setCurrentView('landing'); setIsMobileMenuOpen(false); }} 
+              className="py-2.5 border-b border-slate-100 flex items-center justify-between text-slate-800 hover:text-[#00A896]"
+            >
+              <span>Corredor de los Lagos</span>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </a>
+            <a 
+              href="#nosotros" 
+              onClick={() => { setCurrentView('landing'); setIsMobileMenuOpen(false); }} 
+              className="py-2.5 border-b border-slate-100 flex items-center justify-between text-slate-800 hover:text-[#00A896]"
+            >
+              <span>Quiénes Somos</span>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </a>
+            <button 
+              onClick={() => { setIsMobileMenuOpen(false); setIsOfficeModalOpen(true); }} 
+              className="py-2.5 border-b border-slate-100 text-left w-full text-[#00A896] flex items-center justify-between"
+            >
+              <span>Ver Sucursales & Horarios</span>
+              <Building2 className="w-4 h-4 text-[#00A896]" />
+            </button>
+            <a 
+              href="https://wa.me/5492944235278?text=Hola!%20Deseo%20consultar%20por%20excursiones%20en%20Bariloche" 
+              target="_blank" 
+              rel="noreferrer"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="w-full py-2.5 px-4 rounded-xl bg-[#25D366] text-black font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm"
+            >
+              <MessageCircle className="w-4 h-4 fill-current" />
+              <span>WhatsApp Directo Mostrador</span>
+            </a>
           </motion.div>
         )}
       </AnimatePresence>
@@ -791,18 +826,20 @@ export default function App() {
               <div className="absolute inset-0 bg-gradient-to-b from-[#0F172A]/85 via-[#0F172A]/65 to-[#F8FAFC]" />
             </div>
 
-            <div className="max-w-7xl w-full mx-auto px-6 relative z-10 space-y-8 pt-6">
+            <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 relative z-10 space-y-8 pt-6">
               <motion.div 
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="max-w-3xl space-y-6"
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                style={{ willChange: 'opacity, transform' }}
+                className="transform-gpu max-w-3xl space-y-6"
               >
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.1, duration: 0.5 }}
-                  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700 text-xs font-mono text-slate-200 shadow-md"
+                  transition={{ delay: 0.1, duration: 0.4 }}
+                  style={{ willChange: 'opacity, transform' }}
+                  className="transform-gpu inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700 text-xs font-mono text-slate-200 shadow-md"
                 >
                   <MapPin className="w-3.5 h-3.5 text-[#00A896]" />
                   <span>BARILOCHE · CORREDOR DE LOS LAGOS · CHILE</span>
@@ -853,11 +890,12 @@ export default function App() {
                 ].map((item, idx) => (
                   <motion.div 
                     key={idx}
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 + idx * 0.1, duration: 0.5 }}
+                    transition={{ delay: 0.2 + idx * 0.08, duration: 0.4 }}
+                    style={{ willChange: 'opacity, transform' }}
                     whileHover={{ y: -4, scale: 1.02 }}
-                    className="p-4 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-lg flex items-center gap-3 cursor-default"
+                    className="transform-gpu p-4 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-lg flex items-center gap-3 cursor-default"
                   >
                     <div className="w-10 h-10 rounded-xl bg-[#00A896]/10 border border-[#00A896]/20 flex items-center justify-center text-[#00A896] font-bold shrink-0">
                       <item.icon className="w-5 h-5" />
@@ -909,13 +947,14 @@ export default function App() {
               {paginatedExcursions.map((item, index) => (
                 <motion.div
                   key={item.id}
-                  initial={{ opacity: 0, y: 24 }}
+                  initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.5, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.25), ease: [0.16, 1, 0.3, 1] }}
+                  style={{ willChange: 'opacity, transform' }}
                   whileHover={{ y: -6 }}
                   onClick={() => { setActiveExcursion(item); setIsExcursionModalOpen(true); }}
-                  className="group cursor-pointer rounded-3xl overflow-hidden bg-white border border-slate-200/90 shadow-md hover:shadow-2xl hover:shadow-[#00A896]/15 hover:border-[#00A896]/50 transition-all duration-300 flex flex-col justify-between h-full"
+                  className="transform-gpu group cursor-pointer rounded-3xl overflow-hidden bg-white border border-slate-200/90 shadow-md hover:shadow-2xl hover:shadow-[#00A896]/15 hover:border-[#00A896]/50 transition-all duration-300 flex flex-col justify-between h-full"
                 >
                   <div className="relative h-60 w-full overflow-hidden shrink-0">
                     <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
@@ -1026,7 +1065,7 @@ export default function App() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <motion.div 
                   whileHover={{ y: -4 }}
-                  className="md:col-span-2 bg-slate-800/80 backdrop-blur-xl border border-slate-700/80 rounded-3xl p-8 space-y-6 flex flex-col justify-between shadow-xl"
+                  className="transform-gpu md:col-span-2 bg-slate-800/80 backdrop-blur-xl border border-slate-700/80 rounded-3xl p-8 space-y-6 flex flex-col justify-between shadow-xl"
                 >
                   <div className="space-y-4">
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-cyan-500/20">
@@ -1056,7 +1095,7 @@ export default function App() {
 
                 <motion.div 
                   whileHover={{ y: -4 }}
-                  className="bg-slate-800/80 backdrop-blur-xl border border-slate-700/80 rounded-3xl p-8 space-y-6 flex flex-col justify-between shadow-xl"
+                  className="transform-gpu bg-slate-800/80 backdrop-blur-xl border border-slate-700/80 rounded-3xl p-8 space-y-6 flex flex-col justify-between shadow-xl"
                 >
                   <div className="space-y-4">
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-emerald-500/20">
