@@ -1162,12 +1162,32 @@ export default function App() {
                   <div className="w-12 h-12 rounded-2xl bg-cyan-500/20 border border-cyan-400/30 flex items-center justify-center text-cyan-300 mx-auto">
                     <Building2 className="w-6 h-6" />
                   </div>
-                  <h3 className="font-bold text-lg text-white">Atención Presencial en Centro Cívico</h3>
-                  <p className="text-xs text-slate-300">
-                    Nuestra oficina en **Urquiza 276** se encuentra abierta todos los días de 08:30 a 20:30 hs para asesorarte en persona.
+                  <h3 className="font-bold text-lg text-white">Atención Presencial en el Centro</h3>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Nuestra oficina en{' '}
+                    <a 
+                      href="https://maps.google.com/?q=Urquiza+276,+San+Carlos+de+Bariloche" 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="underline text-cyan-300 hover:text-cyan-200 font-bold inline-flex items-center gap-1 group"
+                      title="Ver ubicación en Google Maps"
+                    >
+                      <span>Urquiza 276</span>
+                      <ArrowUpRight className="w-3 h-3 text-cyan-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </a>{' '}
+                    se encuentra abierta todos los días de 08:30 a 20:30 hs para asesorarte en persona.
                   </p>
                   <div className="pt-2">
-                    <span className="text-[11px] font-mono text-cyan-400 font-bold block">San Carlos de Bariloche</span>
+                    <a 
+                      href="https://maps.google.com/?q=Urquiza+276,+San+Carlos+de+Bariloche" 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="text-[11px] font-mono text-cyan-400 font-bold hover:underline inline-flex items-center gap-1.5 bg-cyan-500/10 px-3 py-1.5 rounded-full border border-cyan-400/30"
+                    >
+                      <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Urquiza 276 · Google Maps</span>
+                      <ArrowUpRight className="w-3 h-3" />
+                    </a>
                   </div>
                 </div>
               </div>
@@ -1925,8 +1945,18 @@ export default function App() {
               <div className="space-y-4 text-xs">
                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                   <div className="font-bold text-slate-900 text-sm flex items-center justify-between">
-                    <span>Sucursal Centro Cívico</span>
-                    <span className="text-[#00A896] text-[10px] font-mono font-bold">Urquiza 276</span>
+                    <span>Sucursal Centro</span>
+                    <a 
+                      href="https://maps.google.com/?q=Urquiza+276,+San+Carlos+de+Bariloche" 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="text-[#00A896] hover:underline text-[10px] font-mono font-bold flex items-center gap-1 bg-[#00A896]/10 px-2.5 py-1 rounded-full border border-[#00A896]/20 transition-all hover:bg-[#00A896]/20"
+                      title="Ver en Google Maps"
+                    >
+                      <MapPin className="w-3 h-3" />
+                      <span>Urquiza 276</span>
+                      <ArrowUpRight className="w-3 h-3" />
+                    </a>
                   </div>
                   <p className="text-slate-600">A metros del Centro Cívico. Venta presencial de excursiones, traslados e información turística.</p>
                   <div className="text-[11px] font-mono text-slate-800 font-semibold pt-1">Horario: Lunes a Domingos 08:30 a 20:30 hs</div>
@@ -1935,7 +1965,17 @@ export default function App() {
                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                   <div className="font-bold text-slate-900 text-sm flex items-center justify-between">
                     <span>Casa Central</span>
-                    <span className="text-[#00A896] text-[10px] font-mono font-bold">San Martín 398</span>
+                    <a 
+                      href="https://maps.google.com/?q=San+Mart%C3%ADn+398,+San+Carlos+de+Bariloche" 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="text-[#00A896] hover:underline text-[10px] font-mono font-bold flex items-center gap-1 bg-[#00A896]/10 px-2.5 py-1 rounded-full border border-[#00A896]/20 transition-all hover:bg-[#00A896]/20"
+                      title="Ver en Google Maps"
+                    >
+                      <MapPin className="w-3 h-3" />
+                      <span>San Martín 398</span>
+                      <ArrowUpRight className="w-3 h-3" />
+                    </a>
                   </div>
                   <p className="text-slate-600">Oficinas corporativas y administrativas. Atención a contingentes, grupos y operadores.</p>
                   <div className="text-[11px] font-mono text-slate-800 font-semibold pt-1">Horario: Lunes a Viernes 09:00 a 18:00 hs</div>
