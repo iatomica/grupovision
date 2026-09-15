@@ -57,6 +57,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { EXCURSIONS_DATA, Excursion } from './data/excursionsData';
+import { loadExcursions, saveExcursions, resetExcursionsToDefault } from './utils/excursionsStorage';
 import { JiraTicketModal, Booking, TicketComment } from './components/JiraTicketModal';
 import { NotificationsModal, UserNotification } from './components/NotificationsModal';
 import { TravelerUser, INITIAL_TRAVELERS } from './data/usersData';
@@ -270,8 +271,8 @@ export default function App() {
   const [userEmail, setUserEmail] = useState<string>('lucia.m@grupovision.tur.ar');
   const [adminTab, setAdminTab] = useState<'kanban' | 'staff' | 'promos' | 'analytics'>('kanban');
 
-  // Dynamic Data States (Real-time Global Sync)
-  const [excursionsList, setExcursionsList] = useState<Excursion[]>(EXCURSIONS_DATA);
+  // Dynamic Data States (Real-time Global Sync con LocalStorage)
+  const [excursionsList, setExcursionsList] = useState<Excursion[]>(() => loadExcursions());
   const [travelersList, setTravelersList] = useState<TravelerUser[]>(INITIAL_TRAVELERS);
   const [activityLogs, setActivityLogs] = useState<SystemActivityLog[]>(INITIAL_ACTIVITY_LOGS);
 
@@ -452,9 +453,13 @@ export default function App() {
     }));
   };
 
-  // Handlers for Dynamic Promo & Excursion Rate Changes (Real-time Global Impact)
+  // Handlers for Dynamic Promo & Excursion Rate Changes (Real-time Global Impact & Storage)
   const handleUpdateExcursionPromo = (id: string, updates: Partial<Excursion>) => {
-    setExcursionsList(prev => prev.map(e => e.id === id ? { ...e, ...updates } : e));
+    setExcursionsList(prev => {
+      const updated = prev.map(e => e.id === id ? { ...e, ...updates } : e);
+      saveExcursions(updated);
+      return updated;
+    });
     const target = excursionsList.find(e => e.id === id);
     if (target) {
       setActivityLogs(prev => [
@@ -468,6 +473,71 @@ export default function App() {
         ...prev
       ]);
     }
+  };
+
+  // Handler for Saving Excursion (Full Edit or Create New)
+  const handleSaveExcursion = (excursion: Excursion, isNew: boolean) => {
+    setExcursionsList(prev => {
+      let updated: Excursion[];
+      if (isNew) {
+        updated = [excursion, ...prev];
+      } else {
+        updated = prev.map(e => e.id === excursion.id ? excursion : e);
+      }
+      saveExcursions(updated);
+      return updated;
+    });
+
+    setActivityLogs(prev => [
+      {
+        id: `log-${Date.now().toString().slice(-4)}`,
+        user: userName || 'Administrador',
+        action: isNew 
+          ? `Creó la nueva excursión "${excursion.title}" en la categoría ${excursion.category}` 
+          : `Editó ficha completa de "${excursion.title}" (USD $${excursion.priceNum})`,
+        timestamp: 'Justo ahora',
+        type: 'system'
+      },
+      ...prev
+    ]);
+  };
+
+  // Handler for Deleting Excursion
+  const handleDeleteExcursion = (id: string) => {
+    const target = excursionsList.find(e => e.id === id);
+    setExcursionsList(prev => {
+      const updated = prev.filter(e => e.id !== id);
+      saveExcursions(updated);
+      return updated;
+    });
+    if (target) {
+      setActivityLogs(prev => [
+        {
+          id: `log-${Date.now().toString().slice(-4)}`,
+          user: userName || 'Administrador',
+          action: `Eliminó la excursión "${target.title}" del catálogo activo`,
+          timestamp: 'Justo ahora',
+          type: 'system'
+        },
+        ...prev
+      ]);
+    }
+  };
+
+  // Handler for Resetting Catalog to Original Factory Data
+  const handleResetCatalog = () => {
+    const resetList = resetExcursionsToDefault();
+    setExcursionsList(resetList);
+    setActivityLogs(prev => [
+      {
+        id: `log-${Date.now().toString().slice(-4)}`,
+        user: userName || 'Administrador',
+        action: 'Restauró el catálogo completo de excursiones a los valores de fábrica',
+        timestamp: 'Justo ahora',
+        type: 'system'
+      },
+      ...prev
+    ]);
   };
 
   // Handlers for Traveler Discounts assigned by Advisor
@@ -1297,7 +1367,7 @@ export default function App() {
                   onClick={() => setAdminTab('promos')}
                   className={`px-3 py-2 rounded-lg transition-all ${adminTab === 'promos' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
                 >
-                  Tarifas & Promociones
+                  Excursiones & Tarifas
                 </button>
                 <button
                   onClick={() => setAdminTab('analytics')}
@@ -1522,6 +1592,9 @@ export default function App() {
             <AdminPromosExcursions
               excursions={excursionsList}
               onUpdateExcursionPromo={handleUpdateExcursionPromo}
+              onSaveExcursion={handleSaveExcursion}
+              onDeleteExcursion={handleDeleteExcursion}
+              onResetCatalog={handleResetCatalog}
             />
           )}
 
