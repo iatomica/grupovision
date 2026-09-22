@@ -898,16 +898,18 @@ export default function App() {
       {currentView === 'landing' && (
         <>
           <section className="relative min-h-[calc(100dvh-5rem)] flex items-center justify-center overflow-hidden py-20 lg:py-0 bg-slate-950">
-            <div className="absolute inset-0 z-0 bg-slate-950">
+            <div className="absolute inset-0 z-0 bg-slate-900">
               <img 
                 src="/images/hero.webp" 
-                alt="Bariloche y Lago Nahuel Huapi"
+                alt="Bariloche y Lago Nahuel Huapi - Grupo Visión"
                 loading="eager"
                 fetchPriority="high"
                 decoding="sync"
-                className="w-full h-full object-cover scale-105 filter brightness-95"
+                className="w-full h-full object-cover scale-100"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-[#0F172A]/85 via-[#0F172A]/65 to-[#F8FAFC]" />
+              {/* Subtle natural contrast gradient - preserves vibrant landscape colors */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/15 to-transparent pointer-events-none" />
+              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#F8FAFC] via-[#F8FAFC]/30 to-transparent pointer-events-none" />
             </div>
 
             <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 relative z-10 space-y-8 pt-6">
