@@ -17,6 +17,8 @@ const DATA_DIR = process.env.DATA_DIR || path.resolve(__dirname, '../data');
 const UPLOADS_DIR = path.join(DATA_DIR, 'uploads');
 const EXCURSIONS_FILE = path.join(DATA_DIR, 'excursions.json');
 const DEFAULT_EXCURSIONS_FILE = path.join(__dirname, 'defaultExcursions.json');
+const SITE_CONTENT_FILE = path.join(DATA_DIR, 'site-content.json');
+const DEFAULT_SITE_CONTENT_FILE = path.join(__dirname, 'defaultSiteContent.json');
 const PUBLIC_EXCURSIONS_DIR = path.resolve(__dirname, '../public/images/excursiones');
 const DIST_DIR = path.resolve(__dirname, '../dist');
 
@@ -28,8 +30,8 @@ if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
 
-// Initialize excursions data if not present
-function initializeExcursionsData() {
+// Initialize excursions and site-content data if not present
+function initializeDataFiles() {
   if (!fs.existsSync(EXCURSIONS_FILE)) {
     console.log('[Server] excursions.json not found in data/. Initializing from default catalog...');
     if (fs.existsSync(DEFAULT_EXCURSIONS_FILE)) {
@@ -37,11 +39,20 @@ function initializeExcursionsData() {
       console.log('[Server] Successfully initialized excursions.json');
     } else {
       fs.writeFileSync(EXCURSIONS_FILE, JSON.stringify([], null, 2));
-      console.warn('[Server] defaultExcursions.json missing, created empty excursions.json');
+    }
+  }
+
+  if (!fs.existsSync(SITE_CONTENT_FILE)) {
+    console.log('[Server] site-content.json not found in data/. Initializing from defaults...');
+    if (fs.existsSync(DEFAULT_SITE_CONTENT_FILE)) {
+      fs.copyFileSync(DEFAULT_SITE_CONTENT_FILE, SITE_CONTENT_FILE);
+      console.log('[Server] Successfully initialized site-content.json');
+    } else {
+      fs.writeFileSync(SITE_CONTENT_FILE, JSON.stringify({}, null, 2));
     }
   }
 }
-initializeExcursionsData();
+initializeDataFiles();
 
 // Helper to read excursions
 function getExcursions() {
@@ -59,6 +70,26 @@ function saveExcursions(data) {
   const tempPath = `${EXCURSIONS_FILE}.tmp`;
   fs.writeFileSync(tempPath, JSON.stringify(data, null, 2), 'utf8');
   fs.renameSync(tempPath, EXCURSIONS_FILE);
+}
+
+// Helpers for site content
+function getSiteContent() {
+  try {
+    const raw = fs.readFileSync(SITE_CONTENT_FILE, 'utf8');
+    return JSON.parse(raw);
+  } catch (err) {
+    console.error('[Server] Error reading site-content.json:', err);
+    if (fs.existsSync(DEFAULT_SITE_CONTENT_FILE)) {
+      return JSON.parse(fs.readFileSync(DEFAULT_SITE_CONTENT_FILE, 'utf8'));
+    }
+    return {};
+  }
+}
+
+function saveSiteContent(data) {
+  const tempPath = `${SITE_CONTENT_FILE}.tmp`;
+  fs.writeFileSync(tempPath, JSON.stringify(data, null, 2), 'utf8');
+  fs.renameSync(tempPath, SITE_CONTENT_FILE);
 }
 
 // Middleware
@@ -156,6 +187,49 @@ app.post('/api/excursions/reset', (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ error: 'Error al restablecer catálogo' });
+  }
+});
+
+// ==========================================
+// SITE CONTENT CMS API (Editable Sections)
+// ==========================================
+
+// GET current site content
+app.get('/api/site-content', (req, res) => {
+  try {
+    const content = getSiteContent();
+    res.json(content);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener contenido del sitio' });
+  }
+});
+
+// PUT update site content
+app.put('/api/site-content', (req, res) => {
+  try {
+    const data = req.body;
+    if (!data || typeof data !== 'object') {
+      return res.status(400).json({ error: 'Formato de contenido inválido' });
+    }
+    saveSiteContent(data);
+    res.json({ success: true, content: data });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al guardar contenido del sitio' });
+  }
+});
+
+// POST reset site content to defaults
+app.post('/api/site-content/reset', (req, res) => {
+  try {
+    if (fs.existsSync(DEFAULT_SITE_CONTENT_FILE)) {
+      const defaultData = JSON.parse(fs.readFileSync(DEFAULT_SITE_CONTENT_FILE, 'utf8'));
+      saveSiteContent(defaultData);
+      res.json({ success: true, content: defaultData });
+    } else {
+      res.status(500).json({ error: 'Contenido por defecto no disponible' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Error al restablecer contenido del sitio' });
   }
 });
 

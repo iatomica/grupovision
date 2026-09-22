@@ -65,8 +65,11 @@ import { TravelerDashboard } from './components/TravelerDashboard';
 import { AdvisorDashboard } from './components/AdvisorDashboard';
 import { AdminPromosExcursions } from './components/AdminPromosExcursions';
 import { AdminAnalyticsReports } from './components/AdminAnalyticsReports';
+import { AdminSiteContent } from './components/AdminSiteContent';
 import { Footer } from './components/Footer';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
+import { SiteContentData, DEFAULT_SITE_CONTENT } from './data/siteContentData';
+import { loadSiteContent, saveSiteContent, resetSiteContentToDefault, fetchSiteContentAsync } from './utils/siteContentStorage';
 
 interface SystemActivityLog {
   id: string;
@@ -77,10 +80,10 @@ interface SystemActivityLog {
 }
 
 const INITIAL_ACTIVITY_LOGS: SystemActivityLog[] = [
-  { id: 'log-1', user: 'Lucía Morales (Admin)', action: 'Configuró 15% OFF en Excursión Camino 7 Lagos', timestamp: 'Hace 25 min', type: 'discount' },
-  { id: 'log-2', user: 'Marcos Benítez (Asesor)', action: 'Asignó 15% de descuento exclusivo a Carolina Rossi', timestamp: 'Hace 45 min', type: 'discount' },
+  { id: 'log-1', user: 'Luis (Admin)', action: 'Configuró 15% OFF en Excursión Camino 7 Lagos', timestamp: 'Hace 25 min', type: 'discount' },
+  { id: 'log-2', user: 'Thomas (Asesor)', action: 'Asignó 15% de descuento exclusivo a Carolina Rossi', timestamp: 'Hace 45 min', type: 'discount' },
   { id: 'log-3', user: 'Carolina Rossi (Viajero)', action: 'Emitió solicitud de paquete VIP en Refugio Roca Negra', timestamp: 'Hace 1 hora', type: 'ticket' },
-  { id: 'log-4', user: 'Gonzalo Reyes (Logística)', action: 'Asignó Van Sprinter AE-829-GV al ticket GV-8492', timestamp: 'Hace 2 horas', type: 'ticket' }
+  { id: 'log-4', user: 'Santiago (Logística)', action: 'Asignó Van Sprinter AE-829-GV al ticket GV-8492', timestamp: 'Hace 2 horas', type: 'ticket' }
 ];
 
 interface StaffMember {
@@ -98,10 +101,10 @@ interface StaffMember {
 const INITIAL_STAFF: StaffMember[] = [
   {
     id: 'st-1',
-    name: 'Lucía Morales',
-    role: 'Operadora Mostrador',
+    name: 'Luis Morales',
+    role: 'Administrador General',
     branch: 'Urquiza 276 (Centro Cívico)',
-    email: 'lucia.m@grupovision.tur.ar',
+    email: 'luis@grupovision.tur.ar',
     canCreateBookings: true,
     canAssignFleet: false,
     canModifyRates: true,
@@ -109,10 +112,10 @@ const INITIAL_STAFF: StaffMember[] = [
   },
   {
     id: 'st-2',
-    name: 'Marcos Benítez',
-    role: 'Guía Lead AAGM',
+    name: 'Thomas Benítez',
+    role: 'Asesor Comercial Senior',
     branch: 'Operativa de Montaña',
-    email: 'marcos.b@grupovision.tur.ar',
+    email: 'thomas@grupovision.tur.ar',
     canCreateBookings: false,
     canAssignFleet: true,
     canModifyRates: false,
@@ -120,10 +123,10 @@ const INITIAL_STAFF: StaffMember[] = [
   },
   {
     id: 'st-3',
-    name: 'Gonzalo Reyes',
+    name: 'Santiago Reyes',
     role: 'Jefe de Logística & Flota',
     branch: 'San Martín 398 (Casa Central)',
-    email: 'logistica@grupovision.tur.ar',
+    email: 'santiago@grupovision.tur.ar',
     canCreateBookings: true,
     canAssignFleet: true,
     canModifyRates: true,
@@ -270,19 +273,26 @@ export default function App() {
   const [currentView, setCurrentView] = useState<'landing' | 'login' | 'admin-board' | 'traveler-board' | 'advisor-board'>('landing');
   const [userRole, setUserRole] = useState<'admin' | 'asesor' | 'traveler' | 'operador' | null>(null);
   const [userName, setUserName] = useState<string>('');
-  const [userEmail, setUserEmail] = useState<string>('lucia.m@grupovision.tur.ar');
-  const [adminTab, setAdminTab] = useState<'kanban' | 'staff' | 'promos' | 'analytics'>('kanban');
+  const [userEmail, setUserEmail] = useState<string>('luis@grupovision.tur.ar');
+  const [adminTab, setAdminTab] = useState<'kanban' | 'staff' | 'promos' | 'analytics' | 'content'>('kanban');
 
   // Dynamic Data States (Real-time Global Sync con Backend API y LocalStorage)
   const [excursionsList, setExcursionsList] = useState<Excursion[]>(() => loadExcursions());
+  const [siteContent, setSiteContent] = useState<SiteContentData>(() => loadSiteContent());
   const [travelersList, setTravelersList] = useState<TravelerUser[]>(INITIAL_TRAVELERS);
   const [activityLogs, setActivityLogs] = useState<SystemActivityLog[]>(INITIAL_ACTIVITY_LOGS);
 
-  // Sync fresh excursions from persistent API on mount
+  // Sync fresh excursions and site content from persistent API on mount
   useEffect(() => {
     fetchExcursionsAsync().then(fresh => {
       if (fresh && fresh.length > 0) {
         setExcursionsList(fresh);
+      }
+    });
+
+    fetchSiteContentAsync().then(freshContent => {
+      if (freshContent && freshContent.about) {
+        setSiteContent(freshContent);
       }
     });
   }, []);
@@ -372,20 +382,20 @@ export default function App() {
   const handleLoginAs = (role: 'admin' | 'asesor' | 'traveler' | 'operador') => {
     setUserRole(role);
     if (role === 'admin') {
-      setUserName('Lucía Morales (Admin Central)');
-      setUserEmail('lucia.m@grupovision.tur.ar');
+      setUserName('Luis (Admin General)');
+      setUserEmail('luis@grupovision.tur.ar');
       setCurrentView('admin-board');
     } else if (role === 'asesor') {
-      setUserName('Marcos Benítez (Asesor Comercial)');
-      setUserEmail('marcos.b@grupovision.tur.ar');
+      setUserName('Thomas (Asesor Comercial)');
+      setUserEmail('thomas@grupovision.tur.ar');
       setCurrentView('advisor-board');
     } else if (role === 'traveler') {
       setUserName('Carolina Rossi');
       setUserEmail('carolina.rossi@gmail.com');
       setCurrentView('traveler-board');
     } else {
-      setUserName('Gonzalo Reyes (Operador Mostrador)');
-      setUserEmail('logistica@grupovision.tur.ar');
+      setUserName('Santiago (Operador Mostrador)');
+      setUserEmail('santiago@grupovision.tur.ar');
       setCurrentView('admin-board');
     }
   };
@@ -542,13 +552,34 @@ export default function App() {
     setActivityLogs(prev => [
       {
         id: `log-${Date.now().toString().slice(-4)}`,
-        user: userName || 'Administrador',
+        user: userName || 'Luis (Admin)',
         action: 'Restauró el catálogo completo de excursiones a los valores de fábrica',
         timestamp: 'Justo ahora',
         type: 'system'
       },
       ...prev
     ]);
+  };
+
+  // Handlers for Editable Site Content (CMS)
+  const handleSaveSiteContent = async (updated: SiteContentData) => {
+    setSiteContent(updated);
+    await saveSiteContent(updated);
+    setActivityLogs(prev => [
+      {
+        id: `log-${Date.now().toString().slice(-4)}`,
+        user: userName || 'Luis (Admin)',
+        action: 'Actualizó los contenidos de las secciones web institucionales',
+        timestamp: 'Justo ahora',
+        type: 'system'
+      },
+      ...prev
+    ]);
+  };
+
+  const handleResetSiteContent = async () => {
+    const res = await resetSiteContentToDefault();
+    setSiteContent(res);
   };
 
   // Handlers for Traveler Discounts assigned by Advisor
@@ -615,7 +646,7 @@ export default function App() {
       status: 'COTIZACION',
       ticketType: 'Reserva',
       priority: currentTraveler.membershipLevel === 'VIP' ? 'VIP' : 'NORMAL',
-      assignedGuide: 'Asesor Asignado: Lucía Morales',
+      assignedGuide: 'Asesor Asignado: Thomas Benítez',
       assignedVehicle: 'Pendiente de Confirmación',
       operatorNotes: note || `Solicitud iniciada por viajero con ${discount}% OFF asignado.`,
       createdAt: new Date().toLocaleString(),
@@ -637,7 +668,7 @@ export default function App() {
 
     // Send notification to staff
     handleAddNotification({
-      recipientEmail: 'lucia.m@grupovision.tur.ar',
+      recipientEmail: 'thomas@grupovision.tur.ar',
       senderName: currentTraveler.name,
       ticketCode: newB.code,
       ticketId: newB.id,
@@ -1080,7 +1111,7 @@ export default function App() {
             {/* Background Image Overlay */}
             <div className="absolute inset-0 z-0">
               <img 
-                src="/images/excursiones/camino-de-los-7-lagos-san-martin-de-los-andes.webp" 
+                src={siteContent.about.backgroundImage} 
                 alt="Fondo Quiénes Somos Grupo Visión"
                 className="w-full h-full object-cover filter brightness-[0.35] contrast-125 scale-105"
               />
@@ -1094,13 +1125,13 @@ export default function App() {
               <div className="text-center max-w-3xl mx-auto space-y-4">
                 <span className="px-3.5 py-1.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono text-xs font-bold inline-flex items-center gap-1.5">
                   <Award className="w-3.5 h-3.5" />
-                  QUIÉNES SOMOS · OPERADORA RECEPTIVA BARILOCHE
+                  {siteContent.about.badge}
                 </span>
                 <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-                  Más de 30 Años Guiando Expediciones en la Patagonia
+                  {siteContent.about.title}
                 </h2>
                 <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                  Desde nuestra fundación, Grupo Visión se ha consolidado como la agencia receptiva de referencia en San Carlos de Bariloche. Brindamos servicios integrales de transporte privado, excursiones de montaña, navegaciones lacustres y cruce de lagos.
+                  {siteContent.about.description}
                 </p>
               </div>
 
@@ -1114,25 +1145,19 @@ export default function App() {
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-cyan-500/20">
                       <Car className="w-6 h-6" />
                     </div>
-                    <h3 className="text-2xl font-bold text-white">Flota Propia 4x4 & Unidades Especializadas</h3>
+                    <h3 className="text-2xl font-bold text-white">{siteContent.about.fleetTitle}</h3>
                     <p className="text-slate-300 text-sm leading-relaxed">
-                      Contamos con una flota moderna de combis Mercedes-Benz Sprinter, minibus Iveco Daily y camionetas 4x4 preparadas con cadenas, raquetas y equipamiento para ascensos invernales a refugios de montaña.
+                      {siteContent.about.fleetDescription}
                     </p>
                   </div>
 
                   <div className="grid grid-cols-3 gap-4 pt-6 border-t border-slate-700/80 text-center font-mono">
-                    <div className="bg-slate-900/60 p-3 rounded-2xl border border-slate-700/50">
-                      <div className="text-2xl font-black text-cyan-400">15+</div>
-                      <div className="text-[10px] text-slate-400 font-semibold mt-0.5">Unidades 4x4</div>
-                    </div>
-                    <div className="bg-slate-900/60 p-3 rounded-2xl border border-slate-700/50">
-                      <div className="text-2xl font-black text-emerald-400">100%</div>
-                      <div className="text-[10px] text-slate-400 font-semibold mt-0.5">Habilitación CNRT</div>
-                    </div>
-                    <div className="bg-slate-900/60 p-3 rounded-2xl border border-slate-700/50">
-                      <div className="text-2xl font-black text-amber-400">24/7</div>
-                      <div className="text-[10px] text-slate-400 font-semibold mt-0.5">Asistencia Logística</div>
-                    </div>
+                    {siteContent.about.fleetMetrics.map((metric, mIdx) => (
+                      <div key={mIdx} className="bg-slate-900/60 p-3 rounded-2xl border border-slate-700/50">
+                        <div className="text-2xl font-black text-cyan-400">{metric.value}</div>
+                        <div className="text-[10px] text-slate-400 font-semibold mt-0.5">{metric.label}</div>
+                      </div>
+                    ))}
                   </div>
                 </motion.div>
 
@@ -1144,17 +1169,17 @@ export default function App() {
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-emerald-500/20">
                       <ShieldCheck className="w-6 h-6" />
                     </div>
-                    <h3 className="text-xl font-bold text-white">Guías AAGM & WFR</h3>
+                    <h3 className="text-xl font-bold text-white">{siteContent.about.guidesTitle}</h3>
                     <p className="text-slate-300 text-xs leading-relaxed">
-                      Todos nuestros recorridos están liderados por guías profesionales matriculados por el Parque Nacional Nahuel Huapi y la Asociación Argentina de Guías de Montaña.
+                      {siteContent.about.guidesDescription}
                     </p>
                   </div>
 
                   <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-700/80 space-y-2 text-xs">
                     <div className="font-bold text-emerald-400 flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4" /> Certificación Médica WFR
+                      <CheckCircle2 className="w-4 h-4" /> {siteContent.about.guidesBadgeTitle}
                     </div>
-                    <p className="text-slate-400 text-[11px]">Primeros auxilios en áreas remotas y comunicación VHF de alta frecuencia.</p>
+                    <p className="text-slate-400 text-[11px]">{siteContent.about.guidesBadgeDesc}</p>
                   </div>
                 </motion.div>
               </div>
@@ -1170,26 +1195,26 @@ export default function App() {
                 <div className="space-y-6 max-w-2xl">
                   <span className="px-3.5 py-1.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono text-xs font-bold inline-flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5" />
-                    DISEÑO DE EXPEDICIONES EXCLUSIVAS
+                    {siteContent.exclusive.badge}
                   </span>
 
                   <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-                    ¿Buscás un Paquete a Medida o Traslado Privado VIP?
+                    {siteContent.exclusive.title}
                   </h2>
 
                   <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                    Diseñamos circuitos exclusivos por el **Corredor de los Lagos (San Martín de los Andes, Villa La Angostura, El Bolsón)** y el **Cruce Andino a Chile** adaptados al ritmo y preferencias de tu grupo.
+                    {siteContent.exclusive.description}
                   </p>
 
                   <div className="flex flex-wrap items-center gap-4 pt-2">
                     <a
-                      href="https://wa.me/5492944235278?text=Hola!%20Me%20interesa%20cotizar%20un%20paquete%20a%20medida%20con%20Grupo%20Vision"
+                      href={`https://wa.me/5492944235278?text=${encodeURIComponent(siteContent.exclusive.whatsappMessage)}`}
                       target="_blank"
                       rel="noreferrer"
                       className="px-6 py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-black font-black rounded-2xl text-xs flex items-center gap-2 transition-all shadow-lg shadow-[#25D366]/20"
                     >
                       <MessageCircle className="w-4 h-4 fill-current" />
-                      Cotizar por WhatsApp con Mostrador
+                      {siteContent.exclusive.buttonText}
                     </a>
 
                     <button
@@ -1205,7 +1230,7 @@ export default function App() {
                   <div className="w-12 h-12 rounded-2xl bg-cyan-500/20 border border-cyan-400/30 flex items-center justify-center text-cyan-300 mx-auto">
                     <Building2 className="w-6 h-6" />
                   </div>
-                  <h3 className="font-bold text-lg text-white">Atención Presencial en el Centro</h3>
+                  <h3 className="font-bold text-lg text-white">{siteContent.exclusive.officeTitle}</h3>
                   <p className="text-xs text-slate-300 leading-relaxed">
                     Nuestra oficina en{' '}
                     <a 
@@ -1215,10 +1240,10 @@ export default function App() {
                       className="underline text-cyan-300 hover:text-cyan-200 font-bold inline-flex items-center gap-1 group"
                       title="Ver ubicación en Google Maps"
                     >
-                      <span>Urquiza 276</span>
+                      <span>{siteContent.exclusive.officeAddress}</span>
                       <ArrowUpRight className="w-3 h-3 text-cyan-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </a>{' '}
-                    se encuentra abierta todos los días de 08:30 a 20:30 hs para asesorarte en persona.
+                    {siteContent.exclusive.officeSchedule} para asesorarte en persona.
                   </p>
                   <div className="pt-2">
                     <a 
@@ -1228,7 +1253,7 @@ export default function App() {
                       className="text-[11px] font-mono text-cyan-400 font-bold hover:underline inline-flex items-center gap-1.5 bg-cyan-500/10 px-3 py-1.5 rounded-full border border-cyan-400/30"
                     >
                       <MapPin className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>Urquiza 276 · Google Maps</span>
+                      <span>{siteContent.exclusive.officeAddress.split(',')[0]} · Google Maps</span>
                       <ArrowUpRight className="w-3 h-3" />
                     </a>
                   </div>
@@ -1275,7 +1300,7 @@ export default function App() {
               >
                 <div>
                   <div className="font-bold text-sm flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-cyan-400" /> Rol Administrador General
+                    <Shield className="w-4 h-4 text-cyan-400" /> Luis · Rol Administrador General
                   </div>
                   <span className="text-slate-400 text-xs">Acceso total, kanban, tarifas/promos, analíticas y reportes CSV</span>
                 </div>
@@ -1288,7 +1313,7 @@ export default function App() {
               >
                 <div>
                   <div className="font-bold text-sm flex items-center gap-2 text-cyan-300">
-                    <UserCheck className="w-4 h-4 text-cyan-400" /> Rol Asesor Comercial
+                    <UserCheck className="w-4 h-4 text-cyan-400" /> Thomas · Rol Asesor Comercial
                   </div>
                   <span className="text-slate-300 text-xs">Directorio de viajeros, emisión de tickets y % de descuento discrecional</span>
                 </div>
@@ -1314,7 +1339,7 @@ export default function App() {
               >
                 <div>
                   <div className="font-bold text-xs flex items-center gap-2">
-                    <Truck className="w-3.5 h-3.5 text-slate-600" /> Rol Operador Mostrador / Guía
+                    <Truck className="w-3.5 h-3.5 text-slate-600" /> Santiago · Rol Operador Mostrador / Logística
                   </div>
                   <span className="text-slate-500 text-[11px]">Gestión de avance de tickets receptivos y logística de flota</span>
                 </div>
@@ -1367,6 +1392,12 @@ export default function App() {
                   className={`px-3 py-2 rounded-lg transition-all ${adminTab === 'promos' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
                 >
                   Excursiones & Tarifas
+                </button>
+                <button
+                  onClick={() => setAdminTab('content')}
+                  className={`px-3 py-2 rounded-lg transition-all ${adminTab === 'content' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                >
+                  Secciones Web (CMS)
                 </button>
                 <button
                   onClick={() => setAdminTab('analytics')}
@@ -1597,7 +1628,17 @@ export default function App() {
             />
           )}
 
-          {/* TAB 4: ANALYTICS & REPORTS */}
+          {/* TAB 4: SITE CONTENT CMS */}
+          {adminTab === 'content' && (
+            <AdminSiteContent
+              content={siteContent}
+              onSaveContent={handleSaveSiteContent}
+              onResetContent={handleResetSiteContent}
+              onViewPublicSite={() => setCurrentView('landing')}
+            />
+          )}
+
+          {/* TAB 5: ANALYTICS & REPORTS */}
           {adminTab === 'analytics' && (
             <AdminAnalyticsReports
               bookings={bookings}

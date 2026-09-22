@@ -442,11 +442,11 @@ Consultas 24/7: +54 9 294 442-8800 | Urquiza 276 (Centro Cívico)
           <div className="lg:col-span-1 bg-white border border-slate-200 rounded-3xl p-6 space-y-6 shadow-sm">
             <div className="text-center space-y-3 border-b border-slate-100 pb-6">
               <div className="w-20 h-20 bg-cyan-100 rounded-full flex items-center justify-center mx-auto text-cyan-700 font-bold text-xl border-4 border-white shadow-md">
-                LM
+                TB
               </div>
               <div>
-                <h3 className="font-bold text-slate-900 text-lg">Lucía Morales</h3>
-                <p className="text-xs text-cyan-700 font-medium">Asesora Senior de Viajes</p>
+                <h3 className="font-bold text-slate-900 text-lg">Thomas Benítez</h3>
+                <p className="text-xs text-cyan-700 font-medium">Asesor Comercial de Viajes</p>
                 <p className="text-xs text-slate-500">Urquiza 276 (Centro Cívico)</p>
               </div>
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
