@@ -1,27 +1,37 @@
-# Stage 1: Build static assets with Node
+# Stage 1: Build static assets
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package descriptors
 COPY package*.json ./
-
-# Install dependencies cleanly
 RUN npm ci
 
-# Copy source code and build
 COPY . .
 RUN npm run build
 
-# Stage 2: Production server with Nginx
-FROM nginx:alpine
+# Stage 2: Production server with Node.js & Sharp
+FROM node:20-alpine
 
-# Copy custom nginx configuration for SPA routing
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
-# Copy build output from Stage 1
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Set production environment
+ENV NODE_ENV=production
+ENV PORT=80
+ENV DATA_DIR=/app/data
 
+# Copy package files and install production dependencies
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Copy built frontend assets and server code
+COPY --from=builder /app/dist ./dist
+COPY server ./server
+COPY public ./public
+
+# Ensure persistent data directory exists
+RUN mkdir -p /app/data/uploads
+
+# Expose HTTP port for Coolify Traefik
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "server/index.js"]

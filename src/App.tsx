@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Compass, 
   Anchor, 
@@ -57,7 +57,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { EXCURSIONS_DATA, Excursion } from './data/excursionsData';
-import { loadExcursions, saveExcursions, resetExcursionsToDefault } from './utils/excursionsStorage';
+import { loadExcursions, saveExcursions, resetExcursionsToDefault, fetchExcursionsAsync } from './utils/excursionsStorage';
 import { JiraTicketModal, Booking, TicketComment } from './components/JiraTicketModal';
 import { NotificationsModal, UserNotification } from './components/NotificationsModal';
 import { TravelerUser, INITIAL_TRAVELERS } from './data/usersData';
@@ -65,6 +65,8 @@ import { TravelerDashboard } from './components/TravelerDashboard';
 import { AdvisorDashboard } from './components/AdvisorDashboard';
 import { AdminPromosExcursions } from './components/AdminPromosExcursions';
 import { AdminAnalyticsReports } from './components/AdminAnalyticsReports';
+import { Footer } from './components/Footer';
+import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 
 interface SystemActivityLog {
   id: string;
@@ -271,10 +273,19 @@ export default function App() {
   const [userEmail, setUserEmail] = useState<string>('lucia.m@grupovision.tur.ar');
   const [adminTab, setAdminTab] = useState<'kanban' | 'staff' | 'promos' | 'analytics'>('kanban');
 
-  // Dynamic Data States (Real-time Global Sync con LocalStorage)
+  // Dynamic Data States (Real-time Global Sync con Backend API y LocalStorage)
   const [excursionsList, setExcursionsList] = useState<Excursion[]>(() => loadExcursions());
   const [travelersList, setTravelersList] = useState<TravelerUser[]>(INITIAL_TRAVELERS);
   const [activityLogs, setActivityLogs] = useState<SystemActivityLog[]>(INITIAL_ACTIVITY_LOGS);
+
+  // Sync fresh excursions from persistent API on mount
+  useEffect(() => {
+    fetchExcursionsAsync().then(fresh => {
+      if (fresh && fresh.length > 0) {
+        setExcursionsList(fresh);
+      }
+    });
+  }, []);
 
   // Landing & Catalog States
   const [selectedCategory, setSelectedCategory] = useState<string>('Todas');
@@ -525,8 +536,8 @@ export default function App() {
   };
 
   // Handler for Resetting Catalog to Original Factory Data
-  const handleResetCatalog = () => {
-    const resetList = resetExcursionsToDefault();
+  const handleResetCatalog = async () => {
+    const resetList = await resetExcursionsToDefault();
     setExcursionsList(resetList);
     setActivityLogs(prev => [
       {
@@ -937,29 +948,6 @@ export default function App() {
                   </div>
                 </div>
               </div>
-
-              {/* Feature Cards Grid */}
-              <div className="pt-8 border-t border-white/20 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono">
-                {[
-                  { icon: Award, label: 'TRAYECTORIA', title: '30+ Años Receptivo' },
-                  { icon: ShieldCheck, label: 'LEGAJO OFICIAL', title: 'EVT N° 12044' },
-                  { icon: Car, label: 'FLOTA PROPIA', title: 'Vans & Minibuses' },
-                  { icon: Building2, label: 'OFICINAS', title: 'Centro Cívico & Central' }
-                ].map((item, idx) => (
-                  <div 
-                    key={idx}
-                    className="p-4 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-lg flex items-center gap-3 cursor-default hover:-translate-y-1 hover:scale-[1.02] transition-transform duration-200"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-[#00A896]/10 border border-[#00A896]/20 flex items-center justify-center text-[#00A896] font-bold shrink-0">
-                      <item.icon className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <span className="text-slate-500 block text-[10px]">{item.label}</span>
-                      <span className="text-slate-900 font-bold text-sm">{item.title}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
           </section>
 
@@ -1246,6 +1234,15 @@ export default function App() {
               </div>
             </div>
           </section>
+
+          {/* INSTITUTIONAL FOOTER WITH 4 TRUST CARDS */}
+          <Footer 
+            onNavigateToSection={(id) => {
+              const el = document.getElementById(id);
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            onOpenOfficesModal={() => setIsOfficeModalOpen(true)}
+          />
         </>
       )}
 
@@ -2041,6 +2038,9 @@ export default function App() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* FLOATING WHATSAPP BUTTON (ONLY ON PUBLIC LANDING) */}
+      <FloatingWhatsApp isVisible={currentView === 'landing'} />
 
     </div>
   );

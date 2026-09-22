@@ -22,10 +22,13 @@ import {
   X,
   ExternalLink,
   ChevronRight,
-  Sparkles
+  Sparkles,
+  Image as ImageIcon,
+  UploadCloud
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Excursion } from '../data/excursionsData';
+import { MediaLibraryModal } from './MediaLibraryModal';
 
 interface AdminPromosExcursionsProps {
   excursions: Excursion[];
@@ -91,6 +94,7 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   const [isFullEditorOpen, setIsFullEditorOpen] = useState(false);
   const [isNewExcursion, setIsNewExcursion] = useState(false);
   const [editorTab, setEditorTab] = useState<'general' | 'texts' | 'services' | 'faq' | 'rates'>('general');
+  const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
   
   // Full Editor Form State
   const [formId, setFormId] = useState('');
@@ -725,15 +729,15 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                       />
                     </div>
 
-                    {/* Image Selector & Preview */}
-                    <div className="border border-slate-200 rounded-2xl p-4 bg-slate-50/60 space-y-3">
+                    {/* Image Selector via Media Library (WordPress Style) */}
+                    <div className="border border-slate-200 rounded-2xl p-4 bg-slate-50/70 space-y-3">
                       <div className="flex items-center justify-between">
-                        <label className="block text-xs font-bold text-slate-800">Fotografía Principal de la Excursión</label>
-                        <span className="text-[11px] text-slate-400">Ruta webp o URL remota</span>
+                        <label className="block text-xs font-bold text-slate-800">Fotografía Principal de Portada</label>
+                        <span className="text-[11px] font-mono text-[#00A896] font-bold">FORMATO WEBP OPTIMIZADO</span>
                       </div>
 
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                        <div className="w-20 h-20 rounded-2xl overflow-hidden bg-slate-200 shrink-0 border border-slate-300">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <div className="w-24 h-24 sm:w-28 sm:h-24 rounded-2xl overflow-hidden bg-slate-200 shrink-0 border-2 border-slate-300 shadow-sm relative group">
                           <img 
                             src={formImage} 
                             alt="Previsualización" 
@@ -742,28 +746,40 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                               (e.target as HTMLImageElement).src = '/images/excursiones/circuito-chico.webp';
                             }}
                           />
+                          <button
+                            type="button"
+                            onClick={() => setIsMediaModalOpen(true)}
+                            className="absolute inset-0 bg-slate-950/60 text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1"
+                          >
+                            <ImageIcon className="w-4 h-4 text-cyan-300" />
+                            <span>Cambiar</span>
+                          </button>
                         </div>
-                        <div className="flex-1 space-y-2 w-full">
-                          <input
-                            type="text"
-                            value={formImage}
-                            onChange={(e) => setFormImage(e.target.value)}
-                            placeholder="/images/excursiones/... o https://..."
-                            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#00A896]"
-                          />
-                          <div>
-                            <span className="text-[11px] text-slate-500 font-semibold block mb-1">O selecciona una imagen del catálogo Bariloche:</span>
-                            <select
-                              onChange={(e) => setFormImage(e.target.value)}
-                              value={formImage}
-                              className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#00A896]"
-                            >
-                              <option value="">-- Galería Local Disponible --</option>
-                              {PRESET_IMAGES.map(img => (
-                                <option key={img.path} value={img.path}>{img.label} ({img.path})</option>
-                              ))}
-                            </select>
+
+                        <div className="flex-1 space-y-2.5 w-full">
+                          <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-2 shadow-xs">
+                            <div className="truncate text-xs font-mono text-slate-600">
+                              <span className="text-slate-400 mr-1.5 font-sans font-bold">Archivo actual:</span>
+                              <span className="font-bold text-slate-800">{formImage.split('/').pop()}</span>
+                            </div>
+                            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-50 text-cyan-700 border border-cyan-200 shrink-0">
+                              WebP
+                            </span>
                           </div>
+
+                          <div className="flex flex-wrap items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setIsMediaModalOpen(true)}
+                              className="px-4 py-2 rounded-xl bg-[#00A896] hover:bg-[#028090] text-white text-xs font-bold transition-all shadow-sm flex items-center gap-2"
+                            >
+                              <ImageIcon className="w-3.5 h-3.5" />
+                              <span>Elegir de Biblioteca Multimedia / Subir</span>
+                            </button>
+                          </div>
+                          <p className="text-[11px] text-slate-500 leading-tight">
+                            Podés seleccionar una imagen del catálogo existente o subir una foto desde tu equipo. Toda imagen subida se convertirá automáticamente a WebP ultraligero con miniatura.
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -1273,6 +1289,14 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
           </div>
         )}
       </AnimatePresence>
+
+      {/* WordPress-Style Media Library Modal */}
+      <MediaLibraryModal
+        isOpen={isMediaModalOpen}
+        onClose={() => setIsMediaModalOpen(false)}
+        onSelectImage={(url) => setFormImage(url)}
+        currentSelectedUrl={formImage}
+      />
 
     </div>
   );
