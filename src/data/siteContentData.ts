@@ -28,9 +28,31 @@ export interface ExclusiveSectionData {
   officeSchedule: string;
 }
 
+export interface SuggestionBannerItem {
+  id: string;
+  title: string;
+  tagline: string;
+  badge: string;
+  discountPercent: number;
+  originalPrice: number;
+  finalPrice: number;
+  duration: string;
+  image: string;
+  excursionId: string;
+  whatsappMessage: string;
+}
+
+export interface TopSuggestionsSectionData {
+  badge: string;
+  title: string;
+  subtitle: string;
+  items: SuggestionBannerItem[];
+}
+
 export interface SiteContentData {
   about: AboutSectionData;
   exclusive: ExclusiveSectionData;
+  topSuggestions?: TopSuggestionsSectionData;
 }
 
 export const DEFAULT_SITE_CONTENT: SiteContentData = {
@@ -60,5 +82,77 @@ export const DEFAULT_SITE_CONTENT: SiteContentData = {
     officeTitle: 'Atención Presencial en el Centro',
     officeAddress: 'Urquiza 276, San Carlos de Bariloche',
     officeSchedule: 'Abierta todos los días de 08:30 a 20:30 hs'
+  },
+  topSuggestions: {
+    badge: '⚡ TOP SUGERENCIAS & OFERTAS EXCLUSIVAS',
+    title: 'Excursiones Destacadas con Descuento Especial',
+    subtitle: 'Aprovechá cupos limitados y beneficios exclusivos reservando anticipadamente online o por WhatsApp.',
+    items: [
+      {
+        id: 'sug-1',
+        title: 'San Martín de los Andes por 7 Lagos',
+        tagline: 'El recorrido escénico más famoso de la Patagonia andina recorriendo lagos cristalinos y bosques milenarios.',
+        badge: '🔥 20% OFF · MÁS ELEGIDA',
+        discountPercent: 20,
+        originalPrice: 85000,
+        finalPrice: 68000,
+        duration: 'Día Completo (10 hs)',
+        image: '/images/excursiones/camino-de-los-7-lagos-san-martin-de-los-andes.webp',
+        excursionId: 'san-martin-de-los-andes-por-7-lagos',
+        whatsappMessage: 'Hola Grupo Visión! Quiero consultar por la promo del 20% OFF en San Martín por 7 Lagos.'
+      },
+      {
+        id: 'sug-2',
+        title: 'Isla Victoria & Bosque de Arrayanes',
+        tagline: 'Navegación tradicional por el lago Nahuel Huapi hacia el único bosque puro de arrayanes del planeta.',
+        badge: '⚡ 15% OFF · CLÁSICO LACUSTRE',
+        discountPercent: 15,
+        originalPrice: 70000,
+        finalPrice: 59500,
+        duration: 'Medio Día / Día Completo',
+        image: '/images/excursiones/isla-victoria-y-bosque-de-arrayanes.webp',
+        excursionId: 'isla-victoria-y-bosque-de-arrayanes',
+        whatsappMessage: 'Hola Grupo Visión! Me interesa reservar con el 15% OFF la navegación a Isla Victoria y Arrayanes.'
+      },
+      {
+        id: 'sug-3',
+        title: 'Cerro Tronador & Glaciar Ventisquero Negro',
+        tagline: 'Expedición al pico más alto del Parque Nacional con cascadas de deshielo y glaciares colgantes.',
+        badge: '🏔️ 15% OFF · AVENTURA 4X4',
+        discountPercent: 15,
+        originalPrice: 62000,
+        finalPrice: 52700,
+        duration: 'Día Completo (9 hs)',
+        image: '/images/excursiones/cerro-tronador-y-glaciares.webp',
+        excursionId: 'cerro-tronador-y-glaciares',
+        whatsappMessage: 'Hola Grupo Visión! Quisiera info sobre la promo en Cerro Tronador y Ventisquero Negro.'
+      },
+      {
+        id: 'sug-4',
+        title: 'Circuito Chico & Punto Panorámico',
+        tagline: 'El paseo de bienvenida por excelencia con vistas inigualables del Lago Moreno, Llao Llao y Capilla San Eduardo.',
+        badge: '✨ 25% OFF · BIENVENIDA A BARILOCHE',
+        discountPercent: 25,
+        originalPrice: 40000,
+        finalPrice: 30000,
+        duration: 'Medio Día (4 hs)',
+        image: '/images/excursiones/circuito-chico.webp',
+        excursionId: 'circuito-chico',
+        whatsappMessage: 'Hola Grupo Visión! Quiero aprovechar la promo bienvenida del 25% OFF en Circuito Chico.'
+      },
+      {
+        id: 'sug-5',
+        title: 'Puerto Blest & Cascada de los Cántaros',
+        tagline: 'Navegación al corazón de la selva valdiviana con frondosa vegetación, alerces milenarios y escalinatas panorámicas.',
+        badge: '🌿 10% OFF · PAISAJE SELVÁTICO',
+        discountPercent: 10,
+        originalPrice: 75000,
+        finalPrice: 67500,
+        duration: 'Día Completo (8 hs)',
+        image: '/images/excursiones/puerto-blest-y-cascada-de-los-cantaros.webp',
+        excursionId: 'puerto-blest-y-cascada-de-los-cantaros',
+        whatsappMessage: 'Hola Grupo Visión! Quisiera reservar Puerto Blest con descuento promocional.'
+      }
+    ]
   }
 };

@@ -13,10 +13,13 @@ import {
   ExternalLink,
   HelpCircle,
   AlertCircle,
-  FileText
+  FileText,
+  Tag,
+  Clock,
+  DollarSign
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { SiteContentData, AboutSectionData, ExclusiveSectionData } from '../data/siteContentData';
+import { SiteContentData, AboutSectionData, ExclusiveSectionData, TopSuggestionsSectionData, SuggestionBannerItem, DEFAULT_SITE_CONTENT } from '../data/siteContentData';
 import { MediaLibraryModal } from './MediaLibraryModal';
 
 interface AdminSiteContentProps {
@@ -32,11 +35,12 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
   onResetContent,
   onViewPublicSite
 }) => {
-  const [activeTab, setActiveTab] = useState<'about' | 'exclusive'>('about');
+  const [activeTab, setActiveTab] = useState<'about' | 'exclusive' | 'suggestions'>('about');
   const [formData, setFormData] = useState<SiteContentData>(content);
   const [isSavedAlert, setIsSavedAlert] = useState(false);
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
   const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
+  const [mediaTarget, setMediaTarget] = useState<'aboutBg' | number>('aboutBg');
 
   // Sync when prop updates
   useEffect(() => {
@@ -70,6 +74,28 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
       return {
         ...prev,
         about: { ...prev.about, fleetMetrics: metrics }
+      };
+    });
+  };
+
+  const updateSuggestions = (updates: Partial<TopSuggestionsSectionData>) => {
+    setFormData(prev => ({
+      ...prev,
+      topSuggestions: {
+        ...(prev.topSuggestions || DEFAULT_SITE_CONTENT.topSuggestions!),
+        ...updates
+      }
+    }));
+  };
+
+  const updateSuggestionItem = (index: number, updates: Partial<SuggestionBannerItem>) => {
+    setFormData(prev => {
+      const current = prev.topSuggestions || DEFAULT_SITE_CONTENT.topSuggestions!;
+      const items = [...current.items];
+      items[index] = { ...items[index], ...updates };
+      return {
+        ...prev,
+        topSuggestions: { ...current, items }
       };
     });
   };
@@ -163,6 +189,18 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
         >
           <Sparkles className="w-4 h-4" />
           <span>2. Sección Expediciones Exclusivas & VIP</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('suggestions')}
+          className={`py-4 px-5 font-bold text-xs sm:text-sm border-b-2 transition-all flex items-center gap-2 ${
+            activeTab === 'suggestions'
+              ? 'border-[#00A896] text-[#00A896]'
+              : 'border-transparent text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <Tag className="w-4 h-4 text-orange-500" />
+          <span>3. Top Sugerencias con Descuento (Carrusel)</span>
         </button>
       </div>
 
@@ -486,12 +524,212 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
         </div>
       )}
 
-      {/* MODAL MEDIA LIBRARY FOR BACKGROUND IMAGE */}
+      {/* TAB 3: TOP SUGERENCIAS CON DESCUENTO (CARRUSEL) */}
+      {activeTab === 'suggestions' && (
+        <div className="bg-white rounded-b-3xl border border-t-0 border-slate-200 p-6 sm:p-8 space-y-8 shadow-sm">
+          
+          {/* Header Texts */}
+          <div className="space-y-4">
+            <h3 className="font-extrabold text-base text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
+              <Tag className="w-4 h-4 text-orange-500" />
+              <span>Encabezado de la Sección de Top Sugerencias &amp; Ofertas</span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Badge Superior</label>
+                <input
+                  type="text"
+                  value={formData.topSuggestions?.badge || ''}
+                  onChange={e => updateSuggestions({ badge: e.target.value })}
+                  placeholder="⚡ TOP SUGERENCIAS & OFERTAS EXCLUSIVAS"
+                  className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Título de la Sección</label>
+                <input
+                  type="text"
+                  value={formData.topSuggestions?.title || ''}
+                  onChange={e => updateSuggestions({ title: e.target.value })}
+                  placeholder="Excursiones Destacadas con Descuento Especial"
+                  className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Bajada / Subtítulo</label>
+                <input
+                  type="text"
+                  value={formData.topSuggestions?.subtitle || ''}
+                  onChange={e => updateSuggestions({ subtitle: e.target.value })}
+                  placeholder="Aprovechá cupos limitados y beneficios exclusivos..."
+                  className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Individual Suggestions Cards */}
+          <div className="space-y-4">
+            <h3 className="font-extrabold text-base text-slate-900 border-b border-slate-100 pb-2 flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#00A896]" />
+                <span>Excursiones en el Carrusel Promocional ({(formData.topSuggestions?.items || []).length})</span>
+              </span>
+              <span className="text-xs font-mono text-slate-400">Pasan automáticamente cada 5.5s</span>
+            </h3>
+
+            <div className="space-y-6">
+              {(formData.topSuggestions?.items || []).map((item, index) => (
+                <div 
+                  key={item.id}
+                  className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-4"
+                >
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
+                    <div className="flex items-center gap-3">
+                      <span className="w-7 h-7 rounded-xl bg-orange-500/10 text-orange-600 font-mono font-bold text-xs flex items-center justify-center">
+                        0{index + 1}
+                      </span>
+                      <h4 className="font-black text-sm text-slate-900">{item.title}</h4>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-500/10 text-orange-600 border border-orange-500/20 font-mono">
+                        {item.discountPercent}% OFF
+                      </span>
+                      <span className="text-xs font-mono font-bold text-emerald-600">
+                        ${item.finalPrice.toLocaleString('es-AR')} ARS
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Título de la Excursión</label>
+                      <input
+                        type="text"
+                        value={item.title}
+                        onChange={e => updateSuggestionItem(index, { title: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Badge de Promoción</label>
+                      <input
+                        type="text"
+                        value={item.badge}
+                        onChange={e => updateSuggestionItem(index, { badge: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Precio Original (Tachado)</label>
+                      <input
+                        type="number"
+                        value={item.originalPrice}
+                        onChange={e => updateSuggestionItem(index, { originalPrice: Number(e.target.value) })}
+                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Precio con Descuento</label>
+                      <input
+                        type="number"
+                        value={item.finalPrice}
+                        onChange={e => updateSuggestionItem(index, { finalPrice: Number(e.target.value) })}
+                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="sm:col-span-2">
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Bajada Descriptiva / Atractivo</label>
+                      <input
+                        type="text"
+                        value={item.tagline}
+                        onChange={e => updateSuggestionItem(index, { tagline: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Duración</label>
+                      <input
+                        type="text"
+                        value={item.duration}
+                        onChange={e => updateSuggestionItem(index, { duration: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Image Selector & WhatsApp Message */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Imagen del Banner</label>
+                      <div className="flex items-center gap-3">
+                        <img 
+                          src={item.image} 
+                          alt={item.title} 
+                          className="w-14 h-10 rounded-lg object-cover border border-slate-200 shrink-0" 
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMediaTarget(index);
+                            setIsMediaModalOpen(true);
+                          }}
+                          className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1.5 shadow-xs"
+                        >
+                          <ImageIcon className="w-3.5 h-3.5 text-[#00A896]" />
+                          <span>Cambiar Imagen</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Mensaje para Consulta en WhatsApp</label>
+                      <input
+                        type="text"
+                        value={item.whatsappMessage}
+                        onChange={e => updateSuggestionItem(index, { whatsappMessage: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                      />
+                    </div>
+                  </div>
+
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      )}
+
+      {/* MODAL MEDIA LIBRARY FOR BACKGROUND IMAGE & BANNER SLIDES */}
       <MediaLibraryModal
         isOpen={isMediaModalOpen}
         onClose={() => setIsMediaModalOpen(false)}
-        onSelectImage={(url) => updateAbout({ backgroundImage: url })}
-        currentSelectedUrl={formData.about.backgroundImage}
+        onSelectImage={(url) => {
+          if (mediaTarget === 'aboutBg') {
+            updateAbout({ backgroundImage: url });
+          } else if (typeof mediaTarget === 'number') {
+            updateSuggestionItem(mediaTarget, { image: url });
+          }
+        }}
+        currentSelectedUrl={
+          mediaTarget === 'aboutBg'
+            ? formData.about.backgroundImage
+            : typeof mediaTarget === 'number'
+              ? (formData.topSuggestions?.items[mediaTarget]?.image || '')
+              : ''
+        }
       />
 
       {/* RESET CONFIRMATION DIALOG */}

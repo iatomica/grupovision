@@ -68,6 +68,7 @@ import { AdminAnalyticsReports } from './components/AdminAnalyticsReports';
 import { AdminSiteContent } from './components/AdminSiteContent';
 import { Footer } from './components/Footer';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
+import { TopSuggestionsBanner } from './components/TopSuggestionsBanner';
 import { SiteContentData, DEFAULT_SITE_CONTENT } from './data/siteContentData';
 import { loadSiteContent, saveSiteContent, resetSiteContentToDefault, fetchSiteContentAsync } from './utils/siteContentStorage';
 
@@ -983,6 +984,23 @@ export default function App() {
               </div>
             </div>
           </section>
+ 
+          {/* TOP SUGGESTIONS & OFFERS BANNER CAROUSEL */}
+          <TopSuggestionsBanner
+            data={siteContent.topSuggestions}
+            onSelectExcursion={(excursionId) => {
+              const found = (excursionsList || EXCURSIONS_DATA).find(
+                e => e.id === excursionId || e.id.includes(excursionId) || excursionId.includes(e.id)
+              );
+              if (found) {
+                setActiveExcursion(found);
+                setIsExcursionModalOpen(true);
+              } else {
+                const el = document.getElementById('excursiones');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+          />
 
           {/* EXCURSIONS CATALOG */}
           <section id="excursiones" className="py-24 max-w-7xl mx-auto px-6">
