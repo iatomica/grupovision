@@ -237,10 +237,52 @@ app.post('/api/site-content/reset', (req, res) => {
 // MEDIA LIBRARY API (WordPress Style)
 // ==========================================
 
+const MEDIA_FOLDERS_FILE = path.join(DATA_DIR, 'media-folders.json');
+
+function getMediaFolders() {
+  try {
+    if (fs.existsSync(MEDIA_FOLDERS_FILE)) {
+      return JSON.parse(fs.readFileSync(MEDIA_FOLDERS_FILE, 'utf8'));
+    }
+  } catch (e) {
+    console.error('[Media] Error reading media-folders.json:', e);
+  }
+  return {};
+}
+
+function saveMediaFolders(folders) {
+  try {
+    fs.writeFileSync(MEDIA_FOLDERS_FILE, JSON.stringify(folders, null, 2), 'utf8');
+  } catch (e) {
+    console.error('[Media] Error saving media-folders.json:', e);
+  }
+}
+
+function inferFolderFromFilename(filename) {
+  const lower = filename.toLowerCase();
+  if (lower.includes('roca-negra') || lower.includes('rocanegra') || lower.includes('raqueta')) return 'Refugio Roca Negra';
+  if (lower.includes('7-lagos') || lower.includes('siete-lagos') || lower.includes('7lagos')) return 'Camino de los 7 Lagos';
+  if (lower.includes('catedral')) return 'Cerro Catedral';
+  if (lower.includes('tronador') || lower.includes('glaciar') || lower.includes('ventisquero')) return 'Cerro Tronador & Glaciares';
+  if (lower.includes('circuito-chico') || lower.includes('campanario') || lower.includes('panoramico')) return 'Circuito Chico';
+  if (lower.includes('victoria') || lower.includes('arrayanes')) return 'Isla Victoria & Arrayanes';
+  if (lower.includes('blest') || lower.includes('cantaros')) return 'Puerto Blest & Cántaros';
+  if (lower.includes('san-martin')) return 'San Martín de los Andes';
+  if (lower.includes('angostura')) return 'Villa La Angostura';
+  if (lower.includes('rafting') || lower.includes('manso')) return 'Rafting Río Manso';
+  if (lower.includes('fragua') || lower.includes('cabalgata')) return 'Cabalgata La Fragua';
+  if (lower.includes('kayak') || lower.includes('moreno')) return 'Kayak en Lagos Morenos';
+  if (lower.includes('cerveza') || lower.includes('patagonia') || lower.includes('gastronom')) return 'Experiencias & Gastronomía';
+  if (lower.includes('traslado') || lower.includes('aeropuerto') || lower.includes('flota') || lower.includes('sprinter')) return 'Traslados & Flota';
+  if (lower.includes('hero') || lower.includes('banner') || lower.includes('portada')) return 'Banners & Portadas';
+  return 'General';
+}
+
 // GET all media assets
 app.get('/api/media', async (req, res) => {
   try {
     const mediaList = [];
+    const customFolders = getMediaFolders();
 
     // 1. List user uploaded files in data/uploads/
     if (fs.existsSync(UPLOADS_DIR)) {
@@ -262,7 +304,8 @@ app.get('/api/media', async (req, res) => {
           thumbUrl: hasThumb ? `/uploads/${thumbName}` : `/uploads/${file}`,
           sizeBytes: stats.size,
           updatedAt: stats.mtime,
-          source: 'upload'
+          source: 'upload',
+          folder: customFolders[file] || inferFolderFromFilename(file)
         });
       }
     }
@@ -285,7 +328,8 @@ app.get('/api/media', async (req, res) => {
           thumbUrl: `/images/excursiones/${file}`,
           sizeBytes: stats.size,
           updatedAt: stats.mtime,
-          source: 'catalog'
+          source: 'catalog',
+          folder: customFolders[`catalog-${file}`] || inferFolderFromFilename(file)
         });
       }
     }
@@ -307,6 +351,7 @@ app.post('/api/media/upload', upload.single('image'), async (req, res) => {
       return res.status(400).json({ error: 'No se envió ningún archivo de imagen' });
     }
 
+    const targetFolder = (req.body && req.body.folder) ? req.body.folder.trim() : 'General';
     const originalName = req.file.originalname || 'imagen';
     const baseSlug = path.parse(originalName).name
       .toLowerCase()
@@ -336,7 +381,12 @@ app.post('/api/media/upload', upload.single('image'), async (req, res) => {
       .webp({ quality: 78, effort: 3 })
       .toFile(thumbFilePath);
 
-    console.log(`[Media] Uploaded and normalized: ${mainFileName} (${mainMetadata.size} bytes)`);
+    // Save folder mapping
+    const customFolders = getMediaFolders();
+    customFolders[mainFileName] = targetFolder;
+    saveMediaFolders(customFolders);
+
+    console.log(`[Media] Uploaded and normalized: ${mainFileName} (${mainMetadata.size} bytes) in folder "${targetFolder}"`);
 
     const mediaItem = {
       id: mainFileName,
@@ -347,13 +397,32 @@ app.post('/api/media/upload', upload.single('image'), async (req, res) => {
       width: mainMetadata.width,
       height: mainMetadata.height,
       updatedAt: new Date().toISOString(),
-      source: 'upload'
+      source: 'upload',
+      folder: targetFolder
     };
 
     res.json({ success: true, item: mediaItem });
   } catch (err) {
     console.error('[Media] Error processing image:', err);
     res.status(500).json({ error: 'Error al procesar y normalizar la imagen a WebP' });
+  }
+});
+
+// PATCH move media item to another folder
+app.patch('/api/media/:fileId/folder', (req, res) => {
+  try {
+    const { fileId } = req.params;
+    const { folder } = req.body;
+    if (!folder) {
+      return res.status(400).json({ error: 'Carpeta requerida' });
+    }
+    const customFolders = getMediaFolders();
+    customFolders[fileId] = folder;
+    saveMediaFolders(customFolders);
+    res.json({ success: true, fileId, folder });
+  } catch (err) {
+    console.error('[Media] Error updating media folder:', err);
+    res.status(500).json({ error: 'Error al actualizar carpeta' });
   }
 });
 

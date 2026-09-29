@@ -12,6 +12,7 @@ export interface MediaItem {
   height?: number;
   updatedAt: string;
   source: 'catalog' | 'upload';
+  folder?: string;
 }
 
 /**
@@ -123,9 +124,12 @@ export async function fetchMediaLibrary(): Promise<MediaItem[]> {
 /**
  * Sube una imagen al servidor, donde Sharp la convierte a WebP y genera thumbnail.
  */
-export async function uploadMediaImage(file: File): Promise<MediaItem> {
+export async function uploadMediaImage(file: File, folder?: string): Promise<MediaItem> {
   const formData = new FormData();
   formData.append('image', file);
+  if (folder) {
+    formData.append('folder', folder);
+  }
 
   const res = await fetch('/api/media/upload', {
     method: 'POST',

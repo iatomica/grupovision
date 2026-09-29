@@ -52,7 +52,9 @@ import {
   Bell,
   Paperclip,
   Tag,
-  AtSign
+  AtSign,
+  CalendarDays,
+  Image as ImageIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -324,9 +326,17 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 6;
 
+  const getTomorrowDateStr = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split('T')[0];
+  };
+
   const [activeExcursion, setActiveExcursion] = useState<Excursion | null>(null);
   const [selectedShiftId, setSelectedShiftId] = useState<string | null>(null);
   const [modalPassengers, setModalPassengers] = useState<number>(2);
+  const [modalSelectedDate, setModalSelectedDate] = useState<string>(getTomorrowDateStr);
+  const [modalActivePhoto, setModalActivePhoto] = useState<string | null>(null);
   const [isExcursionModalOpen, setIsExcursionModalOpen] = useState(false);
   const [isBannerCollapsed, setIsBannerCollapsed] = useState(false);
   const [isOfficeModalOpen, setIsOfficeModalOpen] = useState(false);
@@ -335,6 +345,8 @@ export default function App() {
   // Helper to open modal with preselected shift
   const handleOpenExcursionModal = (item: Excursion) => {
     setActiveExcursion(item);
+    setModalActivePhoto(null);
+    setModalSelectedDate(getTomorrowDateStr());
     const firstEnabledWithSpots = item.shifts?.find(s => s.enabled && s.availableSpots > 0);
     const firstEnabled = item.shifts?.find(s => s.enabled);
     setSelectedShiftId(firstEnabledWithSpots ? firstEnabledWithSpots.id : firstEnabled ? firstEnabled.id : null);
@@ -374,9 +386,11 @@ export default function App() {
     return categoryOrder.filter(cat => cat === 'Todas' || presentSet.has(cat as any));
   }, [excursionsList]);
 
-  // Filtered Excursions (Multilingual search support)
+  // Filtered Excursions (Multilingual search support & only published in public catalog)
   const filteredExcursions = useMemo(() => {
     return excursionsList.filter(item => {
+      // Hide unpublished excursions from public visitors
+      if (item.isPublished === false) return false;
       const matchesCategory = selectedCategory === 'Todas' || item.category === selectedCategory;
       const content = getExcursionContent(item, currentLang);
       const q = searchQuery.toLowerCase().trim();
@@ -1865,15 +1879,85 @@ export default function App() {
           const enabledShifts = activeExcursion.shifts?.filter(s => s.enabled) || [];
           const selectedShift = enabledShifts.find(s => s.id === selectedShiftId) || enabledShifts[0];
 
-          // Prefilled WhatsApp booking message
-          const shiftInfo = selectedShift 
+          // Gallery photos deduplicated
+          const allGalleryPhotos = [
+            activeExcursion.image,
+            ...(activeExcursion.gallery || [])
+          ].filter((url, idx, arr) => Boolean(url && url.trim()) && arr.indexOf(url) === idx);
+
+          const activePhotoToShow = modalActivePhoto || activeExcursion.image;
+          const currentPhotoIndex = Math.max(0, allGalleryPhotos.indexOf(activePhotoToShow));
+
+          const handlePrevPhoto = (e: React.MouseEvent) => {
+            e.stopPropagation();
+            const prevIdx = (currentPhotoIndex - 1 + allGalleryPhotos.length) % allGalleryPhotos.length;
+            setModalActivePhoto(allGalleryPhotos[prevIdx]);
+          };
+
+          const handleNextPhoto = (e: React.MouseEvent) => {
+            e.stopPropagation();
+            const nextIdx = (currentPhotoIndex + 1) % allGalleryPhotos.length;
+            setModalActivePhoto(allGalleryPhotos[nextIdx]);
+          };
+
+          // Calendar calculation for operating days & blocked dates
+          const operatingDays = Array.isArray(activeExcursion.operatingDays) && activeExcursion.operatingDays.length > 0 
+            ? activeExcursion.operatingDays 
+            : [0, 1, 2, 3, 4, 5, 6];
+          const blockedDates = activeExcursion.blockedDates || [];
+
+          // Generate next 14 calendar dates
+          const today = new Date();
+          const upcomingDates = Array.from({ length: 14 }).map((_, i) => {
+            const d = new Date(today);
+            d.setDate(today.getDate() + i + 1);
+            const dateStr = d.toISOString().split('T')[0];
+            const dayOfWeek = d.getDay(); // 0=Dom..6=Sáb
+            const isOperationalDay = operatingDays.includes(dayOfWeek);
+            const isBlocked = blockedDates.includes(dateStr);
+            const isAvailable = isOperationalDay && !isBlocked;
+
+            return {
+              dateStr,
+              dayOfWeek,
+              dayNum: d.getDate(),
+              weekday: d.toLocaleDateString(currentLang === 'pt' ? 'pt-BR' : currentLang === 'en' ? 'en-US' : 'es-AR', { weekday: 'short' }),
+              monthName: d.toLocaleDateString(currentLang === 'pt' ? 'pt-BR' : currentLang === 'en' ? 'en-US' : 'es-AR', { month: 'short' }),
+              isAvailable,
+              isBlocked,
+              isOperationalDay
+            };
+          });
+
+          // Check selected date status
+          const selDateObj = new Date(modalSelectedDate + 'T12:00:00');
+          const selDayOfWeek = isNaN(selDateObj.getTime()) ? 1 : selDateObj.getDay();
+          const isSelectedOperational = operatingDays.includes(selDayOfWeek);
+          const isSelectedBlocked = blockedDates.includes(modalSelectedDate);
+          const isSelectedDateAvailable = isSelectedOperational && !isSelectedBlocked;
+
+          // Nice formatted date string for display
+          const formattedSelectedDate = !isNaN(selDateObj.getTime()) 
+            ? selDateObj.toLocaleDateString(currentLang === 'pt' ? 'pt-BR' : currentLang === 'en' ? 'en-US' : 'es-AR', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+              })
+            : modalSelectedDate;
+
+          // Prefilled WhatsApp booking message with date and shifts
+          const shiftInfo = selectedShift && isSelectedDateAvailable
             ? ` | Turno: ${selectedShift.name} (${selectedShift.time})`
             : '';
+          const dateInfo = ` | Fecha: ${modalSelectedDate} (${formattedSelectedDate})`;
           const langGuideInfo = currentLang === 'en' 
             ? ' [English Bilingual Guide]' 
             : ' [Guía Español / Portugués]';
           const totalEstimate = activePrice * modalPassengers;
-          const waBookingMessage = `Hola Grupo Visión! Deseo consultar y reservar la excursión "${activeContent.title}"${shiftInfo}${langGuideInfo} | Pasajeros: ${modalPassengers} | Tarifa est.: USD $${totalEstimate}. ¿Tienen disponibilidad confirmada?`;
+          const waBookingMessage = isSelectedDateAvailable
+            ? `Hola Grupo Visión! Deseo consultar y reservar la excursión "${activeContent.title}"${dateInfo}${shiftInfo}${langGuideInfo} | Pasajeros: ${modalPassengers} | Tarifa est.: USD $${totalEstimate}. ¿Tienen disponibilidad confirmada?`
+            : `Hola Grupo Visión! Deseo consultar si es posible programar una salida especial para la excursión "${activeContent.title}" en la fecha ${modalSelectedDate} (${formattedSelectedDate})${langGuideInfo} | Pasajeros: ${modalPassengers}. ¿Tienen opciones disponibles?`;
           const waUrl = `https://wa.me/5492944235278?text=${encodeURIComponent(waBookingMessage)}`;
 
           return (
@@ -1885,23 +1969,50 @@ export default function App() {
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 className="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative flex flex-col max-h-[88vh]"
               >
-                {/* Dynamic Collapsible Image Header Banner */}
+                {/* Dynamic Collapsible Image Header Banner with Gallery Support */}
                 <div 
                   className={`relative w-full overflow-hidden shrink-0 transition-all duration-300 ease-in-out ${
                     isBannerCollapsed ? 'h-24 sm:h-28' : 'h-64 sm:h-72'
                   }`}
                 >
                   <img 
-                    src={activeExcursion.image} 
+                    src={activePhotoToShow} 
                     alt={activeContent.title} 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-all duration-300"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent" />
                   
+                  {/* Prev / Next Gallery Arrows (if more than 1 photo) */}
+                  {allGalleryPhotos.length > 1 && !isBannerCollapsed && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={handlePrevPhoto}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-950/60 hover:bg-slate-950/85 text-white backdrop-blur-sm transition-all z-10 cursor-pointer"
+                        title="Foto anterior"
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleNextPhoto}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-950/60 hover:bg-slate-950/85 text-white backdrop-blur-sm transition-all z-10 cursor-pointer"
+                        title="Foto siguiente"
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
+                      
+                      {/* Photo indicator badge */}
+                      <span className="absolute top-3 left-4 px-2.5 py-1 rounded-full bg-slate-950/70 text-white text-[11px] font-mono backdrop-blur-sm border border-white/20 z-10">
+                        📷 {currentPhotoIndex + 1} / {allGalleryPhotos.length}
+                      </span>
+                    </>
+                  )}
+
                   {/* Close Button */}
                   <button 
                     onClick={() => { setIsExcursionModalOpen(false); setIsBannerCollapsed(false); }}
-                    className="absolute top-3 right-3 bg-white/90 hover:bg-white text-slate-800 p-2 rounded-full border border-slate-200 backdrop-blur-md shadow-md z-10"
+                    className="absolute top-3 right-3 bg-white/90 hover:bg-white text-slate-800 p-2 rounded-full border border-slate-200 backdrop-blur-md shadow-md z-10 cursor-pointer"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -1924,6 +2035,39 @@ export default function App() {
                     </span>
                   </div>
                 </div>
+
+                {/* Gallery Thumbnail Strip (if more than 1 photo) */}
+                {allGalleryPhotos.length > 1 && !isBannerCollapsed && (
+                  <div className="px-6 py-2.5 bg-slate-100/90 border-b border-slate-200 flex items-center gap-2 overflow-x-auto scrollbar-none shrink-0">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 shrink-0 flex items-center gap-1 mr-1">
+                      <ImageIcon className="w-3.5 h-3.5 text-[#00A896]" /> Galería:
+                    </span>
+                    {allGalleryPhotos.map((photoUrl, pIdx) => {
+                      const isCurrent = photoUrl === activePhotoToShow;
+                      return (
+                        <button
+                          key={pIdx}
+                          type="button"
+                          onClick={() => setModalActivePhoto(photoUrl)}
+                          className={`relative h-12 w-16 rounded-lg overflow-hidden shrink-0 border-2 transition-all cursor-pointer ${
+                            isCurrent
+                              ? 'border-[#00A896] scale-105 shadow-sm ring-2 ring-[#00A896]/20'
+                              : 'border-transparent opacity-70 hover:opacity-100 hover:border-slate-300'
+                          }`}
+                        >
+                          <img
+                            src={photoUrl}
+                            alt={`Foto ${pIdx + 1}`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = '/images/excursiones/circuito-chico.webp';
+                            }}
+                          />
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
 
                 {/* Scrollable Modal Content with Scroll Listener for Banner Collapse */}
                 <div 
@@ -1961,13 +2105,105 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* INTERACTIVE SHIFTS & CAPACITY SELECTOR */}
+                  {/* CALENDAR & DATE SELECTOR */}
+                  <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-cyan-50/30 border border-slate-200 space-y-3.5">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <CalendarDays className="w-4 h-4 text-[#00A896]" />
+                        <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900">
+                          1. Fecha de Salida en Bariloche
+                        </h4>
+                      </div>
+                      
+                      {/* Native date picker for choosing specific day */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-mono text-slate-500">Otra fecha:</span>
+                        <input
+                          type="date"
+                          min={today.toISOString().split('T')[0]}
+                          value={modalSelectedDate}
+                          onChange={(e) => {
+                            if (e.target.value) setModalSelectedDate(e.target.value);
+                          }}
+                          className="px-2.5 py-1 bg-white border border-slate-300 rounded-lg text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-[#00A896]"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Horizontal 14-day date selector strip */}
+                    <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                      {upcomingDates.map((item) => {
+                        const isSelected = item.dateStr === modalSelectedDate;
+                        return (
+                          <button
+                            key={item.dateStr}
+                            type="button"
+                            onClick={() => setModalSelectedDate(item.dateStr)}
+                            className={`p-2.5 rounded-xl border text-center transition-all shrink-0 min-w-[64px] flex flex-col items-center gap-1 cursor-pointer ${
+                              isSelected
+                                ? 'bg-[#00A896] text-white border-[#00A896] shadow-sm ring-2 ring-[#00A896]/20'
+                                : item.isAvailable
+                                ? 'bg-white border-slate-200 hover:border-slate-300 text-slate-700'
+                                : 'bg-slate-100/70 border-slate-200 text-slate-400 opacity-60'
+                            }`}
+                          >
+                            <span className="text-[10px] uppercase font-bold tracking-wider">
+                              {item.weekday}
+                            </span>
+                            <span className="text-base font-black font-mono leading-none">
+                              {item.dayNum}
+                            </span>
+                            <span className="text-[10px] font-mono opacity-80">
+                              {item.monthName}
+                            </span>
+                            {/* Availability indicator dot */}
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full mt-0.5 ${
+                                isSelected 
+                                  ? 'bg-white' 
+                                  : item.isAvailable 
+                                  ? 'bg-emerald-500' 
+                                  : 'bg-rose-400'
+                              }`}
+                            />
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Selected Date Status Alert */}
+                    <div className={`p-3 rounded-xl text-xs flex items-center justify-between gap-3 ${
+                      isSelectedDateAvailable 
+                        ? 'bg-emerald-50 border border-emerald-200 text-emerald-900' 
+                        : 'bg-amber-50 border border-amber-200 text-amber-900'
+                    }`}>
+                      <div className="flex items-center gap-2">
+                        <span>{isSelectedDateAvailable ? '✓' : '⚠️'}</span>
+                        <span className="font-semibold capitalize">
+                          {formattedSelectedDate}
+                        </span>
+                        <span>•</span>
+                        <span className="text-[11px]">
+                          {isSelectedDateAvailable
+                            ? 'Salidas y turnos disponibles para este día'
+                            : 'Fecha sin salidas programadas habituales (se puede consultar cupo especial)'}
+                        </span>
+                      </div>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold shrink-0 ${
+                        isSelectedDateAvailable ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                      }`}>
+                        {isSelectedDateAvailable ? 'Disponible' : 'Consultar'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* 2. INTERACTIVE SHIFTS & CAPACITY SELECTOR */}
                   <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-emerald-50/40 border border-slate-200 space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-[#00A896]" />
                         <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900">
-                          {t.modal.availableShiftsTitle}
+                          2. {t.modal.availableShiftsTitle}
                         </h4>
                       </div>
                       <span className="text-[11px] font-mono text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full font-bold">
@@ -1990,12 +2226,14 @@ export default function App() {
                             <div
                               key={shift.id}
                               onClick={() => {
-                                if (!isSoldOut) {
+                                if (!isSoldOut && isSelectedDateAvailable) {
                                   setSelectedShiftId(shift.id);
                                 }
                               }}
                               className={`p-3 rounded-xl border text-xs transition-all relative flex flex-col justify-between gap-2 ${
-                                isSoldOut
+                                !isSelectedDateAvailable
+                                  ? 'bg-slate-100/60 border-slate-200 opacity-60 cursor-not-allowed'
+                                  : isSoldOut
                                   ? 'bg-slate-100/70 border-slate-200 opacity-60 cursor-not-allowed'
                                   : isSelected
                                   ? 'bg-white border-[#00A896] ring-2 ring-[#00A896]/20 shadow-md cursor-pointer'
@@ -2006,7 +2244,7 @@ export default function App() {
                                 <div>
                                   <div className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
                                     <span>{shift.name}</span>
-                                    {isSelected && (
+                                    {isSelected && isSelectedDateAvailable && (
                                       <span className="w-2 h-2 rounded-full bg-[#00A896]" />
                                     )}
                                   </div>
@@ -2034,8 +2272,8 @@ export default function App() {
 
                               <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100 font-mono">
                                 <span className="text-slate-400">Cupo total: {shift.totalCapacity}</span>
-                                <span className={`font-bold ${isSelected ? 'text-[#00A896]' : 'text-slate-600'}`}>
-                                  {isSelected ? `✓ ${t.modal.selectedShift}` : t.modal.selectShift}
+                                <span className={`font-bold ${isSelected && isSelectedDateAvailable ? 'text-[#00A896]' : 'text-slate-600'}`}>
+                                  {isSelected && isSelectedDateAvailable ? `✓ ${t.modal.selectedShift}` : t.modal.selectShift}
                                 </span>
                               </div>
                             </div>

@@ -38,6 +38,10 @@ export interface Excursion {
   departureTime: string;
   priceNum: number;        // Tarifa base en USD para Español y Portugués
   priceEnglish?: number;   // Tarifa diferenciada en USD para Inglés (guía bilingüe)
+  isPublished?: boolean;   // Toggle ON/OFF para publicar en la web o dejar en borrador (default: true)
+  gallery?: string[];      // Galería de fotos adicionales de la excursión
+  operatingDays?: number[];// Días de la semana que opera (0=Dom, 1=Lun, ..., 6=Sáb). Default: [0,1,2,3,4,5,6]
+  blockedDates?: string[]; // Fechas específicas bloqueadas o cerradas (formato YYYY-MM-DD)
   shifts?: ExcursionShift[]; // Turnos y cupos configurables por el Admin
   translations?: {
     en?: ExcursionTranslations;
@@ -1384,8 +1388,21 @@ export function normalizeExcursion(e: Excursion): Excursion {
     }
   ];
 
+  const isPublished = e.isPublished !== undefined ? e.isPublished : true;
+  const gallery = (Array.isArray(e.gallery) && e.gallery.length > 0)
+    ? e.gallery
+    : [e.image];
+  const operatingDays = (Array.isArray(e.operatingDays) && e.operatingDays.length > 0)
+    ? e.operatingDays
+    : [0, 1, 2, 3, 4, 5, 6];
+  const blockedDates = Array.isArray(e.blockedDates) ? e.blockedDates : [];
+
   return {
     ...e,
+    isPublished,
+    gallery,
+    operatingDays,
+    blockedDates,
     priceEnglish,
     shifts: (Array.isArray(e.shifts) && e.shifts.length > 0) ? e.shifts : defaultShifts,
     translations: e.translations || {}

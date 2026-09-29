@@ -25,7 +25,11 @@ import {
   Sparkles,
   Image as ImageIcon,
   UploadCloud,
-  Download
+  Download,
+  Eye,
+  EyeOff,
+  CalendarDays,
+  Check
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Excursion, ExcursionShift, ExcursionTranslations } from '../data/excursionsData';
@@ -74,6 +78,16 @@ const CATEGORIES: Excursion['category'][] = [
 const SEASONS: Excursion['season'][] = ['Todo el Año', 'Invierno', 'Verano'];
 const DIFFICULTIES: Excursion['difficulty'][] = ['Fácil', 'Moderado', 'Desafiante'];
 
+const DAYS_OF_WEEK = [
+  { day: 1, label: 'Lunes', short: 'Lun' },
+  { day: 2, label: 'Martes', short: 'Mar' },
+  { day: 3, label: 'Miércoles', short: 'Mié' },
+  { day: 4, label: 'Jueves', short: 'Jue' },
+  { day: 5, label: 'Viernes', short: 'Vie' },
+  { day: 6, label: 'Sábado', short: 'Sáb' },
+  { day: 0, label: 'Domingo', short: 'Dom' },
+];
+
 export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   excursions,
   onUpdateExcursionPromo,
@@ -119,6 +133,13 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   const [formDiscountPercent, setFormDiscountPercent] = useState<number>(0);
   const [formPromoBadge, setFormPromoBadge] = useState('');
   const [formIsFeatured, setFormIsFeatured] = useState(false);
+  const [formIsPublished, setFormIsPublished] = useState<boolean>(true);
+  const [formGallery, setFormGallery] = useState<string[]>([]);
+  const [formOperatingDays, setFormOperatingDays] = useState<number[]>([0, 1, 2, 3, 4, 5, 6]);
+  const [formBlockedDates, setFormBlockedDates] = useState<string[]>([]);
+  const [newBlockedDate, setNewBlockedDate] = useState<string>('');
+  const [newGalleryUrl, setNewGalleryUrl] = useState<string>('');
+  const [mediaModalMode, setMediaModalMode] = useState<'cover' | 'gallery'>('cover');
   const [formShifts, setFormShifts] = useState<ExcursionShift[]>([]);
 
   // Shift form temp states
@@ -126,6 +147,9 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   const [newShiftTime, setNewShiftTime] = useState('09:00 hs');
   const [newShiftCapacity, setNewShiftCapacity] = useState<number>(16);
   const [newShiftAvailable, setNewShiftAvailable] = useState<number>(6);
+
+  // Status Filter for Catalog view
+  const [statusFilter, setStatusFilter] = useState<'Todas' | 'Publicadas' | 'Pausadas'>('Todas');
 
   // Translations temp states for Text Tab
   const [textsLang, setTextsLang] = useState<'es' | 'en' | 'pt'>('es');
@@ -150,14 +174,20 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   // Filtered Excursions
   const filteredExcursions = excursions.filter(exc => {
     const matchesCategory = categoryFilter === 'Todas' || exc.category === categoryFilter;
+    const matchesStatus = 
+      statusFilter === 'Todas' ||
+      (statusFilter === 'Publicadas' && exc.isPublished !== false) ||
+      (statusFilter === 'Pausadas' && exc.isPublished === false);
     const matchesSearch = exc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           exc.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           (exc.description && exc.description.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCategory && matchesSearch;
+    return matchesCategory && matchesStatus && matchesSearch;
   });
 
   // Stats calculation
   const totalServices = excursions.length;
+  const publishedCount = excursions.filter(e => e.isPublished !== false).length;
+  const pausedCount = excursions.filter(e => e.isPublished === false).length;
   const withDiscount = excursions.filter(e => (e.discountPercent && e.discountPercent > 0)).length;
   const featuredCount = excursions.filter(e => e.isFeatured).length;
   const avgPrice = totalServices > 0 
@@ -212,6 +242,12 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     setFormDiscountPercent(0);
     setFormPromoBadge('');
     setFormIsFeatured(false);
+    setFormIsPublished(true);
+    setFormGallery([]);
+    setFormOperatingDays([0, 1, 2, 3, 4, 5, 6]);
+    setFormBlockedDates([]);
+    setNewBlockedDate('');
+    setNewGalleryUrl('');
     setFormCustomNote('');
     setFormShifts([
       { id: `shift-1`, name: 'Turno Mañana', time: '09:00 hs', totalCapacity: 16, availableSpots: 6, enabled: true },
@@ -251,6 +287,16 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     setFormDiscountPercent(exc.discountPercent || 0);
     setFormPromoBadge(exc.promoBadge || '');
     setFormIsFeatured(exc.isFeatured || false);
+    setFormIsPublished(exc.isPublished !== false);
+    setFormGallery(Array.isArray(exc.gallery) ? [...exc.gallery] : []);
+    setFormOperatingDays(
+      Array.isArray(exc.operatingDays) && exc.operatingDays.length > 0 
+        ? [...exc.operatingDays] 
+        : [0, 1, 2, 3, 4, 5, 6]
+    );
+    setFormBlockedDates(Array.isArray(exc.blockedDates) ? [...exc.blockedDates] : []);
+    setNewBlockedDate('');
+    setNewGalleryUrl('');
     setFormCustomNote(exc.customNote || '');
     setFormShifts(
       Array.isArray(exc.shifts) && exc.shifts.length > 0
@@ -303,6 +349,41 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     setFormShifts(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s));
   };
 
+  // Calendar operating days helper
+  const handleToggleOperatingDay = (day: number) => {
+    setFormOperatingDays(prev => 
+      prev.includes(day) 
+        ? (prev.length > 1 ? prev.filter(d => d !== day) : prev) 
+        : [...prev, day].sort()
+    );
+  };
+
+  // Blocked dates helpers
+  const handleAddBlockedDate = () => {
+    if (!newBlockedDate) return;
+    if (!formBlockedDates.includes(newBlockedDate)) {
+      setFormBlockedDates(prev => [...prev, newBlockedDate].sort());
+    }
+    setNewBlockedDate('');
+  };
+
+  const handleRemoveBlockedDate = (dateStr: string) => {
+    setFormBlockedDates(prev => prev.filter(d => d !== dateStr));
+  };
+
+  // Gallery helpers
+  const handleAddGalleryImage = (url: string) => {
+    if (!url || !url.trim()) return;
+    const trimmed = url.trim();
+    if (!formGallery.includes(trimmed)) {
+      setFormGallery(prev => [...prev, trimmed]);
+    }
+  };
+
+  const handleRemoveGalleryImage = (index: number) => {
+    setFormGallery(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleSaveFullExcursion = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formTitle.trim()) {
@@ -345,6 +426,10 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
       discountPercent: formDiscountPercent > 0 ? Number(formDiscountPercent) : undefined,
       promoBadge: formPromoBadge.trim() || undefined,
       isFeatured: formIsFeatured,
+      isPublished: formIsPublished,
+      gallery: formGallery.filter(url => Boolean(url && url.trim())),
+      operatingDays: formOperatingDays,
+      blockedDates: formBlockedDates,
       customNote: formCustomNote.trim() || undefined
     };
 
@@ -457,13 +542,33 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
             <Compass className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Activas</div>
+            <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Total Catálogo</div>
             <div className="text-xl font-black text-slate-900">{totalServices}</div>
           </div>
         </div>
 
         <div className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+            <Eye className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Publicadas (Web)</div>
+            <div className="text-xl font-black text-emerald-600">{publishedCount}</div>
+          </div>
+        </div>
+
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+            <EyeOff className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Pausadas / Ocultas</div>
+            <div className="text-xl font-black text-amber-600">{pausedCount}</div>
+          </div>
+        </div>
+
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
             <Tag className="w-5 h-5" />
           </div>
           <div>
@@ -471,42 +576,47 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
             <div className="text-xl font-black text-slate-900">{withDiscount}</div>
           </div>
         </div>
-
-        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
-            <Star className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Destacadas</div>
-            <div className="text-xl font-black text-slate-900">{featuredCount}</div>
-          </div>
-        </div>
-
-        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-            <DollarSign className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Tarifa Promedio</div>
-            <div className="text-xl font-black text-slate-900">${avgPrice} USD</div>
-          </div>
-        </div>
       </div>
 
-      {/* Controls & Search */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
-        <div className="relative w-full md:w-80">
-          <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Buscar por título, categoría o resumen..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#00A896] transition-colors"
-          />
+      {/* Controls, Status & Category Filters */}
+      <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col gap-3 shadow-sm">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-3">
+          <div className="relative w-full md:w-80">
+            <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Buscar por título, categoría o resumen..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#00A896] transition-colors"
+            />
+          </div>
+
+          {/* Quick Status Filter Tabs */}
+          <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs font-semibold self-start md:self-auto">
+            {(['Todas', 'Publicadas', 'Pausadas'] as const).map((st) => (
+              <button
+                key={st}
+                type="button"
+                onClick={() => setStatusFilter(st)}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                  statusFilter === st
+                    ? 'bg-white text-slate-900 shadow-xs font-bold'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {st === 'Publicadas' && <span className="w-2 h-2 rounded-full bg-emerald-500" />}
+                {st === 'Pausadas' && <span className="w-2 h-2 rounded-full bg-amber-500" />}
+                <span>{st}</span>
+                <span className="text-[10px] opacity-60 font-mono">
+                  ({st === 'Todas' ? totalServices : st === 'Publicadas' ? publishedCount : pausedCount})
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-none">
+        <div className="flex items-center gap-1.5 overflow-x-auto w-full pb-1 scrollbar-none border-t border-slate-100 pt-3">
           {['Todas', ...CATEGORIES].map((cat) => (
             <button
               key={cat}
@@ -528,17 +638,20 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
         {filteredExcursions.map((exc) => {
           const discount = exc.discountPercent || 0;
           const discountedPrice = discount > 0 ? Math.round(exc.priceNum * (1 - discount / 100)) : exc.priceNum;
+          const isExcPublished = exc.isPublished !== false;
 
           return (
             <motion.div
               key={exc.id}
               whileHover={{ y: -3 }}
-              className="bg-white border border-slate-200/80 rounded-3xl p-5 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between group"
+              className={`bg-white border rounded-3xl p-5 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between group ${
+                isExcPublished ? 'border-slate-200/80' : 'border-amber-200/80 bg-amber-50/20'
+              }`}
             >
               <div className="space-y-3">
-                {/* Header tags */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
+                {/* Header tags & 1-Click Publish Toggle */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="px-2.5 py-1 bg-slate-100 text-slate-700 text-[11px] font-bold rounded-lg uppercase tracking-wider">
                       {exc.category}
                     </span>
@@ -547,13 +660,47 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                         <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" /> Top
                       </span>
                     )}
+                    {exc.promoBadge && (
+                      <span className="px-2.5 py-1 bg-rose-100 text-rose-800 text-[11px] font-extrabold rounded-lg flex items-center gap-1 shadow-xs">
+                        <Tag className="w-3 h-3" />
+                        {exc.promoBadge}
+                      </span>
+                    )}
+                    {exc.gallery && exc.gallery.length > 0 && (
+                      <span className="px-2 py-0.5 bg-cyan-50 text-cyan-700 border border-cyan-200 rounded-md text-[10px] font-bold">
+                        📷 {exc.gallery.length} fotos
+                      </span>
+                    )}
                   </div>
-                  {exc.promoBadge && (
-                    <span className="px-2.5 py-1 bg-rose-100 text-rose-800 text-[11px] font-extrabold rounded-lg flex items-center gap-1 shadow-xs">
-                      <Tag className="w-3 h-3" />
-                      {exc.promoBadge}
-                    </span>
-                  )}
+
+                  {/* 1-Click Toggle ON/OFF Publicar Excursión */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onUpdateExcursionPromo(exc.id, { isPublished: !isExcPublished });
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold flex items-center gap-1.5 transition-all shadow-2xs shrink-0 cursor-pointer ${
+                      isExcPublished
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
+                        : 'bg-amber-100 text-amber-800 border border-amber-300 hover:bg-amber-200'
+                    }`}
+                    title={isExcPublished ? 'Clic para pausar/ocultar de la web' : 'Clic para activar y publicar en la web'}
+                  >
+                    {isExcPublished ? (
+                      <>
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <Eye className="w-3 h-3 text-emerald-600" />
+                        <span>Publicada</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
+                        <EyeOff className="w-3 h-3 text-amber-700" />
+                        <span>Pausada</span>
+                      </>
+                    )}
+                  </button>
                 </div>
 
                 {/* Image & Main Info */}
@@ -708,10 +855,10 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
               {/* Navigation Tabs */}
               <div className="flex border-b border-slate-200 bg-slate-50/80 px-4 sm:px-6 overflow-x-auto shrink-0 scrollbar-none gap-2">
                 {[
-                  { id: 'general', label: '1. General & Logística', icon: Compass },
+                  { id: 'general', label: '1. General & Estado', icon: Compass },
                   { id: 'texts', label: '2. Textos & Idiomas', icon: FileText },
-                  { id: 'shifts', label: '3. Turnos & Cupos', icon: Calendar },
-                  { id: 'services', label: '4. Highlights & Servicios', icon: List },
+                  { id: 'shifts', label: '3. Turnos & Calendario', icon: CalendarDays },
+                  { id: 'services', label: '4. Galería & Highlights', icon: ImageIcon },
                   { id: 'faq', label: '5. Preguntas Frecuentes', icon: HelpCircle },
                   { id: 'rates', label: '6. Tarifas & Descuento', icon: DollarSign }
                 ].map((tab) => {
@@ -740,6 +887,35 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                 {/* TAB 1: GENERAL & LOGISTICS */}
                 {editorTab === 'general' && (
                   <div className="space-y-4">
+                    {/* Status & Publication Toggle */}
+                    <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className={`w-2.5 h-2.5 rounded-full ${formIsPublished ? 'bg-emerald-500 ring-4 ring-emerald-100' : 'bg-amber-500 ring-4 ring-amber-100'}`} />
+                          <span className="text-xs font-bold text-slate-800">
+                            {formIsPublished ? 'Excursión Publicada (Visible en Catálogo Público)' : 'Excursión Oculta / Pausada (Borrador Interno)'}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 mt-0.5">
+                          {formIsPublished 
+                            ? 'Los visitantes del sitio pueden ver esta excursión, sus fotos, turnos y solicitar reserva.' 
+                            : 'Esta excursión no se mostrará a los clientes en la web hasta que la actives.'}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setFormIsPublished(!formIsPublished)}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shrink-0 cursor-pointer ${
+                          formIsPublished 
+                            ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm' 
+                            : 'bg-amber-500 hover:bg-amber-600 text-white shadow-sm'
+                        }`}
+                      >
+                        {formIsPublished ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                        <span>{formIsPublished ? 'Activa / Publicada' : 'Pausada / Oculta'}</span>
+                      </button>
+                    </div>
+
                     <div>
                       <label className="block text-xs font-bold text-slate-700 mb-1">Título de la Excursión *</label>
                       <input
@@ -841,7 +1017,10 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                           />
                           <button
                             type="button"
-                            onClick={() => setIsMediaModalOpen(true)}
+                            onClick={() => {
+                              setMediaModalMode('cover');
+                              setIsMediaModalOpen(true);
+                            }}
                             className="absolute inset-0 bg-slate-950/60 text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1"
                           >
                             <ImageIcon className="w-4 h-4 text-cyan-300" />
@@ -863,7 +1042,10 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                           <div className="flex flex-wrap items-center gap-2">
                             <button
                               type="button"
-                              onClick={() => setIsMediaModalOpen(true)}
+                              onClick={() => {
+                                setMediaModalMode('cover');
+                                setIsMediaModalOpen(true);
+                              }}
                               className="px-4 py-2 rounded-xl bg-[#00A896] hover:bg-[#028090] text-white text-xs font-bold transition-all shadow-sm flex items-center gap-2"
                             >
                               <ImageIcon className="w-3.5 h-3.5" />
@@ -1071,14 +1253,125 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                   </div>
                 )}
 
-                {/* TAB 3: SHIFTS & CAPACITIES */}
+                {/* TAB 3: SHIFTS, CALENDAR & CAPACITY */}
                 {editorTab === 'shifts' && (
                   <div className="space-y-6">
+                    {/* Calendar: Operating Days & Blocked Dates */}
+                    <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <CalendarDays className="w-4 h-4 text-[#00A896]" />
+                          <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                            1. Días Operativos en la Semana (Calendario de Salidas)
+                          </h4>
+                        </div>
+                        <span className="text-[11px] font-mono text-[#00A896] bg-[#00A896]/10 px-2.5 py-0.5 rounded-full font-bold">
+                          {formOperatingDays.length === 7 ? 'Opera todos los días' : `${formOperatingDays.length} días por semana`}
+                        </span>
+                      </div>
+                      
+                      <p className="text-[11px] text-slate-500 leading-relaxed">
+                        Selecciona qué días de la semana opera esta excursión. Los usuarios solo podrán elegir fechas en el calendario que coincidan con estos días.
+                      </p>
+
+                      {/* Day pills */}
+                      <div className="flex flex-wrap items-center gap-2">
+                        {DAYS_OF_WEEK.map((d) => {
+                          const isSelected = formOperatingDays.includes(d.day);
+                          return (
+                            <button
+                              key={d.day}
+                              type="button"
+                              onClick={() => handleToggleOperatingDay(d.day)}
+                              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                                isSelected
+                                  ? 'bg-[#00A896] text-white shadow-xs'
+                                  : 'bg-white border border-slate-200 text-slate-400 hover:text-slate-700 hover:border-slate-300'
+                              }`}
+                            >
+                              {isSelected && <Check className="w-3.5 h-3.5" />}
+                              <span>{d.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Quick Presets for Days */}
+                      <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-200/60 text-[11px]">
+                        <span className="text-slate-400 font-semibold mr-1">Preajustes rápidos:</span>
+                        <button
+                          type="button"
+                          onClick={() => setFormOperatingDays([0, 1, 2, 3, 4, 5, 6])}
+                          className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-100 font-medium cursor-pointer"
+                        >
+                          Todos los días (7/7)
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setFormOperatingDays([1, 2, 3, 4, 5])}
+                          className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-100 font-medium cursor-pointer"
+                        >
+                          Lunes a Viernes
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setFormOperatingDays([6, 0])}
+                          className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-100 font-medium cursor-pointer"
+                        >
+                          Fines de Semana (Sáb/Dom)
+                        </button>
+                      </div>
+
+                      {/* Blocked Dates Sub-section */}
+                      <div className="pt-3 border-t border-slate-200/60 space-y-2">
+                        <label className="block text-xs font-bold text-slate-700">
+                          2. Fechas Específicas Bloqueadas (Feriados, Mantenimiento o Cupos Agotados)
+                        </label>
+                        <div className="flex gap-2">
+                          <input
+                            type="date"
+                            value={newBlockedDate}
+                            onChange={(e) => setNewBlockedDate(e.target.value)}
+                            className="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                          />
+                          <button
+                            type="button"
+                            onClick={handleAddBlockedDate}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Bloquear Fecha</span>
+                          </button>
+                        </div>
+
+                        {/* List of blocked dates */}
+                        {formBlockedDates.length > 0 && (
+                          <div className="flex flex-wrap gap-2 pt-1">
+                            {formBlockedDates.map((dateStr) => (
+                              <span
+                                key={dateStr}
+                                className="px-3 py-1 bg-rose-50 text-rose-800 border border-rose-200 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5"
+                              >
+                                <span>⛔ {dateStr}</span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveBlockedDate(dateStr)}
+                                  className="text-rose-400 hover:text-rose-700 ml-1 cursor-pointer font-sans"
+                                >
+                                  ✕
+                                </button>
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
                     <div className="p-4 bg-cyan-50/70 border border-cyan-200/80 rounded-2xl flex items-center justify-between gap-4">
                       <div>
                         <h4 className="text-xs font-bold text-cyan-900 uppercase tracking-wider flex items-center gap-1.5">
-                          <Calendar className="w-4 h-4 text-cyan-600" />
-                          Configuración de Turnos y Cupos Operativos
+                          <Clock className="w-4 h-4 text-cyan-600" />
+                          3. Configuración de Turnos y Cupos Operativos
                         </h4>
                         <p className="text-[11px] text-cyan-800 mt-0.5">
                           Define los horarios de salida y el cupo de pasajeros para que los visitantes puedan ver la disponibilidad y elegir turno desde la web.
@@ -1220,9 +1513,105 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                   </div>
                 )}
 
-                {/* TAB 3: HIGHLIGHTS, INCLUDES & EXCLUDES */}
+                {/* TAB 4: GALLERY & HIGHLIGHTS */}
                 {editorTab === 'services' && (
                   <div className="space-y-6">
+                    {/* Excursion Photo Gallery Manager */}
+                    <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                          <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                            <ImageIcon className="w-4 h-4 text-[#00A896]" />
+                            Galería de Fotos de la Excursión ({formGallery.length} fotos)
+                          </h4>
+                          <p className="text-[11px] text-slate-500 mt-0.5">
+                            Los viajeros podrán navegar estas fotos interactivamente dentro del modal de detalle de la excursión.
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMediaModalMode('gallery');
+                            setIsMediaModalOpen(true);
+                          }}
+                          className="px-4 py-2 rounded-xl bg-[#00A896] hover:bg-[#028090] text-white text-xs font-bold transition-all shadow-sm flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>+ Agregar desde Biblioteca / Subir</span>
+                        </button>
+                      </div>
+
+                      {/* Quick URL Adder */}
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={newGalleryUrl}
+                          onChange={(e) => setNewGalleryUrl(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              if (newGalleryUrl.trim()) {
+                                handleAddGalleryImage(newGalleryUrl.trim());
+                                setNewGalleryUrl('');
+                              }
+                            }
+                          }}
+                          placeholder="O pegar URL directa de imagen (ej: /images/excursiones/... o https://...)"
+                          className="flex-1 px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#00A896]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (newGalleryUrl.trim()) {
+                              handleAddGalleryImage(newGalleryUrl.trim());
+                              setNewGalleryUrl('');
+                            }
+                          }}
+                          className="px-3.5 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold rounded-xl transition-colors cursor-pointer"
+                        >
+                          Añadir URL
+                        </button>
+                      </div>
+
+                      {/* Gallery Thumbnails Grid */}
+                      {formGallery.length === 0 ? (
+                        <div className="p-6 text-center text-slate-400 text-xs bg-white border border-dashed border-slate-200 rounded-xl">
+                          No hay fotos secundarias en la galería. En el modal del sitio se mostrará únicamente la foto de portada principal.
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 pt-1">
+                          {formGallery.map((imgUrl, idx) => (
+                            <div 
+                              key={idx} 
+                              className="group relative aspect-4/3 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shadow-2xs"
+                            >
+                              <img 
+                                src={imgUrl} 
+                                alt={`Galería ${idx + 1}`} 
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = '/images/excursiones/circuito-chico.webp';
+                                }}
+                              />
+                              <div className="absolute inset-0 bg-slate-950/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveGalleryImage(idx)}
+                                  className="p-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg shadow-sm transition-colors cursor-pointer"
+                                  title="Quitar foto de la galería"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                              <span className="absolute bottom-1 left-1.5 px-1.5 py-0.5 rounded bg-black/60 text-white text-[9px] font-mono">
+                                #{idx + 1}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
                     {/* Highlights */}
                     <div className="space-y-2">
                       <label className="block text-xs font-bold text-[#00A896] uppercase tracking-wider">
@@ -1715,8 +2104,15 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
       <MediaLibraryModal
         isOpen={isMediaModalOpen}
         onClose={() => setIsMediaModalOpen(false)}
-        onSelectImage={(url) => setFormImage(url)}
-        currentSelectedUrl={formImage}
+        onSelectImage={(url) => {
+          if (mediaModalMode === 'gallery') {
+            handleAddGalleryImage(url);
+          } else {
+            setFormImage(url);
+          }
+        }}
+        currentSelectedUrl={mediaModalMode === 'gallery' ? undefined : formImage}
+        defaultFolder={formTitle || undefined}
       />
 
     </div>

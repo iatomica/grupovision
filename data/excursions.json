@@ -1,5 +1,87 @@
 [
   {
+    "id": "refugio-roca-negra-copia-290",
+    "title": "Refugio Roca Negra (Copia)",
+    "category": "Invierno",
+    "season": "Invierno",
+    "duration": "Día Completo (8h)",
+    "difficulty": "Fácil",
+    "image": "/images/excursiones/refugio-roca-negra.webp",
+    "description": "Caminata con raquetas para nieve",
+    "fullDetails": "El refugio \"Roca Negra\" está ubicado a más\nde mil seiscientos metros sobre el nivel del mar, y ofrece una vista panorámica\ndel lago Nahuel Huapi y del Parque Nacional con sus lagos, islas y montañas. Es\nuna parada intermedia, antes de llegar a la cima del cerro López\n\nPara acceder\nal sendero se debe llegar hasta el cruce del Arroyo López con la Ruta\nProvincial 77, dentro del circuito panorámico, comúnmente conocido como\nCircuito Chico.\n\n Desde la base del Cerro López,\ncomienza la aventura de ascenso en camionetas 4x4, por un escarpado camino de\nmontaña entre el bosque de Coihues centenarios y altas Lengas. Luego de tomar\nlas primeras fotografías, se da comienzo a la caminata, junto con el guía se\nprocese a equiparse con Raquetas de nieve; con ellas podremos transitar por zonas nevadas sin hundirnos. Durante\nel recorrido, los guías contaran acerca del lugar y disfrutaran de la belleza\nnatural que la montaña tiene para ofrecerles. Finalizada la caminata, en el\nRefugio Roca Negra les darán una cálida bienvenida donde disfrutarán de una\nFondue de chocolate acompañada con fruta fresca, galletas y turrones o de una\nFondue de Queso. Luego, descenderán nuevamente en las camionetas 4x4 hasta\nla base, donde terminará la excursión y se llevará a los pasajeros a sus\nrespectivos hoteles.",
+    "highlights": [
+      "Lago Moreno.",
+      "Cerro López.",
+      "Ascensos en camionetas 4×4.",
+      "Caminatas con Raquetas",
+      "Refugio de montaña Roca Negra.",
+      "Vistas de lagos, bosques y cordillera de los Andes"
+    ],
+    "includes": [
+      "Traslado",
+      "Raquetas de nieve",
+      "Ascenso en camionetas 4x4",
+      "Almuerzo/ Merienda",
+      "Guías"
+    ],
+    "notIncludes": [
+      "Ropa de nieve"
+    ],
+    "additionalInfo": "Horarios de salida:\n*Por la mañana- (Fondue de queso) A partir de las 10.00hs a 16.30hs\n*Por la tarde-(Fondue de Chocolate) A partir de las 14:00 hs a 20:30hs\n*Mayores $ \n*Menores de 12 a 5 años $",
+    "faq": [
+      {
+        "question": "¿Incluye comidas?",
+        "answer": "Sí, de acuerdo con el horario elegido para el paseo, podrá disfrutar de una rica Fondue de Queso o de una Fondue de Chocolate"
+      },
+      {
+        "question": "¿Se suspende por lluvia?",
+        "answer": "No. no se suspende"
+      },
+      {
+        "question": "¿Es necesario llevar ropa de nieve?",
+        "answer": "Si, ropa de nieve, abrigada e impermeable."
+      }
+    ],
+    "recommendedFor": "Parejas, Familias y Grupos",
+    "departureTime": "14:00 hs",
+    "priceNum": 25,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/refugio-roca-negra.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 30,
+    "shifts": [
+      {
+        "id": "refugio-roca-negra-shift-1",
+        "name": "Turno Mañana",
+        "time": "14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "refugio-roca-negra-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {},
+    "isFeatured": false
+  },
+  {
     "id": "refugio-roca-negra",
     "title": "Refugio Roca Negra",
     "category": "Invierno",
@@ -44,7 +126,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "14:00 hs",
-    "priceNum": 25
+    "priceNum": 25,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/refugio-roca-negra.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 30,
+    "shifts": [
+      {
+        "id": "refugio-roca-negra-shift-1",
+        "name": "Turno Mañana",
+        "time": "14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "refugio-roca-negra-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "cabalgata-la-fragua",
@@ -107,7 +223,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 9
+    "priceNum": 9,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/cabalgata-la-fragua.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 10,
+    "shifts": [
+      {
+        "id": "cabalgata-la-fragua-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "cabalgata-la-fragua-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "camino-de-los-7-lagos-san-martin-de-los-andes",
@@ -149,7 +299,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 7
+    "priceNum": 7,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/camino-de-los-7-lagos-san-martin-de-los-andes.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 10,
+    "shifts": [
+      {
+        "id": "camino-de-los-7-lagos-san-martin-de-los-andes-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "camino-de-los-7-lagos-san-martin-de-los-andes-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "cerro-catedral",
@@ -194,7 +378,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 2
+    "priceNum": 2,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/cerro-catedral.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 5,
+    "shifts": [
+      {
+        "id": "cerro-catedral-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "cerro-catedral-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "cerro-tronador-y-glaciares",
@@ -240,7 +458,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6
+    "priceNum": 6,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/cerro-tronador-y-glaciares.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 10,
+    "shifts": [
+      {
+        "id": "cerro-tronador-y-glaciares-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "cerro-tronador-y-glaciares-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "circuito-chico",
@@ -293,7 +545,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs",
-    "priceNum": 2
+    "priceNum": 2,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/circuito-chico.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 5,
+    "shifts": [
+      {
+        "id": "circuito-chico-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "circuito-chico-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "circuito-grande-villa-traful-villa-la-angostura",
@@ -353,7 +639,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6
+    "priceNum": 6,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/circuito-grande-villa-traful-villa-la-angostura.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 10,
+    "shifts": [
+      {
+        "id": "circuito-grande-villa-traful-villa-la-angostura-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "circuito-grande-villa-traful-villa-la-angostura-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "el-bolson-chacras-lago-puelo",
@@ -417,7 +737,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6
+    "priceNum": 6,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/el-bolson-chacras-lago-puelo.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 10,
+    "shifts": [
+      {
+        "id": "el-bolson-chacras-lago-puelo-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "el-bolson-chacras-lago-puelo-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "el-refugio",
@@ -458,7 +812,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 52
+    "priceNum": 52,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/el-refugio.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 65,
+    "shifts": [
+      {
+        "id": "el-refugio-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "el-refugio-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "free-walking-tour",
@@ -527,7 +915,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "12:30 hs",
-    "priceNum": 0
+    "priceNum": 0,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/free-walking-tour.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 40,
+    "shifts": [
+      {
+        "id": "free-walking-tour-shift-1",
+        "name": "Turno Mañana",
+        "time": "12:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "free-walking-tour-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "isla-victoria-y-bosque-de-arrayanes",
@@ -612,7 +1034,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6
+    "priceNum": 6,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/isla-victoria-y-bosque-de-arrayanes.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 10,
+    "shifts": [
+      {
+        "id": "isla-victoria-y-bosque-de-arrayanes-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "isla-victoria-y-bosque-de-arrayanes-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "kayac-lago-gutierrez",
@@ -669,7 +1125,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 4
+    "priceNum": 4,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/kayac-lago-gutierrez.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 5,
+    "shifts": [
+      {
+        "id": "kayac-lago-gutierrez-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "kayac-lago-gutierrez-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "motos-de-nieve",
@@ -713,7 +1203,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "10:00 hs",
-    "priceNum": 22
+    "priceNum": 22,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/motos-de-nieve.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 30,
+    "shifts": [
+      {
+        "id": "motos-de-nieve-shift-1",
+        "name": "Turno Mañana",
+        "time": "10:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "motos-de-nieve-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "navegacion-en-brazo-tristeza",
@@ -768,7 +1292,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 7
+    "priceNum": 7,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/navegacion-en-brazo-tristeza.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 10,
+    "shifts": [
+      {
+        "id": "navegacion-en-brazo-tristeza-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "navegacion-en-brazo-tristeza-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "piedras-blancas",
@@ -814,7 +1372,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 9
+    "priceNum": 9,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/piedras-blancas.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 10,
+    "shifts": [
+      {
+        "id": "piedras-blancas-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "piedras-blancas-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "puerto-blest-y-cascada-de-los-cantaros",
@@ -907,7 +1499,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 7
+    "priceNum": 7,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/puerto-blest-y-cascada-de-los-cantaros.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 10,
+    "shifts": [
+      {
+        "id": "puerto-blest-y-cascada-de-los-cantaros-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "puerto-blest-y-cascada-de-los-cantaros-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "rafting-rio-manso-al-limite",
@@ -968,7 +1594,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 14
+    "priceNum": 14,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/rafting-rio-manso-al-limite.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 20,
+    "shifts": [
+      {
+        "id": "rafting-rio-manso-al-limite-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "rafting-rio-manso-al-limite-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "rafting-rio-manso-desde-villegas",
@@ -1021,7 +1681,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 12
+    "priceNum": 12,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/rafting-rio-manso-desde-villegas.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 15,
+    "shifts": [
+      {
+        "id": "rafting-rio-manso-desde-villegas-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "rafting-rio-manso-desde-villegas-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "ski-nordico",
@@ -1079,7 +1773,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 16
+    "priceNum": 16,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/ski-nordico.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 20,
+    "shifts": [
+      {
+        "id": "ski-nordico-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "ski-nordico-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "teleferico-cerro-otto",
@@ -1131,7 +1859,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "10:00 hs",
-    "priceNum": 2
+    "priceNum": 2,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/teleferico-cerro-otto.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 5,
+    "shifts": [
+      {
+        "id": "teleferico-cerro-otto-shift-1",
+        "name": "Turno Mañana",
+        "time": "10:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "teleferico-cerro-otto-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "velero-el-orgulloso",
@@ -1185,7 +1947,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6
+    "priceNum": 6,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/velero-el-orgulloso.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 10,
+    "shifts": [
+      {
+        "id": "velero-el-orgulloso-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "velero-el-orgulloso-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "villa-la-angostura-y-cerro-bayo",
@@ -1251,7 +2047,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 10
+    "priceNum": 10,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/villa-la-angostura-y-cerro-bayo.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 15,
+    "shifts": [
+      {
+        "id": "villa-la-angostura-y-cerro-bayo-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "villa-la-angostura-y-cerro-bayo-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "winter-park",
@@ -1300,6 +2130,40 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "12:30 hs",
-    "priceNum": 15
+    "priceNum": 15,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/winter-park.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "priceEnglish": 20,
+    "shifts": [
+      {
+        "id": "winter-park-shift-1",
+        "name": "Turno Mañana",
+        "time": "12:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "winter-park-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   }
 ]
