@@ -16,14 +16,20 @@ import {
   FileText,
   Tag,
   Clock,
-  DollarSign
+  DollarSign,
+  Plus,
+  Trash2,
+  ArrowUp,
+  ArrowDown
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SiteContentData, AboutSectionData, ExclusiveSectionData, TopSuggestionsSectionData, SuggestionBannerItem, DEFAULT_SITE_CONTENT } from '../data/siteContentData';
+import { Excursion } from '../data/excursionsData';
 import { MediaLibraryModal } from './MediaLibraryModal';
 
 interface AdminSiteContentProps {
   content: SiteContentData;
+  excursions?: Excursion[];
   onSaveContent: (updated: SiteContentData) => void;
   onResetContent: () => void;
   onViewPublicSite: () => void;
@@ -31,6 +37,7 @@ interface AdminSiteContentProps {
 
 export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
   content,
+  excursions = [],
   onSaveContent,
   onResetContent,
   onViewPublicSite
@@ -41,6 +48,15 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
   const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
   const [mediaTarget, setMediaTarget] = useState<'aboutBg' | number>('aboutBg');
+
+  // Add Promo Modal State
+  const [isAddPromoModalOpen, setIsAddPromoModalOpen] = useState(false);
+  const [newPromoExcursionId, setNewPromoExcursionId] = useState('');
+  const [newPromoDiscount, setNewPromoDiscount] = useState<number>(15);
+  const [newPromoBadge, setNewPromoBadge] = useState<string>('🔥 15% OFF · MÁS ELEGIDA');
+  const [newPromoCustomTitle, setNewPromoCustomTitle] = useState<string>('');
+  const [newPromoOriginalPrice, setNewPromoOriginalPrice] = useState<number>(75000);
+  const [newPromoTagline, setNewPromoTagline] = useState<string>('');
 
   // Sync when prop updates
   useEffect(() => {
@@ -96,6 +112,50 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
       return {
         ...prev,
         topSuggestions: { ...current, items }
+      };
+    });
+  };
+
+  const addSuggestionItem = (newItem: SuggestionBannerItem) => {
+    setFormData(prev => {
+      const current = prev.topSuggestions || DEFAULT_SITE_CONTENT.topSuggestions!;
+      return {
+        ...prev,
+        topSuggestions: {
+          ...current,
+          items: [...current.items, newItem]
+        }
+      };
+    });
+  };
+
+  const removeSuggestionItem = (index: number) => {
+    setFormData(prev => {
+      const current = prev.topSuggestions || DEFAULT_SITE_CONTENT.topSuggestions!;
+      const items = current.items.filter((_, i) => i !== index);
+      return {
+        ...prev,
+        topSuggestions: {
+          ...current,
+          items
+        }
+      };
+    });
+  };
+
+  const moveSuggestionItem = (fromIndex: number, toIndex: number) => {
+    setFormData(prev => {
+      const current = prev.topSuggestions || DEFAULT_SITE_CONTENT.topSuggestions!;
+      if (toIndex < 0 || toIndex >= current.items.length) return prev;
+      const items = [...current.items];
+      const [moved] = items.splice(fromIndex, 1);
+      items.splice(toIndex, 0, moved);
+      return {
+        ...prev,
+        topSuggestions: {
+          ...current,
+          items
+        }
       };
     });
   };
@@ -573,140 +633,312 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
 
           {/* Individual Suggestions Cards */}
           <div className="space-y-4">
-            <h3 className="font-extrabold text-base text-slate-900 border-b border-slate-100 pb-2 flex items-center justify-between">
-              <span className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#00A896]" />
-                <span>Excursiones en el Carrusel Promocional ({(formData.topSuggestions?.items || []).length})</span>
-              </span>
-              <span className="text-xs font-mono text-slate-400">Pasan automáticamente cada 5.5s</span>
-            </h3>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div>
+                <h3 className="font-extrabold text-base text-slate-900 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#00A896]" />
+                  <span>Excursiones en el Carrusel Promocional ({(formData.topSuggestions?.items || []).length})</span>
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Podés agregar nuevas promociones, eliminarlas o reordenarlas. Se muestran en el banner principal del home.
+                </p>
+              </div>
 
-            <div className="space-y-6">
-              {(formData.topSuggestions?.items || []).map((item, index) => (
-                <div 
-                  key={item.id}
-                  className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-4"
-                >
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
-                    <div className="flex items-center gap-3">
-                      <span className="w-7 h-7 rounded-xl bg-orange-500/10 text-orange-600 font-mono font-bold text-xs flex items-center justify-center">
-                        0{index + 1}
-                      </span>
-                      <h4 className="font-black text-sm text-slate-900">{item.title}</h4>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-500/10 text-orange-600 border border-orange-500/20 font-mono">
-                        {item.discountPercent}% OFF
-                      </span>
-                      <span className="text-xs font-mono font-bold text-emerald-600">
-                        ${item.finalPrice.toLocaleString('es-AR')} ARS
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Título de la Excursión</label>
-                      <input
-                        type="text"
-                        value={item.title}
-                        onChange={e => updateSuggestionItem(index, { title: e.target.value })}
-                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Badge de Promoción</label>
-                      <input
-                        type="text"
-                        value={item.badge}
-                        onChange={e => updateSuggestionItem(index, { badge: e.target.value })}
-                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Precio Original (Tachado)</label>
-                      <input
-                        type="number"
-                        value={item.originalPrice}
-                        onChange={e => updateSuggestionItem(index, { originalPrice: Number(e.target.value) })}
-                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Precio con Descuento</label>
-                      <input
-                        type="number"
-                        value={item.finalPrice}
-                        onChange={e => updateSuggestionItem(index, { finalPrice: Number(e.target.value) })}
-                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div className="sm:col-span-2">
-                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Bajada Descriptiva / Atractivo</label>
-                      <input
-                        type="text"
-                        value={item.tagline}
-                        onChange={e => updateSuggestionItem(index, { tagline: e.target.value })}
-                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Duración</label>
-                      <input
-                        type="text"
-                        value={item.duration}
-                        onChange={e => updateSuggestionItem(index, { duration: e.target.value })}
-                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Image Selector & WhatsApp Message */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Imagen del Banner</label>
-                      <div className="flex items-center gap-3">
-                        <img 
-                          src={item.image} 
-                          alt={item.title} 
-                          className="w-14 h-10 rounded-lg object-cover border border-slate-200 shrink-0" 
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setMediaTarget(index);
-                            setIsMediaModalOpen(true);
-                          }}
-                          className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1.5 shadow-xs"
-                        >
-                          <ImageIcon className="w-3.5 h-3.5 text-[#00A896]" />
-                          <span>Cambiar Imagen</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Mensaje para Consulta en WhatsApp</label>
-                      <input
-                        type="text"
-                        value={item.whatsappMessage}
-                        onChange={e => updateSuggestionItem(index, { whatsappMessage: e.target.value })}
-                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
-                      />
-                    </div>
-                  </div>
-
-                </div>
-              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  if (excursions.length > 0) {
+                    const firstExc = excursions[0];
+                    setNewPromoExcursionId(firstExc.id);
+                    setNewPromoCustomTitle(firstExc.title);
+                    setNewPromoOriginalPrice(firstExc.priceNum ? firstExc.priceNum * 1200 : 75000);
+                    setNewPromoDiscount(15);
+                    setNewPromoBadge('🔥 15% OFF · MÁS ELEGIDA');
+                    setNewPromoTagline(firstExc.description ? firstExc.description.slice(0, 110) + '...' : '');
+                  }
+                  setIsAddPromoModalOpen(true);
+                }}
+                className="px-4 py-2.5 rounded-xl bg-[#00A896] hover:bg-[#028090] text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-[#00A896]/20 transition-all cursor-pointer self-start sm:self-auto"
+              >
+                <Plus size={16} />
+                <span>+ Agregar Nueva Promoción</span>
+              </button>
             </div>
+
+            {(!formData.topSuggestions?.items || formData.topSuggestions.items.length === 0) ? (
+              <div className="p-8 rounded-2xl border-2 border-dashed border-slate-200 text-center space-y-3">
+                <Tag className="w-8 h-8 text-slate-300 mx-auto" />
+                <p className="text-sm font-semibold text-slate-600">No hay promociones activas en el carrusel</p>
+                <button
+                  type="button"
+                  onClick={() => setIsAddPromoModalOpen(true)}
+                  className="px-4 py-2 rounded-xl bg-[#00A896] text-white text-xs font-bold"
+                >
+                  Agregar la primera promoción
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {formData.topSuggestions.items.map((item, index) => {
+                  // Resolve matching excursion from live catalog
+                  const linkedExcursion = excursions.find(e => 
+                    e.id === item.excursionId || 
+                    e.title.toLowerCase().trim() === item.title.toLowerCase().trim()
+                  );
+
+                  return (
+                    <div 
+                      key={item.id || `sug-${index}`}
+                      className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-4 hover:border-slate-300 transition-all shadow-xs"
+                    >
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
+                        <div className="flex items-center gap-3">
+                          <span className="w-7 h-7 rounded-xl bg-[#00A896]/10 text-[#00A896] font-mono font-bold text-xs flex items-center justify-center">
+                            {String(index + 1).padStart(2, '0')}
+                          </span>
+                          <div>
+                            <h4 className="font-black text-sm text-slate-900">{item.title}</h4>
+                            {linkedExcursion && (
+                              <span className="text-[10px] font-mono text-[#00A896] font-semibold">
+                                ✓ Vinculada al catálogo ({linkedExcursion.category})
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-500/10 text-orange-600 border border-orange-500/20 font-mono">
+                            {item.discountPercent}% OFF
+                          </span>
+                          <span className="text-xs font-mono font-bold text-emerald-600">
+                            ${item.finalPrice.toLocaleString('es-AR')} ARS
+                          </span>
+
+                          {/* Reorder Buttons */}
+                          <div className="flex items-center gap-1 border-l border-slate-200 pl-2 ml-1">
+                            <button
+                              type="button"
+                              disabled={index === 0}
+                              onClick={() => moveSuggestionItem(index, index - 1)}
+                              className="p-1 rounded-lg text-slate-400 hover:text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-200 transition-colors"
+                              title="Mover arriba"
+                            >
+                              <ArrowUp size={14} />
+                            </button>
+                            <button
+                              type="button"
+                              disabled={index === formData.topSuggestions!.items.length - 1}
+                              onClick={() => moveSuggestionItem(index, index + 1)}
+                              className="p-1 rounded-lg text-slate-400 hover:text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-200 transition-colors"
+                              title="Mover abajo"
+                            >
+                              <ArrowDown size={14} />
+                            </button>
+                          </div>
+
+                          {/* Delete Promotion Button */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (window.confirm(`¿Seguro que deseas eliminar "${item.title}" de las promociones del carrusel?`)) {
+                                removeSuggestionItem(index);
+                              }
+                            }}
+                            className="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-200 hover:border-rose-300 transition-colors text-xs font-bold flex items-center gap-1 cursor-pointer"
+                            title="Eliminar esta promoción"
+                          >
+                            <Trash2 size={14} />
+                            <span className="hidden sm:inline">Eliminar</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Excursion selector link */}
+                      {excursions.length > 0 && (
+                        <div className="bg-white p-3 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                          <label className="text-[11px] font-bold text-slate-700">
+                            Vincular con Excursión del Catálogo:
+                          </label>
+                          <select
+                            value={item.excursionId || ''}
+                            onChange={(e) => {
+                              const targetId = e.target.value;
+                              const targetExc = excursions.find(ex => ex.id === targetId);
+                              if (targetExc) {
+                                const orig = targetExc.priceNum ? targetExc.priceNum * 1200 : item.originalPrice;
+                                const disc = item.discountPercent || 15;
+                                const fin = Math.round(orig * (1 - disc / 100));
+                                updateSuggestionItem(index, {
+                                  excursionId: targetExc.id,
+                                  title: targetExc.title,
+                                  duration: targetExc.duration,
+                                  image: targetExc.image,
+                                  tagline: targetExc.description ? targetExc.description.slice(0, 110) + '...' : item.tagline,
+                                  originalPrice: orig,
+                                  finalPrice: fin
+                                });
+                              } else {
+                                updateSuggestionItem(index, { excursionId: targetId });
+                              }
+                            }}
+                            className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                          >
+                            <option value="">-- Sin vincular (Personalizada) --</option>
+                            {excursions.map(exc => (
+                              <option key={exc.id} value={exc.id}>
+                                {exc.title} ({exc.category} - ${exc.priceNum} USD)
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">Título de la Excursión</label>
+                          <input
+                            type="text"
+                            value={item.title}
+                            onChange={e => updateSuggestionItem(index, { title: e.target.value })}
+                            className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">Badge de Promoción</label>
+                          <input
+                            type="text"
+                            value={item.badge}
+                            onChange={e => updateSuggestionItem(index, { badge: e.target.value })}
+                            className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">Precio Original (ARS)</label>
+                          <input
+                            type="number"
+                            value={item.originalPrice}
+                            onChange={e => {
+                              const orig = Number(e.target.value);
+                              const disc = item.discountPercent || 0;
+                              updateSuggestionItem(index, { 
+                                originalPrice: orig,
+                                finalPrice: Math.round(orig * (1 - disc / 100))
+                              });
+                            }}
+                            className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">Descuento (%)</label>
+                          <div className="flex gap-2">
+                            <input
+                              type="number"
+                              min="0"
+                              max="99"
+                              value={item.discountPercent}
+                              onChange={e => {
+                                const disc = Number(e.target.value);
+                                updateSuggestionItem(index, { 
+                                  discountPercent: disc,
+                                  finalPrice: Math.round(item.originalPrice * (1 - disc / 100))
+                                });
+                              }}
+                              className="w-20 px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                            />
+                            <div className="flex-1 flex items-center px-3 py-1.5 bg-slate-100 rounded-xl border border-slate-200 text-xs font-mono font-bold text-emerald-700">
+                              Final: ${item.finalPrice.toLocaleString('es-AR')}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="sm:col-span-2">
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">Bajada Descriptiva / Atractivo</label>
+                          <input
+                            type="text"
+                            value={item.tagline}
+                            onChange={e => updateSuggestionItem(index, { tagline: e.target.value })}
+                            className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">Duración</label>
+                          <input
+                            type="text"
+                            value={item.duration}
+                            onChange={e => updateSuggestionItem(index, { duration: e.target.value })}
+                            className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Image Selector & WhatsApp Message */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-1">Imagen del Banner</label>
+                          <div className="flex items-center gap-3">
+                            <img 
+                              src={linkedExcursion?.image || item.image} 
+                              alt={item.title} 
+                              className="w-16 h-12 rounded-lg object-cover border border-slate-200 shrink-0" 
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setMediaTarget(index);
+                                setIsMediaModalOpen(true);
+                              }}
+                              className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer"
+                            >
+                              <ImageIcon className="w-3.5 h-3.5 text-[#00A896]" />
+                              <span>Cambiar Imagen</span>
+                            </button>
+                            {linkedExcursion && linkedExcursion.image !== item.image && (
+                              <button
+                                type="button"
+                                onClick={() => updateSuggestionItem(index, { image: linkedExcursion.image })}
+                                className="text-[10px] text-[#00A896] hover:underline font-bold"
+                              >
+                                Usar foto del catálogo
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex items-center justify-between mb-1">
+                            <label className="block text-[11px] font-bold text-slate-600">Mensaje para Consulta en WhatsApp</label>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const autoMsg = `Hola Grupo Visión! Deseo aprovechar la promoción de "${item.title}" (${item.badge}) | Tarifa Especial: $${item.finalPrice.toLocaleString('es-AR')} ARS | ¿Tienen disponibilidad confirmada?`;
+                                updateSuggestionItem(index, { whatsappMessage: autoMsg });
+                              }}
+                              className="text-[10px] text-[#00A896] hover:underline font-bold"
+                            >
+                              Generar automático
+                            </button>
+                          </div>
+                          <input
+                            type="text"
+                            value={item.whatsappMessage}
+                            onChange={e => updateSuggestionItem(index, { whatsappMessage: e.target.value })}
+                            placeholder="Dejar vacío para mensaje automático con precio y descuento..."
+                            className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+                      </div>
+
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
         </div>
@@ -731,6 +963,201 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
               : ''
         }
       />
+
+      {/* MODAL AGREGAR NUEVA PROMOCIÓN AL CARRUSEL */}
+      <AnimatePresence>
+        {isAddPromoModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white rounded-3xl p-6 max-w-lg w-full border border-slate-200 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto"
+            >
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-[#00A896] flex items-center justify-center">
+                    <Sparkles className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-black text-lg text-slate-900 leading-tight">
+                      Nueva Promoción para el Carrusel
+                    </h4>
+                    <p className="text-xs text-slate-500">
+                      Aparecerá en el banner principal del home
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsAddPromoModalOpen(false)}
+                  className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {/* 1. Selector de Excursión */}
+                {excursions.length > 0 && (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      1. Seleccionar Excursión del Catálogo
+                    </label>
+                    <select
+                      value={newPromoExcursionId}
+                      onChange={(e) => {
+                        const targetId = e.target.value;
+                        setNewPromoExcursionId(targetId);
+                        const exc = excursions.find(x => x.id === targetId);
+                        if (exc) {
+                          setNewPromoCustomTitle(exc.title);
+                          setNewPromoOriginalPrice(exc.priceNum ? exc.priceNum * 1200 : 75000);
+                          setNewPromoTagline(exc.description ? exc.description.slice(0, 110) + '...' : '');
+                        }
+                      }}
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                    >
+                      {excursions.map(exc => (
+                        <option key={exc.id} value={exc.id}>
+                          {exc.title} ({exc.category} - ${exc.priceNum} USD)
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {/* 2. Título & Tagline */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    2. Título de la Promoción
+                  </label>
+                  <input
+                    type="text"
+                    value={newPromoCustomTitle}
+                    onChange={e => setNewPromoCustomTitle(e.target.value)}
+                    placeholder="Ej: Puerto Blest & Cascada de los Cántaros"
+                    className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    3. Bajada / Frase Atractiva
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={newPromoTagline}
+                    onChange={e => setNewPromoTagline(e.target.value)}
+                    placeholder="Breve resumen de por qué hacer esta excursión..."
+                    className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                  />
+                </div>
+
+                {/* 4. Precios & Descuento */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Precio Habitual (ARS)
+                    </label>
+                    <input
+                      type="number"
+                      value={newPromoOriginalPrice}
+                      onChange={e => setNewPromoOriginalPrice(Number(e.target.value))}
+                      className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Descuento (%)
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="90"
+                      value={newPromoDiscount}
+                      onChange={e => setNewPromoDiscount(Number(e.target.value))}
+                      className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                    />
+                  </div>
+                </div>
+
+                {/* Preview Final Price */}
+                <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between">
+                  <span className="text-xs font-bold text-emerald-900">
+                    Precio Promocional Calculado:
+                  </span>
+                  <div className="text-right">
+                    <span className="font-mono font-black text-emerald-700 text-sm">
+                      ${Math.round((newPromoOriginalPrice || 75000) * (1 - (newPromoDiscount || 15) / 100)).toLocaleString('es-AR')} ARS
+                    </span>
+                    <span className="block text-[10px] text-emerald-600 font-bold">
+                      Ahorro: ${Math.round((newPromoOriginalPrice || 75000) * ((newPromoDiscount || 15) / 100)).toLocaleString('es-AR')} ARS
+                    </span>
+                  </div>
+                </div>
+
+                {/* 5. Badge */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Badge / Etiqueta Destacada
+                  </label>
+                  <input
+                    type="text"
+                    value={newPromoBadge}
+                    onChange={e => setNewPromoBadge(e.target.value)}
+                    placeholder="Ej: 🔥 15% OFF · MÁS ELEGIDA"
+                    className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                  />
+                </div>
+              </div>
+
+              {/* Botones de acción */}
+              <div className="flex gap-2 pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setIsAddPromoModalOpen(false)}
+                  className="w-1/2 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 text-xs font-bold"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const orig = newPromoOriginalPrice || 75000;
+                    const disc = newPromoDiscount || 15;
+                    const finalPrice = Math.round(orig * (1 - disc / 100));
+                    const selectedExc = excursions.find(e => e.id === newPromoExcursionId);
+                    const title = newPromoCustomTitle || selectedExc?.title || 'Nueva Promoción';
+                    
+                    const newItem: SuggestionBannerItem = {
+                      id: `sug-${Date.now()}`,
+                      title,
+                      tagline: newPromoTagline || selectedExc?.description?.slice(0, 110) || '',
+                      badge: newPromoBadge || `${disc}% OFF`,
+                      discountPercent: disc,
+                      originalPrice: orig,
+                      finalPrice,
+                      duration: selectedExc?.duration || 'Día Completo',
+                      image: selectedExc?.image || '/images/excursiones/circuito-chico.webp',
+                      excursionId: selectedExc?.id || '',
+                      whatsappMessage: `Hola Grupo Visión! Deseo aprovechar la promoción de "${title}" (${newPromoBadge}) | Tarifa Especial: $${finalPrice.toLocaleString('es-AR')} ARS | ¿Tienen disponibilidad confirmada?`
+                    };
+
+                    addSuggestionItem(newItem);
+                    setIsAddPromoModalOpen(false);
+                  }}
+                  className="w-1/2 py-2.5 rounded-xl bg-[#00A896] hover:bg-[#028090] text-white text-xs font-bold shadow-md cursor-pointer"
+                >
+                  + Agregar al Carrusel
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* RESET CONFIRMATION DIALOG */}
       <AnimatePresence>
