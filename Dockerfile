@@ -28,8 +28,9 @@ COPY --from=builder /app/dist ./dist
 COPY server ./server
 COPY public ./public
 
-# Ensure persistent data directory exists
+# Ensure persistent data directory exists and declare volume
 RUN mkdir -p /app/data/uploads
+VOLUME ["/app/data"]
 
 # Expose HTTP port for Coolify Traefik
 EXPOSE 80

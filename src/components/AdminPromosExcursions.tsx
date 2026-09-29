@@ -24,7 +24,8 @@ import {
   ChevronRight,
   Sparkles,
   Image as ImageIcon,
-  UploadCloud
+  UploadCloud,
+  Download
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Excursion, ExcursionShift, ExcursionTranslations } from '../data/excursionsData';
@@ -428,6 +429,16 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
             Nueva Excursión
           </button>
           
+          <a
+            href="/api/admin/backup"
+            download
+            className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold text-xs rounded-2xl border border-slate-700/80 flex items-center justify-center gap-2 transition-all"
+            title="Descargar copia de seguridad en JSON de todas las excursiones, precios y textos"
+          >
+            <Download className="w-3.5 h-3.5 text-emerald-400" />
+            Descargar Backup
+          </a>
+
           <button
             onClick={() => setIsResetConfirmOpen(true)}
             className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold text-xs rounded-2xl border border-slate-700/80 flex items-center justify-center gap-2 transition-all"

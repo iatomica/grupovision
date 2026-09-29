@@ -388,6 +388,42 @@ app.delete('/api/media/:filename', (req, res) => {
 });
 
 // ==========================================
+// ADMINISTRATIVE BACKUP & RESTORE
+// ==========================================
+app.get('/api/admin/backup', (req, res) => {
+  try {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      app: 'Grupo Visión Bariloche',
+      excursions: getExcursions(),
+      siteContent: getSiteContent()
+    };
+    res.setHeader('Content-Disposition', `attachment; filename=grupovision_backup_${Date.now()}.json`);
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(backup, null, 2));
+  } catch (err) {
+    console.error('[Backup] Error creating backup:', err);
+    res.status(500).json({ error: 'Error al generar backup de datos' });
+  }
+});
+
+app.post('/api/admin/restore', (req, res) => {
+  try {
+    const { excursions, siteContent } = req.body;
+    if (Array.isArray(excursions) && excursions.length > 0) {
+      saveExcursions(excursions);
+    }
+    if (siteContent && typeof siteContent === 'object') {
+      saveSiteContent(siteContent);
+    }
+    res.json({ success: true, message: 'Copia de seguridad restaurada correctamente' });
+  } catch (err) {
+    console.error('[Restore] Error restoring backup:', err);
+    res.status(500).json({ error: 'Error al restaurar copia de seguridad' });
+  }
+});
+
+// ==========================================
 // PRODUCTION FRONTEND SERVING
 // ==========================================
 if (fs.existsSync(DIST_DIR)) {
