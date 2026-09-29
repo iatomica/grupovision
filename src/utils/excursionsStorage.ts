@@ -1,4 +1,4 @@
-import { Excursion, EXCURSIONS_DATA } from '../data/excursionsData';
+import { Excursion, EXCURSIONS_DATA, normalizeExcursion } from '../data/excursionsData';
 
 const STORAGE_KEY = 'grupovision_excursions_catalog_v1';
 
@@ -21,18 +21,20 @@ export function loadExcursions(): Excursion[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      saveExcursions(EXCURSIONS_DATA);
-      return EXCURSIONS_DATA;
+      const normalized = EXCURSIONS_DATA.map(normalizeExcursion);
+      saveExcursions(normalized);
+      return normalized;
     }
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed) && parsed.length > 0) {
-      return parsed;
+      return parsed.map(normalizeExcursion);
     }
-    saveExcursions(EXCURSIONS_DATA);
-    return EXCURSIONS_DATA;
+    const normalized = EXCURSIONS_DATA.map(normalizeExcursion);
+    saveExcursions(normalized);
+    return normalized;
   } catch (error) {
     console.warn('[ExcursionsStorage] Error al leer de localStorage, usando datos base:', error);
-    return EXCURSIONS_DATA;
+    return EXCURSIONS_DATA.map(normalizeExcursion);
   }
 }
 
@@ -46,8 +48,9 @@ export async function fetchExcursionsAsync(): Promise<Excursion[]> {
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        return data;
+        const normalized = data.map(normalizeExcursion);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+        return normalized;
       }
     }
   } catch (err) {

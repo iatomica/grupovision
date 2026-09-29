@@ -27,7 +27,7 @@ import {
   UploadCloud
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Excursion } from '../data/excursionsData';
+import { Excursion, ExcursionShift, ExcursionTranslations } from '../data/excursionsData';
 import { MediaLibraryModal } from './MediaLibraryModal';
 
 interface AdminPromosExcursionsProps {
@@ -93,7 +93,7 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   // Comprehensive Edit / Create Modal state
   const [isFullEditorOpen, setIsFullEditorOpen] = useState(false);
   const [isNewExcursion, setIsNewExcursion] = useState(false);
-  const [editorTab, setEditorTab] = useState<'general' | 'texts' | 'services' | 'faq' | 'rates'>('general');
+  const [editorTab, setEditorTab] = useState<'general' | 'texts' | 'shifts' | 'services' | 'faq' | 'rates'>('general');
   const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
   
   // Full Editor Form State
@@ -114,9 +114,26 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   const [formRecommendedFor, setFormRecommendedFor] = useState('Familias, Parejas y Grupos');
   const [formDepartureTime, setFormDepartureTime] = useState('09:00 hs');
   const [formPriceNum, setFormPriceNum] = useState<number>(50);
+  const [formPriceEnglish, setFormPriceEnglish] = useState<number>(65);
   const [formDiscountPercent, setFormDiscountPercent] = useState<number>(0);
   const [formPromoBadge, setFormPromoBadge] = useState('');
   const [formIsFeatured, setFormIsFeatured] = useState(false);
+  const [formShifts, setFormShifts] = useState<ExcursionShift[]>([]);
+
+  // Shift form temp states
+  const [newShiftName, setNewShiftName] = useState('Turno Mañana');
+  const [newShiftTime, setNewShiftTime] = useState('09:00 hs');
+  const [newShiftCapacity, setNewShiftCapacity] = useState<number>(16);
+  const [newShiftAvailable, setNewShiftAvailable] = useState<number>(6);
+
+  // Translations temp states for Text Tab
+  const [textsLang, setTextsLang] = useState<'es' | 'en' | 'pt'>('es');
+  const [transTitleEn, setTransTitleEn] = useState('');
+  const [transDescEn, setTransDescEn] = useState('');
+  const [transDetailsEn, setTransDetailsEn] = useState('');
+  const [transTitlePt, setTransTitlePt] = useState('');
+  const [transDescPt, setTransDescPt] = useState('');
+  const [transDetailsPt, setTransDetailsPt] = useState('');
 
   // Temporary inputs for adding list items
   const [newHighlight, setNewHighlight] = useState('');
@@ -190,10 +207,22 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     setFormRecommendedFor('Todo público, familias y parejas');
     setFormDepartureTime('09:30 hs');
     setFormPriceNum(45);
+    setFormPriceEnglish(55);
     setFormDiscountPercent(0);
     setFormPromoBadge('');
     setFormIsFeatured(false);
     setFormCustomNote('');
+    setFormShifts([
+      { id: `shift-1`, name: 'Turno Mañana', time: '09:00 hs', totalCapacity: 16, availableSpots: 6, enabled: true },
+      { id: `shift-2`, name: 'Turno Tarde', time: '14:30 hs', totalCapacity: 16, availableSpots: 12, enabled: true }
+    ]);
+    setTextsLang('es');
+    setTransTitleEn('');
+    setTransDescEn('');
+    setTransDetailsEn('');
+    setTransTitlePt('');
+    setTransDescPt('');
+    setTransDetailsPt('');
     setIsFullEditorOpen(true);
   };
 
@@ -217,10 +246,26 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     setFormRecommendedFor(exc.recommendedFor || 'Todo público');
     setFormDepartureTime(exc.departureTime || '09:00 hs');
     setFormPriceNum(exc.priceNum);
+    setFormPriceEnglish(exc.priceEnglish || Math.max(exc.priceNum, Math.round((exc.priceNum * 1.25) / 5) * 5));
     setFormDiscountPercent(exc.discountPercent || 0);
     setFormPromoBadge(exc.promoBadge || '');
     setFormIsFeatured(exc.isFeatured || false);
     setFormCustomNote(exc.customNote || '');
+    setFormShifts(
+      Array.isArray(exc.shifts) && exc.shifts.length > 0
+        ? exc.shifts.map(s => ({ ...s }))
+        : [
+            { id: `${exc.id}-shift-1`, name: 'Turno Mañana', time: exc.departureTime || '09:00 hs', totalCapacity: 16, availableSpots: 6, enabled: true },
+            { id: `${exc.id}-shift-2`, name: 'Turno Tarde', time: '14:30 hs', totalCapacity: 16, availableSpots: 12, enabled: true }
+          ]
+    );
+    setTextsLang('es');
+    setTransTitleEn(exc.translations?.en?.title || '');
+    setTransDescEn(exc.translations?.en?.description || '');
+    setTransDetailsEn(exc.translations?.en?.fullDetails || '');
+    setTransTitlePt(exc.translations?.pt?.title || '');
+    setTransDescPt(exc.translations?.pt?.description || '');
+    setTransDetailsPt(exc.translations?.pt?.fullDetails || '');
     setIsFullEditorOpen(true);
   };
 
@@ -233,6 +278,28 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
       isFeatured: false
     };
     onSaveExcursion(clonedExcursion, true);
+  };
+
+  const handleAddShift = () => {
+    if (!newShiftName.trim() || !newShiftTime.trim()) return;
+    const newS: ExcursionShift = {
+      id: `shift-${Date.now()}`,
+      name: newShiftName.trim(),
+      time: newShiftTime.trim(),
+      totalCapacity: Math.max(1, Number(newShiftCapacity) || 1),
+      availableSpots: Math.max(0, Math.min(Number(newShiftAvailable) || 0, Number(newShiftCapacity) || 1)),
+      enabled: true
+    };
+    setFormShifts(prev => [...prev, newS]);
+    setNewShiftName('Turno ' + (formShifts.length + 2));
+  };
+
+  const handleRemoveShift = (id: string) => {
+    setFormShifts(prev => prev.filter(s => s.id !== id));
+  };
+
+  const handleUpdateShift = (id: string, updates: Partial<ExcursionShift>) => {
+    setFormShifts(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s));
   };
 
   const handleSaveFullExcursion = (e: React.FormEvent) => {
@@ -260,6 +327,20 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
       recommendedFor: formRecommendedFor.trim() || 'Todo público',
       departureTime: formDepartureTime.trim() || '09:00 hs',
       priceNum: Number(formPriceNum) || 0,
+      priceEnglish: Number(formPriceEnglish) || Math.max(Number(formPriceNum), Math.round((Number(formPriceNum) * 1.25) / 5) * 5),
+      shifts: formShifts,
+      translations: {
+        en: (transTitleEn.trim() || transDescEn.trim() || transDetailsEn.trim()) ? {
+          title: transTitleEn.trim() || undefined,
+          description: transDescEn.trim() || undefined,
+          fullDetails: transDetailsEn.trim() || undefined
+        } : undefined,
+        pt: (transTitlePt.trim() || transDescPt.trim() || transDetailsPt.trim()) ? {
+          title: transTitlePt.trim() || undefined,
+          description: transDescPt.trim() || undefined,
+          fullDetails: transDetailsPt.trim() || undefined
+        } : undefined
+      },
       discountPercent: formDiscountPercent > 0 ? Number(formDiscountPercent) : undefined,
       promoBadge: formPromoBadge.trim() || undefined,
       isFeatured: formIsFeatured,
@@ -617,10 +698,11 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
               <div className="flex border-b border-slate-200 bg-slate-50/80 px-4 sm:px-6 overflow-x-auto shrink-0 scrollbar-none gap-2">
                 {[
                   { id: 'general', label: '1. General & Logística', icon: Compass },
-                  { id: 'texts', label: '2. Textos & Ficha', icon: FileText },
-                  { id: 'services', label: '3. Highlights & Servicios', icon: List },
-                  { id: 'faq', label: '4. Preguntas Frecuentes', icon: HelpCircle },
-                  { id: 'rates', label: '5. Tarifas & Descuento', icon: DollarSign }
+                  { id: 'texts', label: '2. Textos & Idiomas', icon: FileText },
+                  { id: 'shifts', label: '3. Turnos & Cupos', icon: Calendar },
+                  { id: 'services', label: '4. Highlights & Servicios', icon: List },
+                  { id: 'faq', label: '5. Preguntas Frecuentes', icon: HelpCircle },
+                  { id: 'rates', label: '6. Tarifas & Descuento', icon: DollarSign }
                 ].map((tab) => {
                   const Icon = tab.icon;
                   return (
@@ -786,46 +868,343 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                   </div>
                 )}
 
-                {/* TAB 2: TEXTS & NARRATIVE */}
+                {/* TAB 2: TEXTS & NARRATIVE (MULTILINGUAL) */}
                 {editorTab === 'texts' && (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Resumen Breve (Aparece en la tarjeta del catálogo)
-                      </label>
-                      <input
-                        type="text"
-                        value={formDescription}
-                        onChange={(e) => setFormDescription(e.target.value)}
-                        placeholder="Ej: Navegación exclusiva por aguas cristalinas con vistas al bosque nativo."
-                        className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#00A896]"
-                      />
+                  <div className="space-y-5">
+                    {/* Language Switcher for Content */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-100 rounded-2xl border border-slate-200">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-bold text-slate-700 font-mono">Idioma a editar:</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => setTextsLang('es')}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
+                            textsLang === 'es' ? 'bg-white text-slate-900 shadow-sm border border-slate-300' : 'text-slate-500 hover:text-slate-800'
+                          }`}
+                        >
+                          <span>🇪🇸</span> Español (Base)
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setTextsLang('en')}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
+                            textsLang === 'en' ? 'bg-white text-cyan-800 shadow-sm border border-cyan-300' : 'text-slate-500 hover:text-slate-800'
+                          }`}
+                        >
+                          <span>🇬🇧</span> English
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setTextsLang('pt')}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
+                            textsLang === 'pt' ? 'bg-white text-emerald-800 shadow-sm border border-emerald-300' : 'text-slate-500 hover:text-slate-800'
+                          }`}
+                        >
+                          <span>🇧🇷</span> Português
+                        </button>
+                      </div>
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Itinerario & Descripción Detallada (Modal de Ficha Técnica)
-                      </label>
-                      <textarea
-                        rows={7}
-                        value={formFullDetails}
-                        onChange={(e) => setFormFullDetails(e.target.value)}
-                        placeholder="Escribe el desarrollo completo del recorrido, paradas, actividades y experiencia paso a paso..."
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs leading-relaxed focus:outline-none focus:border-[#00A896]"
-                      />
+                    {/* Spanish (Default / Base) */}
+                    {textsLang === 'es' && (
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Título en Español
+                          </label>
+                          <input
+                            type="text"
+                            value={formTitle}
+                            onChange={(e) => setFormTitle(e.target.value)}
+                            placeholder="Ej: Refugio Roca Negra"
+                            className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Resumen Breve (Aparece en la tarjeta del catálogo)
+                          </label>
+                          <input
+                            type="text"
+                            value={formDescription}
+                            onChange={(e) => setFormDescription(e.target.value)}
+                            placeholder="Ej: Caminata con raquetas para nieve y ascenso 4x4"
+                            className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Itinerario & Descripción Detallada (Modal de Ficha Técnica)
+                          </label>
+                          <textarea
+                            rows={6}
+                            value={formFullDetails}
+                            onChange={(e) => setFormFullDetails(e.target.value)}
+                            placeholder="Escribe el desarrollo completo del recorrido, paradas, actividades y experiencia paso a paso..."
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs leading-relaxed focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Información Adicional & Recomendaciones
+                          </label>
+                          <textarea
+                            rows={3}
+                            value={formAdditionalInfo}
+                            onChange={(e) => setFormAdditionalInfo(e.target.value)}
+                            placeholder="Requisitos de edad, vestimenta sugerida, estado físico o avisos importantes."
+                            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs leading-relaxed focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* English Translation */}
+                    {textsLang === 'en' && (
+                      <div className="space-y-4">
+                        <div className="p-3 bg-cyan-50 border border-cyan-200 rounded-xl text-[11px] text-cyan-800">
+                          ℹ️ Si dejas algún campo vacío, el sitio usará la versión en español como respaldo automático.
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Title in English
+                          </label>
+                          <input
+                            type="text"
+                            value={transTitleEn}
+                            onChange={(e) => setTransTitleEn(e.target.value)}
+                            placeholder={`Ej: ${formTitle || 'Roca Negra Mountain Refuge'}`}
+                            className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Short Summary (English)
+                          </label>
+                          <input
+                            type="text"
+                            value={transDescEn}
+                            onChange={(e) => setTransDescEn(e.target.value)}
+                            placeholder="e.g., Snowshoeing mountain walk and 4x4 ascent"
+                            className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Full Itinerary & Details (English)
+                          </label>
+                          <textarea
+                            rows={6}
+                            value={transDetailsEn}
+                            onChange={(e) => setTransDetailsEn(e.target.value)}
+                            placeholder="Write the full itinerary in English..."
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs leading-relaxed focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Portuguese Translation */}
+                    {textsLang === 'pt' && (
+                      <div className="space-y-4">
+                        <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-[11px] text-emerald-800">
+                          ℹ️ Se deixar algum campo vazio, o site exibirá o texto original em espanhol automaticamente.
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Título em Português
+                          </label>
+                          <input
+                            type="text"
+                            value={transTitlePt}
+                            onChange={(e) => setTransTitlePt(e.target.value)}
+                            placeholder={`Ex: ${formTitle || 'Refúgio Roca Negra'}`}
+                            className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Resumo Breve (Português)
+                          </label>
+                          <input
+                            type="text"
+                            value={transDescPt}
+                            onChange={(e) => setTransDescPt(e.target.value)}
+                            placeholder="Ex: Caminhada com raquetes de neve e subida em 4x4"
+                            className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Itinerário Completo & Detalhes (Português)
+                          </label>
+                          <textarea
+                            rows={6}
+                            value={transDetailsPt}
+                            onChange={(e) => setTransDetailsPt(e.target.value)}
+                            placeholder="Escreva o roteiro detalhado em português..."
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs leading-relaxed focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* TAB 3: SHIFTS & CAPACITIES */}
+                {editorTab === 'shifts' && (
+                  <div className="space-y-6">
+                    <div className="p-4 bg-cyan-50/70 border border-cyan-200/80 rounded-2xl flex items-center justify-between gap-4">
+                      <div>
+                        <h4 className="text-xs font-bold text-cyan-900 uppercase tracking-wider flex items-center gap-1.5">
+                          <Calendar className="w-4 h-4 text-cyan-600" />
+                          Configuración de Turnos y Cupos Operativos
+                        </h4>
+                        <p className="text-[11px] text-cyan-800 mt-0.5">
+                          Define los horarios de salida y el cupo de pasajeros para que los visitantes puedan ver la disponibilidad y elegir turno desde la web.
+                        </p>
+                      </div>
+                      <span className="px-2.5 py-1 bg-white text-cyan-800 border border-cyan-300 rounded-lg text-xs font-mono font-bold shrink-0">
+                        {formShifts.filter(s => s.enabled).length} turnos activos
+                      </span>
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Información Adicional & Recomendaciones
-                      </label>
-                      <textarea
-                        rows={3}
-                        value={formAdditionalInfo}
-                        onChange={(e) => setFormAdditionalInfo(e.target.value)}
-                        placeholder="Requisitos de edad, vestimenta sugerida, estado físico o avisos importantes."
-                        className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs leading-relaxed focus:outline-none focus:border-[#00A896]"
-                      />
+                    {/* Formulario para agregar turno */}
+                    <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+                      <span className="text-xs font-bold text-slate-800 block">Incorporar Nuevo Turno</span>
+                      <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                        <div>
+                          <label className="block text-[11px] font-semibold text-slate-600 mb-1">Nombre del Turno</label>
+                          <input
+                            type="text"
+                            value={newShiftName}
+                            onChange={(e) => setNewShiftName(e.target.value)}
+                            placeholder="Ej: Turno Mañana"
+                            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-semibold text-slate-600 mb-1">Horario de Salida</label>
+                          <input
+                            type="text"
+                            value={newShiftTime}
+                            onChange={(e) => setNewShiftTime(e.target.value)}
+                            placeholder="09:00 hs"
+                            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-semibold text-slate-600 mb-1">Capacidad Total</label>
+                          <input
+                            type="number"
+                            min={1}
+                            max={200}
+                            value={newShiftCapacity}
+                            onChange={(e) => setNewShiftCapacity(parseInt(e.target.value) || 1)}
+                            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-semibold text-slate-600 mb-1">Lugares Disponibles</label>
+                          <input
+                            type="number"
+                            min={0}
+                            max={newShiftCapacity}
+                            value={newShiftAvailable}
+                            onChange={(e) => setNewShiftAvailable(parseInt(e.target.value) || 0)}
+                            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex justify-end pt-1">
+                        <button
+                          type="button"
+                          onClick={handleAddShift}
+                          className="px-4 py-2 bg-[#00A896] hover:bg-[#028090] text-white text-xs font-bold rounded-xl transition-all shadow-sm flex items-center gap-1.5"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>Agregar Turno</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Lista de Turnos */}
+                    <div className="space-y-3">
+                      <span className="text-xs font-bold text-slate-700 block">Turnos Configurados ({formShifts.length})</span>
+                      {formShifts.length === 0 ? (
+                        <div className="p-6 text-center text-slate-400 text-xs bg-slate-50 border border-dashed border-slate-200 rounded-2xl">
+                          No hay turnos configurados para esta excursión. Agrega al menos uno arriba.
+                        </div>
+                      ) : (
+                        formShifts.map((s, idx) => (
+                          <div
+                            key={s.id || idx}
+                            className={`p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+                              s.enabled ? 'bg-white border-slate-200 shadow-xs' : 'bg-slate-50/80 border-slate-200 opacity-60'
+                            }`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center font-mono font-bold text-xs text-slate-700 shrink-0">
+                                #{idx + 1}
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="font-bold text-sm text-slate-900">{s.name}</span>
+                                  <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                                    {s.time}
+                                  </span>
+                                  {s.availableSpots === 0 ? (
+                                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-100 text-rose-700 border border-rose-200">
+                                      Agotado
+                                    </span>
+                                  ) : s.availableSpots <= 3 ? (
+                                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                                      Últimos {s.availableSpots} lugares
+                                    </span>
+                                  ) : (
+                                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                      {s.availableSpots} lugares libres
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="text-xs text-slate-500 mt-0.5 font-mono">
+                                  Capacidad Total: {s.totalCapacity} pasajeros · Disponibles: {s.availableSpots}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                              <label className="flex items-center gap-1.5 text-xs text-slate-600 font-medium cursor-pointer mr-2">
+                                <input
+                                  type="checkbox"
+                                  checked={s.enabled}
+                                  onChange={(e) => handleUpdateShift(s.id, { enabled: e.target.checked })}
+                                  className="rounded text-[#00A896] focus:ring-[#00A896]"
+                                />
+                                <span>{s.enabled ? 'Habilitado' : 'Deshabilitado'}</span>
+                              </label>
+
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveShift(s.id)}
+                                className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors"
+                                title="Eliminar turno"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        ))
+                      )}
                     </div>
                   </div>
                 )}
@@ -982,13 +1361,13 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                   </div>
                 )}
 
-                {/* TAB 5: RATES & PROMOTIONS */}
+                {/* TAB 6: RATES & PROMOTIONS */}
                 {editorTab === 'rates' && (
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-bold text-slate-700 mb-1">
-                          Precio Base en Dólares (USD) *
+                          Tarifa Base Español / Portugués (USD) *
                         </label>
                         <div className="relative">
                           <DollarSign className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
@@ -1002,46 +1381,77 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                             className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base font-black text-slate-900 focus:outline-none focus:border-[#00A896]"
                           />
                         </div>
+                        <span className="text-[11px] text-slate-500 mt-1 block">
+                          Tarifa estándar para viajeros de habla hispana y portuguesa.
+                        </span>
                       </div>
 
                       <div>
-                        <label className="block text-xs font-bold text-slate-700 mb-1">
-                          Descuento Promocional (%)
+                        <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                          <span>Tarifa en Inglés (USD)</span>
+                          <span className="text-[10px] text-cyan-700 font-mono font-bold bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200">🇬🇧 Guía Bilingüe</span>
                         </label>
-                        <div className="flex items-center gap-3">
+                        <div className="relative">
+                          <DollarSign className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
                           <input
-                            type="range"
-                            min={0}
-                            max={60}
-                            step={5}
-                            value={formDiscountPercent}
-                            onChange={(e) => setFormDiscountPercent(parseInt(e.target.value) || 0)}
-                            className="w-full accent-[#00A896]"
+                            type="number"
+                            min={1}
+                            max={5000}
+                            value={formPriceEnglish}
+                            onChange={(e) => setFormPriceEnglish(parseFloat(e.target.value) || 0)}
+                            placeholder={`Sugerido: USD ${Math.round(formPriceNum * 1.25)}`}
+                            className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base font-black text-slate-900 focus:outline-none focus:border-[#00A896]"
                           />
-                          <span className="text-lg font-black text-rose-600 min-w-[3rem] text-right">
-                            {formDiscountPercent}%
-                          </span>
                         </div>
+                        <span className="text-[11px] text-slate-500 mt-1 block">
+                          Tarifa diferenciada en inglés. Se activa automáticamente al elegir idioma inglés en la web.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        Descuento Promocional (%)
+                      </label>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="range"
+                          min={0}
+                          max={60}
+                          step={5}
+                          value={formDiscountPercent}
+                          onChange={(e) => setFormDiscountPercent(parseInt(e.target.value) || 0)}
+                          className="w-full accent-[#00A896]"
+                        />
+                        <span className="text-lg font-black text-rose-600 min-w-[3rem] text-right">
+                          {formDiscountPercent}%
+                        </span>
                       </div>
                     </div>
 
                     {/* Real-time calculated price preview banner */}
-                    <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-between">
+                    <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-between flex-wrap gap-4">
                       <div>
                         <span className="text-[11px] font-semibold text-emerald-800 uppercase tracking-wider block">
-                          Tarifa Final que verá el Cliente
+                          Tarifas Finales en la Web (con descuento aplicado)
                         </span>
                         <span className="text-xs text-emerald-600">
                           {formDiscountPercent > 0 ? `Aplica ${formDiscountPercent}% de descuento sobre el precio base` : 'Sin descuento activo'}
                         </span>
                       </div>
-                      <div className="text-right">
-                        <div className="text-2xl font-black text-emerald-700">
-                          ${formDiscountPercent > 0 ? Math.round(formPriceNum * (1 - formDiscountPercent / 100)) : formPriceNum} USD
+                      <div className="flex items-center gap-6">
+                        <div className="text-right">
+                          <span className="text-[10px] font-bold text-slate-500 block uppercase">ES / PT</span>
+                          <div className="text-xl font-black text-emerald-700">
+                            ${formDiscountPercent > 0 ? Math.round(formPriceNum * (1 - formDiscountPercent / 100)) : formPriceNum} USD
+                          </div>
                         </div>
-                        {formDiscountPercent > 0 && (
-                          <div className="text-xs text-slate-400 line-through">${formPriceNum} USD</div>
-                        )}
+                        <div className="text-right border-l border-emerald-200 pl-6">
+                          <span className="text-[10px] font-bold text-cyan-700 block uppercase">EN (Inglés)</span>
+                          <div className="text-xl font-black text-cyan-800">
+                            ${formDiscountPercent > 0 ? Math.round(formPriceEnglish * (1 - formDiscountPercent / 100)) : formPriceEnglish} USD
+                          </div>
+                        </div>
                       </div>
                     </div>
 

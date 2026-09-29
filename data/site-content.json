@@ -7,9 +7,18 @@
     "fleetTitle": "Flota Propia 4x4 & Unidades Especializadas",
     "fleetDescription": "Contamos con una flota moderna de combis Mercedes-Benz Sprinter, minibus Iveco Daily y camionetas 4x4 preparadas con cadenas, raquetas y equipamiento para ascensos invernales a refugios de montaña.",
     "fleetMetrics": [
-      { "value": "15+", "label": "Unidades 4x4" },
-      { "value": "100%", "label": "Habilitación CNRT" },
-      { "value": "24/7", "label": "Asistencia Logística" }
+      {
+        "value": "15+",
+        "label": "Unidades 4x4"
+      },
+      {
+        "value": "100%",
+        "label": "Habilitación CNRT"
+      },
+      {
+        "value": "24/7",
+        "label": "Asistencia Logística"
+      }
     ],
     "guidesTitle": "Guías AAGM & WFR",
     "guidesDescription": "Todos nuestros recorridos están liderados por guías profesionales matriculados por el Parque Nacional Nahuel Huapi y la Asociación Argentina de Guías de Montaña.",

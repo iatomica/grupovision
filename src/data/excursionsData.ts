@@ -1,4 +1,24 @@
 // Auto-generated Excursions Data from Grupo Visión Receptive Catalog
+
+export interface ExcursionShift {
+  id: string;
+  name: string;          // Ej: "Turno Mañana"
+  time: string;          // Ej: "09:00 hs"
+  totalCapacity: number; // Ej: 15
+  availableSpots: number;// Ej: 4
+  enabled: boolean;      // true / false
+}
+
+export interface ExcursionTranslations {
+  title?: string;
+  description?: string;
+  fullDetails?: string;
+  highlights?: string[];
+  includes?: string[];
+  notIncludes?: string[];
+  departureTime?: string;
+}
+
 export interface Excursion {
   id: string;
   title: string;
@@ -16,7 +36,13 @@ export interface Excursion {
   faq?: { question: string; answer: string }[];
   recommendedFor: string;
   departureTime: string;
-  priceNum: number;
+  priceNum: number;        // Tarifa base en USD para Español y Portugués
+  priceEnglish?: number;   // Tarifa diferenciada en USD para Inglés (guía bilingüe)
+  shifts?: ExcursionShift[]; // Turnos y cupos configurables por el Admin
+  translations?: {
+    en?: ExcursionTranslations;
+    pt?: ExcursionTranslations;
+  };
   discountPercent?: number;
   promoBadge?: string;
   isFeatured?: boolean;
@@ -1328,3 +1354,40 @@ export const EXCURSIONS_DATA: Excursion[] = [
     "priceNum": 15
   }
 ];
+
+/**
+ * Normaliza y enriquece una excursión garantizando turnos de prueba consistentes,
+ * precio en inglés y estructura de traducciones.
+ */
+export function normalizeExcursion(e: Excursion): Excursion {
+  const priceNum = e.priceNum || 30;
+  const priceEnglish = (typeof e.priceEnglish === 'number' && e.priceEnglish > 0)
+    ? e.priceEnglish
+    : Math.max(priceNum, Math.round((priceNum * 1.25) / 5) * 5);
+
+  const defaultShifts: ExcursionShift[] = [
+    {
+      id: `${e.id}-shift-1`,
+      name: 'Turno Mañana',
+      time: e.departureTime && e.departureTime.includes(':') ? e.departureTime : '09:00 hs',
+      totalCapacity: 16,
+      availableSpots: 6,
+      enabled: true
+    },
+    {
+      id: `${e.id}-shift-2`,
+      name: 'Turno Tarde',
+      time: '14:30 hs',
+      totalCapacity: 16,
+      availableSpots: 11,
+      enabled: true
+    }
+  ];
+
+  return {
+    ...e,
+    priceEnglish,
+    shifts: (Array.isArray(e.shifts) && e.shifts.length > 0) ? e.shifts : defaultShifts,
+    translations: e.translations || {}
+  };
+}

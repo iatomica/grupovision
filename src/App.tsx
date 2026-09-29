@@ -57,6 +57,13 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { EXCURSIONS_DATA, Excursion } from './data/excursionsData';
+import { 
+  LanguageCode, 
+  LANGUAGES, 
+  UI_TRANSLATIONS, 
+  getExcursionPrice, 
+  getExcursionContent 
+} from './data/translations';
 import { loadExcursions, saveExcursions, resetExcursionsToDefault, fetchExcursionsAsync } from './utils/excursionsStorage';
 import { JiraTicketModal, Booking, TicketComment } from './components/JiraTicketModal';
 import { NotificationsModal, UserNotification } from './components/NotificationsModal';
@@ -298,6 +305,19 @@ export default function App() {
     });
   }, []);
 
+  // Language & Internationalization State
+  const [currentLang, setCurrentLang] = useState<LanguageCode>(() => {
+    const saved = localStorage.getItem('grupovision_lang') as LanguageCode;
+    return (saved === 'es' || saved === 'en' || saved === 'pt') ? saved : 'es';
+  });
+
+  const handleLanguageChange = (lang: LanguageCode) => {
+    setCurrentLang(lang);
+    localStorage.setItem('grupovision_lang', lang);
+  };
+
+  const t = UI_TRANSLATIONS[currentLang];
+
   // Landing & Catalog States
   const [selectedCategory, setSelectedCategory] = useState<string>('Todas');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -305,10 +325,22 @@ export default function App() {
   const itemsPerPage = 6;
 
   const [activeExcursion, setActiveExcursion] = useState<Excursion | null>(null);
+  const [selectedShiftId, setSelectedShiftId] = useState<string | null>(null);
+  const [modalPassengers, setModalPassengers] = useState<number>(2);
   const [isExcursionModalOpen, setIsExcursionModalOpen] = useState(false);
   const [isBannerCollapsed, setIsBannerCollapsed] = useState(false);
   const [isOfficeModalOpen, setIsOfficeModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Helper to open modal with preselected shift
+  const handleOpenExcursionModal = (item: Excursion) => {
+    setActiveExcursion(item);
+    const firstEnabledWithSpots = item.shifts?.find(s => s.enabled && s.availableSpots > 0);
+    const firstEnabled = item.shifts?.find(s => s.enabled);
+    setSelectedShiftId(firstEnabledWithSpots ? firstEnabledWithSpots.id : firstEnabled ? firstEnabled.id : null);
+    setModalPassengers(2);
+    setIsExcursionModalOpen(true);
+  };
 
   // Operations & Jira Ticket States
   const [bookings, setBookings] = useState<Booking[]>(INITIAL_BOOKINGS);
@@ -342,16 +374,22 @@ export default function App() {
     return categoryOrder.filter(cat => cat === 'Todas' || presentSet.has(cat as any));
   }, [excursionsList]);
 
-  // Filtered Excursions
+  // Filtered Excursions (Multilingual search support)
   const filteredExcursions = useMemo(() => {
     return excursionsList.filter(item => {
       const matchesCategory = selectedCategory === 'Todas' || item.category === selectedCategory;
-      const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            (item.fullDetails && item.fullDetails.toLowerCase().includes(searchQuery.toLowerCase()));
+      const content = getExcursionContent(item, currentLang);
+      const q = searchQuery.toLowerCase().trim();
+      const matchesSearch = 
+        !q ||
+        content.title.toLowerCase().includes(q) || 
+        content.description.toLowerCase().includes(q) ||
+        (content.fullDetails && content.fullDetails.toLowerCase().includes(q)) ||
+        item.title.toLowerCase().includes(q) ||
+        item.description.toLowerCase().includes(q);
       return matchesCategory && matchesSearch;
     });
-  }, [excursionsList, selectedCategory, searchQuery]);
+  }, [excursionsList, selectedCategory, searchQuery, currentLang]);
 
   const totalPages = Math.max(1, Math.ceil(filteredExcursions.length / itemsPerPage));
   const paginatedExcursions = useMemo(() => {
@@ -802,32 +840,54 @@ export default function App() {
               onClick={() => setCurrentView('landing')}
               className="hover:text-[#00A896] transition-colors"
             >
-              Excursiones
+              {t.nav.excursions}
             </a>
             <a 
               href="#corredor" 
               onClick={() => setCurrentView('landing')}
               className="hover:text-[#00A896] transition-colors"
             >
-              Corredor de los Lagos
+              {t.nav.corredor}
             </a>
             <a 
               href="#nosotros" 
               onClick={() => setCurrentView('landing')}
               className="hover:text-[#00A896] transition-colors"
             >
-              Quiénes Somos
+              {t.nav.about}
             </a>
             <button 
               onClick={() => setIsOfficeModalOpen(true)} 
               className="hover:text-[#00A896] transition-colors"
             >
-              Sucursales
+              {t.nav.offices}
             </button>
           </nav>
 
           {/* Right Action Buttons */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Language & Currency Differential Selector */}
+            <div className="flex items-center bg-slate-100 hover:bg-slate-200/80 p-1 rounded-xl border border-slate-200/80 transition-colors shadow-inner" title="Cambiar idioma y tarifa">
+              {LANGUAGES.map((langOpt) => {
+                const isActive = currentLang === langOpt.code;
+                return (
+                  <button
+                    key={langOpt.code}
+                    onClick={() => handleLanguageChange(langOpt.code)}
+                    title={`${langOpt.name} - ${langOpt.guideLabel}`}
+                    className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                      isActive 
+                        ? 'bg-white text-slate-900 shadow-sm' 
+                        : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                  >
+                    <span className="text-sm leading-none">{langOpt.flag}</span>
+                    <span className="text-[11px] font-mono uppercase">{langOpt.code}</span>
+                  </button>
+                );
+              })}
+            </div>
+
             <a 
               href="https://wa.me/5492944235278?text=Hola!%20Deseo%20consultar%20por%20excursiones%20en%20Bariloche" 
               target="_blank"
@@ -835,7 +895,7 @@ export default function App() {
               className="hidden sm:inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-black font-extrabold text-xs px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl transition-all shadow-sm shrink-0"
             >
               <MessageCircle className="w-4 h-4 fill-current" />
-              <span>WhatsApp Directo</span>
+              <span>{t.nav.directWhatsapp}</span>
             </a>
 
             {userRole ? (
@@ -844,7 +904,7 @@ export default function App() {
                 className="inline-flex items-center gap-1.5 sm:gap-2 bg-[#00A896] hover:bg-[#028090] text-white font-bold text-[11px] sm:text-xs px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl transition-all shadow-md shadow-[#00A896]/20 shrink-0"
               >
                 <Sliders className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span>Panel {userRole === 'admin' ? 'Operativo' : userRole === 'asesor' ? 'Asesor' : 'VIP'}</span>
+                <span>{t.nav.panel} {userRole === 'admin' ? 'Operativo' : userRole === 'asesor' ? 'Asesor' : 'VIP'}</span>
               </button>
             ) : (
               <button
@@ -852,7 +912,7 @@ export default function App() {
                 className="inline-flex items-center gap-1.5 sm:gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-[11px] sm:text-xs px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl transition-all shadow-md shrink-0"
               >
                 <Lock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00A896]" />
-                <span>Acceder</span>
+                <span>{t.nav.access}</span>
               </button>
             )}
 
@@ -879,12 +939,39 @@ export default function App() {
             transition={{ duration: 0.2, ease: 'easeOut' }}
             className="transform-gpu md:hidden bg-white border-b border-slate-200 overflow-hidden px-4 py-4 sm:px-6 space-y-3 text-sm font-semibold text-slate-800 shadow-xl"
           >
+            {/* Mobile Language & Rate Selector */}
+            <div className="py-2.5 border-b border-slate-100">
+              <span className="text-[11px] font-mono text-slate-400 block mb-2">{t.langSelector.label}</span>
+              <div className="flex items-center gap-2">
+                {LANGUAGES.map((langOpt) => {
+                  const isActive = currentLang === langOpt.code;
+                  return (
+                    <button
+                      key={langOpt.code}
+                      onClick={() => handleLanguageChange(langOpt.code)}
+                      className={`flex-1 py-2 px-2 rounded-xl text-xs font-bold border transition-all flex items-center justify-center gap-1.5 ${
+                        isActive
+                          ? 'bg-[#00A896]/10 border-[#00A896] text-[#00A896] shadow-sm'
+                          : 'border-slate-200 bg-white text-slate-600'
+                      }`}
+                    >
+                      <span className="text-sm">{langOpt.flag}</span>
+                      <span>{langOpt.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <span className="text-[10px] text-slate-500 mt-1.5 block">
+                {currentLang === 'en' ? t.langSelector.rateNoticeEn : t.langSelector.rateNoticeEsPt}
+              </span>
+            </div>
+
             <a 
               href="#excursiones" 
               onClick={() => { setCurrentView('landing'); setIsMobileMenuOpen(false); }} 
               className="py-2.5 border-b border-slate-100 flex items-center justify-between text-slate-800 hover:text-[#00A896]"
             >
-              <span>Excursiones & Servicios</span>
+              <span>{t.nav.excursions}</span>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </a>
             <a 
@@ -892,7 +979,7 @@ export default function App() {
               onClick={() => { setCurrentView('landing'); setIsMobileMenuOpen(false); }} 
               className="py-2.5 border-b border-slate-100 flex items-center justify-between text-slate-800 hover:text-[#00A896]"
             >
-              <span>Corredor de los Lagos</span>
+              <span>{t.nav.corredor}</span>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </a>
             <a 
@@ -900,14 +987,14 @@ export default function App() {
               onClick={() => { setCurrentView('landing'); setIsMobileMenuOpen(false); }} 
               className="py-2.5 border-b border-slate-100 flex items-center justify-between text-slate-800 hover:text-[#00A896]"
             >
-              <span>Quiénes Somos</span>
+              <span>{t.nav.about}</span>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </a>
             <button 
               onClick={() => { setIsMobileMenuOpen(false); setIsOfficeModalOpen(true); }} 
               className="py-2.5 border-b border-slate-100 text-left w-full text-[#00A896] flex items-center justify-between"
             >
-              <span>Ver Sucursales & Horarios</span>
+              <span>{t.nav.offices}</span>
               <Building2 className="w-4 h-4 text-[#00A896]" />
             </button>
             <a 
@@ -918,7 +1005,7 @@ export default function App() {
               className="w-full py-2.5 px-4 rounded-xl bg-[#25D366] text-black font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm"
             >
               <MessageCircle className="w-4 h-4 fill-current" />
-              <span>WhatsApp Directo Mostrador</span>
+              <span>{t.nav.directWhatsapp}</span>
             </a>
           </motion.div>
         )}
@@ -948,15 +1035,15 @@ export default function App() {
               <div className="max-w-3xl space-y-6">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700 text-xs font-mono text-slate-200 shadow-md">
                   <MapPin className="w-3.5 h-3.5 text-[#00A896]" />
-                  <span>BARILOCHE · CORREDOR DE LOS LAGOS · CHILE</span>
+                  <span>{t.hero.badge}</span>
                 </div>
 
                 <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] text-white drop-shadow-md">
-                  Descubrí Bariloche con <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-[#00A896]">Grupo Visión</span>
+                  {t.hero.titlePre}<span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-[#00A896]">{t.hero.titleHighlight}</span>
                 </h1>
 
                 <p className="text-lg sm:text-xl text-slate-100 leading-relaxed max-w-2xl font-medium drop-shadow-sm">
-                  Más de 30 años organizando excursiones tradicionales, navegaciones por el Nahuel Huapi, trekking y traslados privados.
+                  {t.hero.subtitle}
                 </p>
 
                 <div className="pt-2">
@@ -965,7 +1052,7 @@ export default function App() {
                       <Search className="w-5 h-5 text-[#00A896] shrink-0" />
                       <input 
                         type="text" 
-                        placeholder="¿Qué excursión buscás? (Ej: 7 Lagos, Tronador, Raquetas)..."
+                        placeholder={t.hero.searchPlaceholder}
                         value={searchQuery}
                         onChange={e => handleSearchChange(e.target.value)}
                         className="w-full bg-transparent border-none text-slate-900 text-sm font-medium focus:outline-none placeholder-slate-400"
@@ -976,7 +1063,7 @@ export default function App() {
                       href="#excursiones"
                       className="w-full sm:w-auto bg-[#00A896] hover:bg-[#028090] text-white text-xs font-bold px-6 py-3 rounded-xl transition-all shrink-0 flex items-center justify-center gap-2 shadow-md shadow-[#00A896]/30 hover:scale-[1.02] active:scale-95"
                     >
-                      <span>Buscar</span>
+                      <span>{t.hero.searchButton}</span>
                       <ChevronRight className="w-4 h-4" />
                     </a>
                   </div>
@@ -993,8 +1080,7 @@ export default function App() {
                 e => e.id === excursionId || e.id.includes(excursionId) || excursionId.includes(e.id)
               );
               if (found) {
-                setActiveExcursion(found);
-                setIsExcursionModalOpen(true);
+                handleOpenExcursionModal(found);
               } else {
                 const el = document.getElementById('excursiones');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -1006,8 +1092,8 @@ export default function App() {
           <section id="excursiones" className="py-24 max-w-7xl mx-auto px-6">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
               <div>
-                <span className="text-[#00A896] text-xs font-mono font-bold uppercase tracking-widest block mb-2">CATÁLOGO COMPLETO ({filteredExcursions.length} SERVICIOS)</span>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">Excursiones & Servicios Receptivos</h2>
+                <span className="text-[#00A896] text-xs font-mono font-bold uppercase tracking-widest block mb-2">{t.catalog.badge} ({filteredExcursions.length} {t.catalog.excursions.toUpperCase()})</span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">{t.catalog.title}</h2>
               </div>
 
               {/* Dynamic Category Tabs (Only Shows Categories with at least 1 Item) */}
@@ -1020,68 +1106,108 @@ export default function App() {
                       selectedCategory === cat ? 'bg-[#00A896] text-white shadow-md' : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    {cat}
+                    {cat === 'Todas' ? t.catalog.all : cat}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Results Info Bar */}
-            <div className="flex items-center justify-between text-xs font-mono text-slate-500 mb-6 px-1">
+            {/* Results Info Bar with Language Rate Badge */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-slate-500 mb-6 px-1 gap-2">
               <span>
-                Mostrando <strong className="text-slate-900">{filteredExcursions.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</strong> a <strong className="text-slate-900">{Math.min(currentPage * itemsPerPage, filteredExcursions.length)}</strong> de <strong className="text-slate-900">{filteredExcursions.length}</strong> excursiones
+                {t.catalog.showing} <strong className="text-slate-900">{filteredExcursions.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</strong> {t.catalog.to} <strong className="text-slate-900">{Math.min(currentPage * itemsPerPage, filteredExcursions.length)}</strong> {t.catalog.of} <strong className="text-slate-900">{filteredExcursions.length}</strong> {t.catalog.excursions}
               </span>
-              <span>Página {currentPage} de {totalPages}</span>
+              <div className="flex items-center gap-3">
+                <span className="px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
+                  {currentLang === 'en' ? '🇬🇧 English Rates (Bilingual Guide)' : currentLang === 'pt' ? '🇧🇷 Tarifas em Português' : '🇪🇸 Tarifas en Español'}
+                </span>
+                <span>{t.catalog.page} {currentPage} / {totalPages}</span>
+              </div>
             </div>
 
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center items-stretch max-w-7xl mx-auto">
-              {paginatedExcursions.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => { setActiveExcursion(item); setIsExcursionModalOpen(true); }}
-                  className="group cursor-pointer rounded-3xl overflow-hidden bg-white border border-slate-200/90 shadow-md hover:shadow-2xl hover:shadow-[#00A896]/15 hover:border-[#00A896]/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full"
-                >
-                  <div className="relative h-60 w-full overflow-hidden shrink-0 bg-slate-200">
-                    <img 
-                      src={item.image} 
-                      alt={item.title} 
-                      loading="eager"
-                      decoding="async"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
-                    <div className="absolute top-3 left-3 flex gap-2">
-                      <span className="px-3 py-1 rounded-full bg-white/95 text-slate-900 text-[10px] font-mono font-bold shadow-md">{item.category}</span>
-                      <span className="px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-white text-[10px] font-mono shadow-md">{item.duration}</span>
+              {paginatedExcursions.map((item) => {
+                const content = getExcursionContent(item, currentLang);
+                const displayPrice = getExcursionPrice(item, currentLang);
+                const enabledShifts = item.shifts?.filter(s => s.enabled) || [];
+                const totalSpots = enabledShifts.reduce((acc, s) => acc + s.availableSpots, 0);
+
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => handleOpenExcursionModal(item)}
+                    className="group cursor-pointer rounded-3xl overflow-hidden bg-white border border-slate-200/90 shadow-md hover:shadow-2xl hover:shadow-[#00A896]/15 hover:border-[#00A896]/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full"
+                  >
+                    <div className="relative h-60 w-full overflow-hidden shrink-0 bg-slate-200">
+                      <img 
+                        src={item.image} 
+                        alt={content.title} 
+                        loading="eager"
+                        decoding="async"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
+                      <div className="absolute top-3 left-3 flex gap-2">
+                        <span className="px-3 py-1 rounded-full bg-white/95 text-slate-900 text-[10px] font-mono font-bold shadow-md">{item.category}</span>
+                        <span className="px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-white text-[10px] font-mono shadow-md">{item.duration}</span>
+                      </div>
+
+                      {/* Shifts indicator badge overlay */}
+                      {enabledShifts.length > 0 && (
+                        <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/85 backdrop-blur-md text-emerald-300 text-[10px] font-mono font-bold border border-slate-700 shadow-md">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          <span>{enabledShifts.length} {t.catalog.shiftsAvailable} ({totalSpots} cupos)</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                      <div>
+                        <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#00A896] transition-colors leading-snug mb-2 line-clamp-2">
+                          {content.title}
+                        </h3>
+                        <p className="text-slate-600 text-xs leading-relaxed line-clamp-2">
+                          {content.description}
+                        </p>
+                      </div>
+
+                      <ul className="space-y-1.5 text-xs text-slate-500 pt-3 border-t border-slate-100">
+                        {content.highlights.slice(0, 2).map((h, i) => (
+                          <li key={i} className="flex items-center gap-2">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#00A896] shrink-0" />
+                            <span className="truncate">{h}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div className="pt-3 flex items-center justify-between border-t border-slate-100">
+                        <div>
+                          <div className="flex items-baseline gap-1.5">
+                            <span className="text-[11px] font-mono text-slate-400">{t.catalog.rate}</span>
+                            <span className="text-base font-extrabold text-[#00A896]">
+                              USD ${displayPrice}
+                            </span>
+                            {item.discountPercent && item.discountPercent > 0 ? (
+                              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">
+                                {item.discountPercent}% OFF
+                              </span>
+                            ) : null}
+                          </div>
+                          <span className="text-[10px] text-slate-400 block font-mono">
+                            {currentLang === 'en' ? 'Bilingual Guide' : 'Guía Español / PT'}
+                          </span>
+                        </div>
+
+                        <button className="inline-flex items-center gap-1.5 bg-[#00A896] hover:bg-[#028090] text-white font-bold text-xs px-4 py-2 rounded-xl transition-all shadow-md shadow-[#00A896]/20">
+                          <span>{t.catalog.viewDetail}</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
-
-                  <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#00A896] transition-colors leading-snug mb-2 line-clamp-2">{item.title}</h3>
-                      <p className="text-slate-600 text-xs leading-relaxed line-clamp-2">{item.description}</p>
-                    </div>
-
-                    <ul className="space-y-1.5 text-xs text-slate-500 pt-3 border-t border-slate-100">
-                      {item.highlights.slice(0, 2).map((h, i) => (
-                        <li key={i} className="flex items-center gap-2">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#00A896] shrink-0" />
-                          <span className="truncate">{h}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div className="pt-3 flex items-center justify-between border-t border-slate-100">
-                      <span className="text-[11px] font-mono text-slate-400">Tarifa USD {item.priceNum}</span>
-                      <button className="inline-flex items-center gap-1.5 bg-[#00A896] hover:bg-[#028090] text-white font-bold text-xs px-4 py-2 rounded-xl transition-all shadow-md shadow-[#00A896]/20">
-                        <span>Ver Detalle</span>
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Pagination Controls */}
@@ -1731,175 +1857,332 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* EXCURSION DETAILS MODAL */}
+      {/* EXCURSION DETAIL & SHIFTS MODAL */}
       <AnimatePresence>
-        {isExcursionModalOpen && activeExcursion && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.94 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.94 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative flex flex-col max-h-[88vh]"
-            >
-              {/* Dynamic Collapsible Image Header Banner */}
-              <div 
-                className={`relative w-full overflow-hidden shrink-0 transition-all duration-300 ease-in-out ${
-                  isBannerCollapsed ? 'h-24 sm:h-28' : 'h-64 sm:h-72'
-                }`}
+        {isExcursionModalOpen && activeExcursion && (() => {
+          const activeContent = getExcursionContent(activeExcursion, currentLang);
+          const activePrice = getExcursionPrice(activeExcursion, currentLang);
+          const enabledShifts = activeExcursion.shifts?.filter(s => s.enabled) || [];
+          const selectedShift = enabledShifts.find(s => s.id === selectedShiftId) || enabledShifts[0];
+
+          // Prefilled WhatsApp booking message
+          const shiftInfo = selectedShift 
+            ? ` | Turno: ${selectedShift.name} (${selectedShift.time})`
+            : '';
+          const langGuideInfo = currentLang === 'en' 
+            ? ' [English Bilingual Guide]' 
+            : ' [Guía Español / Portugués]';
+          const totalEstimate = activePrice * modalPassengers;
+          const waBookingMessage = `Hola Grupo Visión! Deseo consultar y reservar la excursión "${activeContent.title}"${shiftInfo}${langGuideInfo} | Pasajeros: ${modalPassengers} | Tarifa est.: USD $${totalEstimate}. ¿Tienen disponibilidad confirmada?`;
+          const waUrl = `https://wa.me/5492944235278?text=${encodeURIComponent(waBookingMessage)}`;
+
+          return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.94 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.94 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative flex flex-col max-h-[88vh]"
               >
-                <img 
-                  src={activeExcursion.image} 
-                  alt={activeExcursion.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/40 to-transparent" />
-                
-                {/* Close Button */}
-                <button 
-                  onClick={() => { setIsExcursionModalOpen(false); setIsBannerCollapsed(false); }}
-                  className="absolute top-3 right-3 bg-white/90 hover:bg-white text-slate-800 p-2 rounded-full border border-slate-200 backdrop-blur-md shadow-md z-10"
+                {/* Dynamic Collapsible Image Header Banner */}
+                <div 
+                  className={`relative w-full overflow-hidden shrink-0 transition-all duration-300 ease-in-out ${
+                    isBannerCollapsed ? 'h-24 sm:h-28' : 'h-64 sm:h-72'
+                  }`}
                 >
-                  <X className="w-4 h-4" />
-                </button>
-
-                {/* Collapsible Banner Title & Badges */}
-                <div className="absolute bottom-3 left-6 right-6 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="px-3 py-1 rounded-full bg-[#00A896] text-white text-xs font-mono font-bold shadow-md">
-                      {activeExcursion.category}
-                    </span>
-                    {isBannerCollapsed && (
-                      <span className="text-white font-bold text-sm truncate max-w-xs drop-shadow-md">
-                        {activeExcursion.title}
-                      </span>
-                    )}
-                  </div>
+                  <img 
+                    src={activeExcursion.image} 
+                    alt={activeContent.title} 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/40 to-transparent" />
                   
-                  <span className="px-3 py-1 rounded-full bg-slate-950/85 text-white text-xs font-mono shadow-md border border-slate-700 shrink-0">
-                    Duración: {activeExcursion.duration}
-                  </span>
-                </div>
-              </div>
-
-              {/* Scrollable Modal Content with Scroll Listener for Banner Collapse */}
-              <div 
-                onScroll={handleModalScroll}
-                className="p-6 sm:p-8 overflow-y-auto space-y-6 flex-1 text-slate-800"
-              >
-                <div>
-                  <h3 className="text-2xl sm:text-3xl font-black text-slate-900 leading-tight mb-2">
-                    {activeExcursion.title}
-                  </h3>
-                  <p className="text-slate-600 text-sm leading-relaxed">
-                    {activeExcursion.fullDetails}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-mono">
-                  <div>
-                    <span className="text-slate-400 block text-[10px]">TEMPORADA</span>
-                    <span className="font-bold text-slate-900">{activeExcursion.season}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block text-[10px]">SALIDA</span>
-                    <span className="font-bold text-slate-900">{activeExcursion.departureTime}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block text-[10px]">TARIFA ESTIMADA</span>
-                    <span className="font-bold text-[#00A896]">USD {activeExcursion.priceNum} / pax</span>
-                  </div>
-                </div>
-
-                {activeExcursion.highlights && activeExcursion.highlights.length > 0 && (
-                  <div className="space-y-3">
-                    <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#00A896]">Puntos Destacados del Recorrido:</h4>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700 font-medium">
-                      {activeExcursion.highlights.map((hl, i) => (
-                        <li key={i} className="flex items-start gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-[#00A896] shrink-0 mt-0.5" />
-                          <span>{hl}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
-                  {activeExcursion.includes && activeExcursion.includes.length > 0 && (
-                    <div className="space-y-2">
-                      <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-700">Incluido:</h4>
-                      <ul className="space-y-1.5 text-xs text-slate-700">
-                        {activeExcursion.includes.map((inc, i) => (
-                          <li key={i} className="flex items-start gap-2">
-                            <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                            <span>{inc}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {activeExcursion.notIncludes && activeExcursion.notIncludes.length > 0 && (
-                    <div className="space-y-2">
-                      <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-rose-700">No Incluido:</h4>
-                      <ul className="space-y-1.5 text-xs text-slate-600">
-                        {activeExcursion.notIncludes.map((ninc, i) => (
-                          <li key={i} className="flex items-start gap-2">
-                            <X className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
-                            <span>{ninc}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-
-                {activeExcursion.additionalInfo && (
-                  <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs space-y-1">
-                    <span className="font-mono font-bold text-amber-800 uppercase text-[11px] block">Información Adicional & Recomendaciones</span>
-                    <p className="text-slate-700 whitespace-pre-line leading-relaxed">{activeExcursion.additionalInfo}</p>
-                  </div>
-                )}
-
-                {activeExcursion.faq && activeExcursion.faq.length > 0 && (
-                  <div className="space-y-3 pt-2">
-                    <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900">Preguntas Frecuentes:</h4>
-                    <div className="space-y-2">
-                      {activeExcursion.faq.map((f, i) => (
-                        <div key={i} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs space-y-1">
-                          <span className="font-bold text-slate-900 block">{f.question}</span>
-                          <p className="text-slate-600 leading-relaxed">{f.answer}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row gap-3">
-                  <motion.a 
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    href={`https://wa.me/5492944235278?text=Hola!%20Quisiera%20consultar%20y%20reservar%20la%20excursion:%20${encodeURIComponent(activeExcursion.title)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-black font-extrabold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 text-xs transition-all shadow-md shadow-[#25D366]/20"
-                  >
-                    <MessageCircle className="w-4 h-4 fill-current" />
-                    <span>Reservar por WhatsApp Directo</span>
-                  </motion.a>
-
+                  {/* Close Button */}
                   <button 
                     onClick={() => { setIsExcursionModalOpen(false); setIsBannerCollapsed(false); }}
-                    className="px-6 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold"
+                    className="absolute top-3 right-3 bg-white/90 hover:bg-white text-slate-800 p-2 rounded-full border border-slate-200 backdrop-blur-md shadow-md z-10"
                   >
-                    Cerrar
+                    <X className="w-4 h-4" />
                   </button>
+
+                  {/* Collapsible Banner Title & Badges */}
+                  <div className="absolute bottom-3 left-6 right-6 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="px-3 py-1 rounded-full bg-[#00A896] text-white text-xs font-mono font-bold shadow-md">
+                        {activeExcursion.category}
+                      </span>
+                      {isBannerCollapsed && (
+                        <span className="text-white font-bold text-sm truncate max-w-xs drop-shadow-md">
+                          {activeContent.title}
+                        </span>
+                      )}
+                    </div>
+                    
+                    <span className="px-3 py-1 rounded-full bg-slate-950/85 text-white text-xs font-mono shadow-md border border-slate-700 shrink-0">
+                      {t.modal.duration}: {activeExcursion.duration}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
+
+                {/* Scrollable Modal Content with Scroll Listener for Banner Collapse */}
+                <div 
+                  onScroll={handleModalScroll}
+                  className="p-6 sm:p-8 overflow-y-auto space-y-6 flex-1 text-slate-800"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-3 mb-2">
+                      <h3 className="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
+                        {activeContent.title}
+                      </h3>
+                    </div>
+                    <p className="text-slate-600 text-sm leading-relaxed">
+                      {activeContent.fullDetails || activeContent.description}
+                    </p>
+                  </div>
+
+                  {/* Quick Info Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-mono">
+                    <div>
+                      <span className="text-slate-400 block text-[10px] uppercase">TEMPORADA</span>
+                      <span className="font-bold text-slate-900">{activeExcursion.season}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 block text-[10px] uppercase">{t.modal.departure.toUpperCase()}</span>
+                      <span className="font-bold text-slate-900">{activeContent.departureTime || activeExcursion.departureTime}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 block text-[10px] uppercase">
+                        {currentLang === 'en' ? 'USD RATE (EN GUIDE)' : 'TARIFA USD (ES/PT)'}
+                      </span>
+                      <span className="font-bold text-[#00A896] text-sm">
+                        USD ${activePrice} / pax
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* INTERACTIVE SHIFTS & CAPACITY SELECTOR */}
+                  <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-emerald-50/40 border border-slate-200 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-[#00A896]" />
+                        <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900">
+                          {t.modal.availableShiftsTitle}
+                        </h4>
+                      </div>
+                      <span className="text-[11px] font-mono text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full font-bold">
+                        Cupos en vivo
+                      </span>
+                    </div>
+                    
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {t.modal.availableShiftsDesc}
+                    </p>
+
+                    {enabledShifts.length > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                        {enabledShifts.map((shift) => {
+                          const isSelected = selectedShift?.id === shift.id;
+                          const isSoldOut = shift.availableSpots <= 0;
+                          const isLowSpots = shift.availableSpots > 0 && shift.availableSpots <= 4;
+
+                          return (
+                            <div
+                              key={shift.id}
+                              onClick={() => {
+                                if (!isSoldOut) {
+                                  setSelectedShiftId(shift.id);
+                                }
+                              }}
+                              className={`p-3 rounded-xl border text-xs transition-all relative flex flex-col justify-between gap-2 ${
+                                isSoldOut
+                                  ? 'bg-slate-100/70 border-slate-200 opacity-60 cursor-not-allowed'
+                                  : isSelected
+                                  ? 'bg-white border-[#00A896] ring-2 ring-[#00A896]/20 shadow-md cursor-pointer'
+                                  : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-sm cursor-pointer'
+                              }`}
+                            >
+                              <div className="flex items-start justify-between gap-2">
+                                <div>
+                                  <div className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                                    <span>{shift.name}</span>
+                                    {isSelected && (
+                                      <span className="w-2 h-2 rounded-full bg-[#00A896]" />
+                                    )}
+                                  </div>
+                                  <div className="text-[11px] text-slate-500 font-mono flex items-center gap-1 mt-0.5">
+                                    <Clock className="w-3 h-3 text-slate-400" />
+                                    <span>{shift.time}</span>
+                                  </div>
+                                </div>
+
+                                {/* Cupos Status Badge */}
+                                {isSoldOut ? (
+                                  <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[10px] font-mono font-bold shrink-0">
+                                    {t.modal.soldOut}
+                                  </span>
+                                ) : isLowSpots ? (
+                                  <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-mono font-bold shrink-0 animate-pulse">
+                                    {t.modal.lastSpots.replace('{n}', shift.availableSpots.toString())}
+                                  </span>
+                                ) : (
+                                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold shrink-0">
+                                    {shift.availableSpots} {t.modal.spotsAvailable}
+                                  </span>
+                                )}
+                              </div>
+
+                              <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100 font-mono">
+                                <span className="text-slate-400">Cupo total: {shift.totalCapacity}</span>
+                                <span className={`font-bold ${isSelected ? 'text-[#00A896]' : 'text-slate-600'}`}>
+                                  {isSelected ? `✓ ${t.modal.selectedShift}` : t.modal.selectShift}
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="p-3 rounded-xl bg-slate-100 text-slate-500 text-xs italic text-center">
+                        Consultar horarios especiales directamente por WhatsApp.
+                      </div>
+                    )}
+
+                    {/* Passenger Counter & Estimated Total */}
+                    <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-200/80">
+                      <div className="flex items-center gap-3 w-full sm:w-auto">
+                        <span className="text-xs font-mono text-slate-700 font-bold">{t.modal.passengers}:</span>
+                        <div className="flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white shadow-sm">
+                          <button
+                            type="button"
+                            onClick={() => setModalPassengers(prev => Math.max(1, prev - 1))}
+                            className="px-3 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-sm"
+                          >
+                            -
+                          </button>
+                          <span className="px-4 py-1 text-xs font-mono font-bold text-slate-900">
+                            {modalPassengers}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const maxAllowed = selectedShift ? selectedShift.availableSpots : 20;
+                              setModalPassengers(prev => Math.min(Math.max(1, maxAllowed), prev + 1));
+                            }}
+                            className="px-3 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-sm"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                        <span className="text-xs font-mono text-slate-500">{t.modal.totalEstimated}:</span>
+                        <span className="text-base font-black text-[#00A896] font-mono">
+                          USD ${totalEstimate}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Highlights */}
+                  {activeContent.highlights && activeContent.highlights.length > 0 && (
+                    <div className="space-y-3">
+                      <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#00A896]">
+                        {t.modal.highlights}:
+                      </h4>
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700 font-medium">
+                        {activeContent.highlights.map((hl, i) => (
+                          <li key={i} className="flex items-start gap-2">
+                            <CheckCircle2 className="w-4 h-4 text-[#00A896] shrink-0 mt-0.5" />
+                            <span>{hl}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Included / Not Included */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
+                    {activeContent.includes && activeContent.includes.length > 0 && (
+                      <div className="space-y-2">
+                        <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-700">
+                          {t.modal.includes}:
+                        </h4>
+                        <ul className="space-y-1.5 text-xs text-slate-700">
+                          {activeContent.includes.map((inc, i) => (
+                            <li key={i} className="flex items-start gap-2">
+                              <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                              <span>{inc}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {activeContent.notIncludes && activeContent.notIncludes.length > 0 && (
+                      <div className="space-y-2">
+                        <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-rose-700">
+                          {t.modal.notIncludes}:
+                        </h4>
+                        <ul className="space-y-1.5 text-xs text-slate-600">
+                          {activeContent.notIncludes.map((ninc, i) => (
+                            <li key={i} className="flex items-start gap-2">
+                              <X className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
+                              <span>{ninc}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+
+                  {activeExcursion.additionalInfo && (
+                    <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs space-y-1">
+                      <span className="font-mono font-bold text-amber-800 uppercase text-[11px] block">Información Adicional & Recomendaciones</span>
+                      <p className="text-slate-700 whitespace-pre-line leading-relaxed">{activeExcursion.additionalInfo}</p>
+                    </div>
+                  )}
+
+                  {activeExcursion.faq && activeExcursion.faq.length > 0 && (
+                    <div className="space-y-3 pt-2">
+                      <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900">{t.modal.faq}:</h4>
+                      <div className="space-y-2">
+                        {activeExcursion.faq.map((f, i) => (
+                          <div key={i} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs space-y-1">
+                            <span className="font-bold text-slate-900 block">{f.question}</span>
+                            <p className="text-slate-600 leading-relaxed">{f.answer}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row gap-3">
+                    <motion.a 
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      href={waUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-black font-extrabold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 text-xs transition-all shadow-md shadow-[#25D366]/20"
+                    >
+                      <MessageCircle className="w-4 h-4 fill-current" />
+                      <span>{t.modal.whatsappInquiry} ({modalPassengers} pax)</span>
+                    </motion.a>
+
+                    <button 
+                      onClick={() => { setIsExcursionModalOpen(false); setIsBannerCollapsed(false); }}
+                      className="px-6 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold"
+                    >
+                      {t.modal.close}
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          );
+        })()}
       </AnimatePresence>
 
       {/* NEW TICKET MODAL */}
