@@ -85,13 +85,12 @@ export const Footer: React.FC<FooterProps> = ({
           
           {/* Brand Column */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#00A896] flex items-center justify-center text-white shadow-md shadow-[#00A896]/30 font-black">
-                GV
-              </div>
-              <span className="font-black text-xl tracking-tight text-white">
-                GRUPO VISIÓN
-              </span>
+            <div className="inline-flex items-center bg-white px-3.5 py-2 rounded-2xl shadow-md border border-slate-700/40">
+              <img 
+                src="/images/logo.png" 
+                alt="Grupo Visión Viajes y Turismo" 
+                className="h-8 sm:h-9 w-auto object-contain" 
+              />
             </div>
             <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
               Operador receptivo en San Carlos de Bariloche y la Patagonia Argentina. Excursiones tradicionales, aventuras de montaña, navegaciones lacustres y traslados privados corporativos.

@@ -879,18 +879,18 @@ export default function App() {
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 h-16 sm:h-20 flex items-center shadow-sm">
         <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 flex items-center justify-between gap-3">
           
-          {/* Logo */}
+          {/* Logo Oficial Grupo Visión */}
           <a 
             href="#" 
             onClick={(e) => { e.preventDefault(); setCurrentView('landing'); }} 
-            className="flex items-center gap-2.5 group shrink-0"
+            className="flex items-center group shrink-0 py-1"
+            title="Grupo Visión Viajes y Turismo"
           >
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#00A896] to-[#028090] flex items-center justify-center shadow-md shadow-[#00A896]/20 group-hover:scale-105 transition-transform duration-300">
-              <Globe className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-black text-lg sm:text-xl tracking-tight text-slate-900 whitespace-nowrap">
-              GRUPO VISIÓN
-            </span>
+            <img 
+              src="/images/logo.png" 
+              alt="Grupo Visión Viajes y Turismo" 
+              className="h-9 sm:h-11 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+            />
           </a>
 
           {/* Full Desktop Navigation Header */}
@@ -2349,126 +2349,144 @@ export default function App() {
       </AnimatePresence>
 
       {/* NEW TICKET MODAL */}
+      {/* NEW TICKET MODAL */}
       <AnimatePresence>
         {isNewBookingModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-md">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl relative"
+              className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full max-h-[88vh] overflow-hidden flex flex-col shadow-2xl relative"
             >
-              <button 
-                onClick={() => setIsNewBookingModalOpen(false)}
-                className="absolute top-4 right-4 text-slate-400 hover:text-slate-900 p-1.5 rounded-lg hover:bg-slate-100"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#00A896]/10 border border-[#00A896]/30 flex items-center justify-center text-[#00A896]">
-                  <Plus className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-slate-900">Ingresar Nuevo Ticket Receptivo</h3>
-                  <span className="text-xs font-mono text-slate-500">Oficina Urquiza 276</span>
-                </div>
-              </div>
-
-              <form onSubmit={handleCreateBooking} className="space-y-4 text-xs">
-                <div>
-                  <label className="block font-mono text-slate-600 mb-1">Nombre del Titular</label>
-                  <input 
-                    type="text" required
-                    placeholder="Ej: Laura Méndez"
-                    value={newBookingData.customerName}
-                    onChange={e => setNewBookingData({...newBookingData, customerName: e.target.value})}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#00A896]"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block font-mono text-slate-600 mb-1">Teléfono / WPP</label>
-                    <input 
-                      type="text" required
-                      placeholder="+54 9..."
-                      value={newBookingData.customerPhone}
-                      onChange={e => setNewBookingData({...newBookingData, customerPhone: e.target.value})}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#00A896]"
-                    />
+              {/* Fixed Header */}
+              <div className="shrink-0 flex items-center justify-between p-5 sm:p-6 border-b border-slate-100 bg-white">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#00A896]/10 border border-[#00A896]/30 flex items-center justify-center text-[#00A896]">
+                    <Plus className="w-5 h-5" />
                   </div>
                   <div>
-                    <label className="block font-mono text-slate-600 mb-1">Cantidad de Pax</label>
-                    <input 
-                      type="number" min="1" max="20" required
-                      value={newBookingData.guests}
-                      onChange={e => setNewBookingData({...newBookingData, guests: Number(e.target.value)})}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#00A896]"
-                    />
+                    <h3 className="text-xl font-bold text-slate-900">Ingresar Nuevo Ticket Receptivo</h3>
+                    <span className="text-xs font-mono text-slate-500">Oficina Urquiza 276</span>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block font-mono text-slate-600 mb-1">Tipo de Ticket</label>
-                    <select
-                      value={newBookingData.ticketType}
-                      onChange={e => setNewBookingData({...newBookingData, ticketType: e.target.value as any})}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#00A896]"
-                    >
-                      <option value="Reserva">Reserva Receptiva</option>
-                      <option value="Incidencia">Incidencia / Reclamo</option>
-                      <option value="Consulta">Consulta Comercial</option>
-                      <option value="Logística">Logística & Flota</option>
-                      <option value="VIP">Atención VIP</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block font-mono text-slate-600 mb-1">Prioridad</label>
-                    <select
-                      value={newBookingData.priority}
-                      onChange={e => setNewBookingData({...newBookingData, priority: e.target.value as any})}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#00A896]"
-                    >
-                      <option value="NORMAL">NORMAL</option>
-                      <option value="ALTA">ALTA</option>
-                      <option value="VIP">VIP</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block font-mono text-slate-600 mb-1">Excursión Seleccionada</label>
-                  <select 
-                    value={newBookingData.excursionTitle}
-                    onChange={e => setNewBookingData({...newBookingData, excursionTitle: e.target.value})}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#00A896]"
-                  >
-                    {excursionsList.map((e: Excursion) => (
-                      <option key={e.id} value={e.title}>{e.title}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block font-mono text-slate-600 mb-1">Lugar de Pick-Up / Hotel</label>
-                  <input 
-                    type="text"
-                    placeholder="Ej: Hotel Panamericano Bariloche"
-                    value={newBookingData.pickupLocation}
-                    onChange={e => setNewBookingData({...newBookingData, pickupLocation: e.target.value})}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#00A896]"
-                  />
                 </div>
 
                 <button 
-                  type="submit"
-                  className="w-full bg-[#00A896] hover:bg-[#028090] text-white font-bold py-3 rounded-xl shadow-md transition-all text-xs"
+                  onClick={() => setIsNewBookingModalOpen(false)}
+                  className="text-slate-400 hover:text-slate-900 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+                  title="Cerrar modal"
                 >
-                  Confirmar e Ingresar Ticket
+                  <X className="w-5 h-5" />
                 </button>
+              </div>
+
+              {/* Scrollable Form Body */}
+              <form onSubmit={handleCreateBooking} className="flex flex-col flex-1 overflow-hidden">
+                <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4 text-xs">
+                  <div>
+                    <label className="block font-mono text-slate-600 mb-1">Nombre del Titular</label>
+                    <input 
+                      type="text" required
+                      placeholder="Ej: Laura Méndez"
+                      value={newBookingData.customerName}
+                      onChange={e => setNewBookingData({...newBookingData, customerName: e.target.value})}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#00A896]"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-mono text-slate-600 mb-1">Teléfono / WPP</label>
+                      <input 
+                        type="text" required
+                        placeholder="+54 9..."
+                        value={newBookingData.customerPhone}
+                        onChange={e => setNewBookingData({...newBookingData, customerPhone: e.target.value})}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#00A896]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-mono text-slate-600 mb-1">Cantidad de Pax</label>
+                      <input 
+                        type="number" min="1" max="20" required
+                        value={newBookingData.guests}
+                        onChange={e => setNewBookingData({...newBookingData, guests: Number(e.target.value)})}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#00A896]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-mono text-slate-600 mb-1">Tipo de Ticket</label>
+                      <select
+                        value={newBookingData.ticketType}
+                        onChange={e => setNewBookingData({...newBookingData, ticketType: e.target.value as any})}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#00A896]"
+                      >
+                        <option value="Reserva">Reserva Receptiva</option>
+                        <option value="Incidencia">Incidencia / Reclamo</option>
+                        <option value="Consulta">Consulta Comercial</option>
+                        <option value="Logística">Logística & Flota</option>
+                        <option value="VIP">Atención VIP</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block font-mono text-slate-600 mb-1">Prioridad</label>
+                      <select
+                        value={newBookingData.priority}
+                        onChange={e => setNewBookingData({...newBookingData, priority: e.target.value as any})}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#00A896]"
+                      >
+                        <option value="NORMAL">NORMAL</option>
+                        <option value="ALTA">ALTA</option>
+                        <option value="VIP">VIP</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-mono text-slate-600 mb-1">Excursión Seleccionada</label>
+                    <select 
+                      value={newBookingData.excursionTitle}
+                      onChange={e => setNewBookingData({...newBookingData, excursionTitle: e.target.value})}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#00A896]"
+                    >
+                      {excursionsList.map((e: Excursion) => (
+                        <option key={e.id} value={e.title}>{e.title}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block font-mono text-slate-600 mb-1">Lugar de Pick-Up / Hotel</label>
+                    <input 
+                      type="text"
+                      placeholder="Ej: Hotel Panamericano Bariloche"
+                      value={newBookingData.pickupLocation}
+                      onChange={e => setNewBookingData({...newBookingData, pickupLocation: e.target.value})}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#00A896]"
+                    />
+                  </div>
+                </div>
+
+                {/* Fixed Footer Buttons */}
+                <div className="shrink-0 p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-end gap-2">
+                  <button 
+                    type="button"
+                    onClick={() => setIsNewBookingModalOpen(false)}
+                    className="px-4 py-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-200 font-semibold text-xs transition-colors cursor-pointer"
+                  >
+                    Cancelar
+                  </button>
+                  <button 
+                    type="submit"
+                    className="bg-[#00A896] hover:bg-[#028090] text-white font-bold px-5 py-2.5 rounded-xl shadow-md transition-all text-xs cursor-pointer hover:scale-[1.02] active:scale-95"
+                  >
+                    Confirmar e Ingresar Ticket
+                  </button>
+                </div>
               </form>
             </motion.div>
           </div>

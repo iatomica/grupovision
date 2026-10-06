@@ -186,45 +186,48 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-md">
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 15 }}
+        initial={{ opacity: 0, scale: 0.96, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 15 }}
-        className="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative my-8"
+        exit={{ opacity: 0, scale: 0.96, y: 12 }}
+        className="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full shadow-2xl relative flex flex-col max-h-[88vh] overflow-hidden"
       >
-        {/* Header Modal */}
-        <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-100">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#00A896]/10 border border-[#00A896]/30 flex items-center justify-center text-[#00A896] shrink-0">
-              <Ticket className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-xl font-black text-slate-900">
-                  Carga Manual de Pasajeros (Mostrador)
-                </h3>
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3 text-emerald-600" />
-                  Anti-Sobreventa
-                </span>
+        <form onSubmit={handleSubmit} className="flex flex-col h-full max-h-[88vh] overflow-hidden">
+          {/* Header Modal (Fixed Top) */}
+          <div className="shrink-0 flex items-center justify-between gap-4 p-5 sm:p-6 pb-4 border-b border-slate-100 bg-white">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#00A896]/10 border border-[#00A896]/30 flex items-center justify-center text-[#00A896] shrink-0">
+                <Ticket className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Registrá reservas presenciales en el local. Descuenta cupos en tiempo real para mantener el sistema actualizado.
-              </p>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg sm:text-xl font-black text-slate-900 leading-tight">
+                    Carga Manual de Pasajeros (Mostrador)
+                  </h3>
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold flex items-center gap-1 shrink-0">
+                    <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                    Anti-Sobreventa
+                  </span>
+                </div>
+                <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">
+                  Registrá reservas presenciales en el local. Descuenta cupos en tiempo real para mantener el sistema actualizado.
+                </p>
+              </div>
             </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-2 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all cursor-pointer shrink-0"
+              title="Cerrar modal"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4 pt-4 text-xs">
+          {/* Scrollable Configuration Body */}
+          <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4 text-xs">
           {/* 1. Sucursal de Atención & Prioridad */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -493,9 +496,11 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
               className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#00A896]"
             />
           </div>
+          </div>
+          {/* Fin del cuerpo scrolleable */}
 
-          {/* Resumen Final de Cobro & Botón Confirmar */}
-          <div className="p-3.5 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-3">
+          {/* Resumen Final de Cobro & Botón Confirmar (Fixed Footer) */}
+          <div className="shrink-0 p-4 sm:p-5 bg-slate-900 text-white border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-[0_-8px_20px_rgba(0,0,0,0.15)]">
             <div className="space-y-0.5">
               <span className="text-[10px] font-mono text-slate-400 block uppercase">
                 Importe Total ({passengersCount} pax x USD ${rateUSD}):
@@ -509,7 +514,7 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs cursor-pointer"
+                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs cursor-pointer transition-colors"
               >
                 Cancelar
               </button>
