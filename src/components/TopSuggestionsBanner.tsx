@@ -56,7 +56,7 @@ export const TopSuggestionsBanner: React.FC<TopSuggestionsBannerProps> = ({
     (currentItem.excursionId && (e.id.includes(currentItem.excursionId) || currentItem.excursionId.includes(e.id)))
   );
 
-  const displayImage = matchedExcursion?.image || currentItem.image;
+  const displayImage = currentItem.image || matchedExcursion?.image;
   const displayTitle = currentItem.title || matchedExcursion?.title || 'Excursión Bariloche';
   const displayDuration = currentItem.duration || matchedExcursion?.duration || 'Día Completo';
 

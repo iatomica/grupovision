@@ -211,9 +211,8 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   const [newFaqQuestion, setNewFaqQuestion] = useState('');
   const [newFaqAnswer, setNewFaqAnswer] = useState('');
 
-  // Dialog states for Delete & Reset
+  // Dialog states for Delete
   const [deletingExcursion, setDeletingExcursion] = useState<Excursion | null>(null);
-  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
 
   // Filtered Excursions
   const filteredExcursions = excursions.filter(exc => {
@@ -575,15 +574,6 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
             <Download className="w-3.5 h-3.5 text-emerald-400" />
             Descargar Backup
           </a>
-
-          <button
-            onClick={() => setIsResetConfirmOpen(true)}
-            className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold text-xs rounded-2xl border border-slate-700/80 flex items-center justify-center gap-2 transition-all"
-            title="Restaurar datos de fábrica originales"
-          >
-            <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
-            Restaurar Catálogo
-          </button>
         </div>
       </div>
 
@@ -2171,47 +2161,6 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
       </AnimatePresence>
 
       {/* ========================================================================= */}
-      {/* MODAL 4: RESET CATALOG CONFIRMATION */}
-      {/* ========================================================================= */}
-      <AnimatePresence>
-        {isResetConfirmOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-slate-100 text-center"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto">
-                <RotateCcw className="w-6 h-6" />
-              </div>
-
-              <h3 className="font-bold text-slate-900 text-base">Restaurar Catálogo Original</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Esta acción restablecerá todas las excursiones a sus valores iniciales de fábrica, descartando cambios y excursiones personalizadas.
-              </p>
-
-              <div className="flex items-center justify-center gap-2 pt-2">
-                <button
-                  onClick={() => setIsResetConfirmOpen(false)}
-                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-xl"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={() => {
-                    onResetCatalog();
-                    setIsResetConfirmOpen(false);
-                  }}
-                  className="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-sm"
-                >
-                  Confirmar Restauración
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
       {/* WordPress-Style Media Library Modal */}
       <MediaLibraryModal

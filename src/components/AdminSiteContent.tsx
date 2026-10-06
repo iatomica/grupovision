@@ -883,7 +883,7 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
                           <label className="block text-[11px] font-bold text-slate-600 mb-1">Imagen del Banner</label>
                           <div className="flex items-center gap-3">
                             <img 
-                              src={linkedExcursion?.image || item.image} 
+                              src={item.image || linkedExcursion?.image} 
                               alt={item.title} 
                               className="w-16 h-12 rounded-lg object-cover border border-slate-200 shrink-0" 
                             />

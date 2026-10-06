@@ -50,6 +50,11 @@ export interface Booking {
   status: 'BACKLOG' | 'COTIZACION' | 'CONFIRMADA' | 'COMPLETADA';
   ticketType: 'Reserva' | 'Incidencia' | 'Consulta' | 'Logística' | 'VIP';
   priority: 'ALTA' | 'NORMAL' | 'VIP';
+  shiftId?: string;
+  shiftTime?: string;
+  shiftName?: string;
+  source?: 'mostrador-urquiza' | 'mostrador-san-martin' | 'web' | 'whatsapp' | 'telefono';
+  paymentMethod?: string;
   assignedGuide: string;
   assignedVehicle: string;
   operatorNotes: string;

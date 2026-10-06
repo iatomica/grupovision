@@ -80,6 +80,9 @@ import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { TopSuggestionsBanner } from './components/TopSuggestionsBanner';
 import { SiteContentData, DEFAULT_SITE_CONTENT } from './data/siteContentData';
 import { loadSiteContent, saveSiteContent, resetSiteContentToDefault, fetchSiteContentAsync } from './utils/siteContentStorage';
+import { PublicExcursionCalendar } from './components/PublicExcursionCalendar';
+import { ManualPassengerModal } from './components/ManualPassengerModal';
+import { AdminCalendarOperations } from './components/AdminCalendarOperations';
 
 interface SystemActivityLog {
   id: string;
@@ -278,13 +281,30 @@ const INITIAL_NOTIFICATIONS: UserNotification[] = [
   }
 ];
 
+const loadInitialBookings = (): Booking[] => {
+  try {
+    const saved = localStorage.getItem('grupovision_bookings');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (e) {
+    console.error('Error loading bookings from localStorage', e);
+  }
+  return INITIAL_BOOKINGS;
+};
+
 export default function App() {
   // Navigation & User Auth States
   const [currentView, setCurrentView] = useState<'landing' | 'login' | 'admin-board' | 'traveler-board' | 'advisor-board'>('landing');
   const [userRole, setUserRole] = useState<'admin' | 'asesor' | 'traveler' | 'operador' | null>(null);
   const [userName, setUserName] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('luis@grupovision.tur.ar');
-  const [adminTab, setAdminTab] = useState<'kanban' | 'staff' | 'promos' | 'analytics' | 'content'>('kanban');
+  const [adminTab, setAdminTab] = useState<'promos' | 'content' | 'kanban' | 'staff' | 'analytics'>('promos');
+  const [operationsSubView, setOperationsSubView] = useState<'calendar' | 'kanban'>('calendar');
+  const [isManualBookingModalOpen, setIsManualBookingModalOpen] = useState(false);
+  const [manualModalDefaultDate, setManualModalDefaultDate] = useState<string | undefined>(undefined);
+  const [manualModalDefaultExcursionId, setManualModalDefaultExcursionId] = useState<string | undefined>(undefined);
 
   // Dynamic Data States (Real-time Global Sync con Backend API y LocalStorage)
   const [excursionsList, setExcursionsList] = useState<Excursion[]>(() => loadExcursions());
@@ -355,7 +375,31 @@ export default function App() {
   };
 
   // Operations & Jira Ticket States
-  const [bookings, setBookings] = useState<Booking[]>(INITIAL_BOOKINGS);
+  const [bookings, setBookings] = useState<Booking[]>(() => loadInitialBookings());
+
+  const handleSaveManualBooking = (newB: Booking) => {
+    setBookings(prev => {
+      const updated = [newB, ...prev];
+      try {
+        localStorage.setItem('grupovision_bookings', JSON.stringify(updated));
+      } catch (e) {
+        console.error(e);
+      }
+      return updated;
+    });
+
+    setActivityLogs(prev => [
+      {
+        id: `log-${Date.now().toString().slice(-4)}`,
+        user: userName || 'Administrador Mostrador',
+        action: `Registró por mostrador a ${newB.customerName} (${newB.guests} pax) en "${newB.excursionTitle}" para el ${newB.date} (${newB.shiftName || newB.shiftTime || 'Salida confirmada'}). Ticket: ${newB.code}`,
+        timestamp: 'Justo ahora',
+        type: 'ticket'
+      },
+      ...prev
+    ]);
+  };
+
   const [staffList, setStaffList] = useState<StaffMember[]>(INITIAL_STAFF);
   const [selectedTicket, setSelectedTicket] = useState<Booking | null>(null);
   const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
@@ -732,6 +776,9 @@ export default function App() {
   // Add Walk-in / New Ticket
   const handleCreateBooking = (e: React.FormEvent) => {
     e.preventDefault();
+    const targetExc = excursionsList.find(exc => exc.title === newBookingData.excursionTitle);
+    const unitPrice = targetExc ? targetExc.priceNum : 140;
+
     const newB: Booking = {
       id: `b-${Date.now().toString().slice(-4)}`,
       code: `GV-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -741,7 +788,7 @@ export default function App() {
       excursionTitle: newBookingData.excursionTitle,
       date: newBookingData.date || new Date().toISOString().split('T')[0],
       guests: Number(newBookingData.guests),
-      totalPriceUSD: Number(newBookingData.guests) * 140,
+      totalPriceUSD: Number(newBookingData.guests) * unitPrice,
       pickupLocation: newBookingData.pickupLocation || 'Oficina Centro Cívico (Urquiza 276)',
       status: 'BACKLOG',
       ticketType: newBookingData.ticketType,
@@ -754,7 +801,15 @@ export default function App() {
       attachments: []
     };
 
-    setBookings([newB, ...bookings]);
+    setBookings(prev => {
+      const updated = [newB, ...prev];
+      try {
+        localStorage.setItem('grupovision_bookings', JSON.stringify(updated));
+      } catch (err) {
+        console.error(err);
+      }
+      return updated;
+    });
     setIsNewBookingModalOpen(false);
     setNewBookingData({
       customerName: '', customerEmail: '', customerPhone: '',
@@ -1038,18 +1093,9 @@ export default function App() {
 
             <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 relative z-10 space-y-8 pt-6">
               <div className="max-w-3xl space-y-6">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700 text-xs font-mono text-slate-200 shadow-md">
-                  <MapPin className="w-3.5 h-3.5 text-[#00A896]" />
-                  <span>{t.hero.badge}</span>
-                </div>
-
-                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] text-white drop-shadow-md">
-                  {t.hero.titlePre}<span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-[#00A896]">{t.hero.titleHighlight}</span>
+                <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight leading-[1.05] drop-shadow-md">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-[#00A896]">Grupo Visión</span>
                 </h1>
-
-                <p className="text-lg sm:text-xl text-slate-100 leading-relaxed max-w-2xl font-medium drop-shadow-sm">
-                  {t.hero.subtitle}
-                </p>
 
                 <div className="pt-2">
                   <div className="p-2.5 rounded-2xl bg-white/95 backdrop-blur-xl max-w-2xl border border-slate-200 shadow-2xl flex flex-col sm:flex-row items-center gap-3">
@@ -1522,58 +1568,148 @@ export default function App() {
               <h1 className="text-3xl font-black text-slate-900 mt-1">Control de Pasajeros & Logística Receptiva</h1>
             </div>
 
-            {/* Sub-tabs: Kanban vs Staff vs Promos vs Analytics */}
-            <div className="flex items-center gap-3">
+            {/* Sub-tabs: 1. Excursiones & Tarifas, 2. Secciones Web (CMS), 3. Operaciones & Calendario, 4. Personal, 5. Analitica */}
+            <div className="flex flex-wrap items-center gap-3">
               <div className="p-1 rounded-xl bg-slate-200 text-xs font-bold flex gap-1 flex-wrap">
                 <button
-                  onClick={() => setAdminTab('kanban')}
-                  className={`px-3 py-2 rounded-lg transition-all ${adminTab === 'kanban' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
-                >
-                  Tablero de Operaciones
-                </button>
-                <button
-                  onClick={() => setAdminTab('staff')}
-                  className={`px-3 py-2 rounded-lg transition-all ${adminTab === 'staff' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
-                >
-                  Permisos & Personal
-                </button>
-                <button
                   onClick={() => setAdminTab('promos')}
-                  className={`px-3 py-2 rounded-lg transition-all ${adminTab === 'promos' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                  className={`px-3.5 py-2 rounded-lg transition-all cursor-pointer ${adminTab === 'promos' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
                 >
                   Excursiones & Tarifas
                 </button>
                 <button
                   onClick={() => setAdminTab('content')}
-                  className={`px-3 py-2 rounded-lg transition-all ${adminTab === 'content' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                  className={`px-3.5 py-2 rounded-lg transition-all cursor-pointer ${adminTab === 'content' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
                 >
                   Secciones Web (CMS)
                 </button>
                 <button
+                  onClick={() => setAdminTab('kanban')}
+                  className={`px-3.5 py-2 rounded-lg transition-all cursor-pointer ${adminTab === 'kanban' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                >
+                  Tablero de Operaciones & Calendario
+                </button>
+                <button
+                  onClick={() => setAdminTab('staff')}
+                  className={`px-3.5 py-2 rounded-lg transition-all cursor-pointer ${adminTab === 'staff' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                >
+                  Permisos & Personal
+                </button>
+                <button
                   onClick={() => setAdminTab('analytics')}
-                  className={`px-3 py-2 rounded-lg transition-all ${adminTab === 'analytics' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                  className={`px-3.5 py-2 rounded-lg transition-all cursor-pointer ${adminTab === 'analytics' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
                 >
                   Analítica & Reportes
                 </button>
               </div>
 
-              <button 
-                onClick={() => setIsNewBookingModalOpen(true)}
-                className="inline-flex items-center gap-2 bg-[#00A896] hover:bg-[#028090] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all shrink-0"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Nuevo Ticket Mostrador</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => {
+                    setManualModalDefaultDate(undefined);
+                    setManualModalDefaultExcursionId(undefined);
+                    setIsManualBookingModalOpen(true);
+                  }}
+                  className="inline-flex items-center gap-2 bg-[#00A896] hover:bg-[#028090] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all shrink-0 cursor-pointer hover:scale-[1.02] active:scale-95"
+                  title="Carga manual de pasajeros que reservaron en el local para descontar cupos y evitar sobreventas"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Cargar Pasajeros (Mostrador)</span>
+                </button>
+
+                <button 
+                  onClick={() => setIsNewBookingModalOpen(true)}
+                  className="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl shadow-md transition-all shrink-0 cursor-pointer"
+                  title="Ingresar nuevo ticket de consulta o incidencia"
+                >
+                  <Inbox className="w-4 h-4 text-emerald-400" />
+                  <span>Nuevo Ticket</span>
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* TAB 1: KANBAN BOARD */}
+          {/* TAB 1: DYNAMIC PROMOS & EXCURSIONS MANAGER */}
+          {adminTab === 'promos' && (
+            <AdminPromosExcursions
+              excursions={excursionsList}
+              promoSuggestions={siteContent.topSuggestions?.items || []}
+              onUpdatePromoSuggestions={(newItems) => {
+                handleSaveSiteContent({
+                  ...siteContent,
+                  topSuggestions: {
+                    badge: siteContent.topSuggestions?.badge || '⚡ TOP SUGERENCIAS & OFERTAS EXCLUSIVAS',
+                    title: siteContent.topSuggestions?.title || 'Excursiones Destacadas con Descuento Especial',
+                    subtitle: siteContent.topSuggestions?.subtitle || 'Aprovechá cupos limitados y beneficios exclusivos reservando anticipadamente online o por WhatsApp.',
+                    items: newItems
+                  }
+                });
+              }}
+              onUpdateExcursionPromo={handleUpdateExcursionPromo}
+              onSaveExcursion={handleSaveExcursion}
+              onDeleteExcursion={handleDeleteExcursion}
+              onResetCatalog={handleResetCatalog}
+            />
+          )}
+
+          {/* TAB 2: SITE CONTENT CMS */}
+          {adminTab === 'content' && (
+            <AdminSiteContent
+              content={siteContent}
+              excursions={excursionsList}
+              onSaveContent={handleSaveSiteContent}
+              onResetContent={handleResetSiteContent}
+              onViewPublicSite={() => setCurrentView('landing')}
+            />
+          )}
+
+          {/* TAB 3: KANBAN BOARD & OPERATIONAL CALENDAR */}
           {adminTab === 'kanban' && (
             <div className="space-y-6">
-              
-              {/* Daily Metrics */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-1">
+              {/* Selector de sub-vista dentro de Operaciones */}
+              <div className="flex items-center gap-1.5 p-1 bg-slate-200/80 rounded-2xl w-fit text-xs font-bold">
+                <button
+                  type="button"
+                  onClick={() => setOperationsSubView('calendar')}
+                  className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
+                    operationsSubView === 'calendar'
+                      ? 'bg-white text-slate-900 shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <CalendarDays className="w-4 h-4 text-[#00A896]" />
+                  <span>Calendario de Salidas & Cupos</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setOperationsSubView('kanban')}
+                  className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
+                    operationsSubView === 'kanban'
+                      ? 'bg-white text-slate-900 shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <Inbox className="w-4 h-4 text-[#00A896]" />
+                  <span>Tablero Kanban de Tickets</span>
+                </button>
+              </div>
+
+              {operationsSubView === 'calendar' ? (
+                <AdminCalendarOperations
+                  excursions={excursionsList}
+                  bookings={bookings}
+                  onOpenManualModal={(date, excId) => {
+                    setManualModalDefaultDate(date);
+                    setManualModalDefaultExcursionId(excId);
+                    setIsManualBookingModalOpen(true);
+                  }}
+                  onSelectBookingTicket={(b) => setSelectedTicket(b)}
+                />
+              ) : (
+                <div className="space-y-6">
+                  {/* Daily Metrics */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-1">
                   <span className="text-slate-500 text-[11px] font-mono flex items-center gap-1"><Inbox className="w-3.5 h-3.5 text-[#00A896]" /> Backlog Consultas</span>
                   <div className="text-2xl font-black text-slate-900">{bookings.filter(b => b.status === 'BACKLOG').length}</div>
                 </div>
@@ -1711,6 +1847,9 @@ export default function App() {
                 })}
               </div>
 
+                </div>
+              )}
+
             </div>
           )}
 
@@ -1765,40 +1904,6 @@ export default function App() {
                 </div>
               </div>
             </div>
-          )}
-
-          {/* TAB 3: DYNAMIC PROMOS & EXCURSIONS MANAGER */}
-          {adminTab === 'promos' && (
-            <AdminPromosExcursions
-              excursions={excursionsList}
-              promoSuggestions={siteContent.topSuggestions?.items || []}
-              onUpdatePromoSuggestions={(newItems) => {
-                handleSaveSiteContent({
-                  ...siteContent,
-                  topSuggestions: {
-                    badge: siteContent.topSuggestions?.badge || '⚡ TOP SUGERENCIAS & OFERTAS EXCLUSIVAS',
-                    title: siteContent.topSuggestions?.title || 'Excursiones Destacadas con Descuento Especial',
-                    subtitle: siteContent.topSuggestions?.subtitle || 'Aprovechá cupos limitados y beneficios exclusivos reservando anticipadamente online o por WhatsApp.',
-                    items: newItems
-                  }
-                });
-              }}
-              onUpdateExcursionPromo={handleUpdateExcursionPromo}
-              onSaveExcursion={handleSaveExcursion}
-              onDeleteExcursion={handleDeleteExcursion}
-              onResetCatalog={handleResetCatalog}
-            />
-          )}
-
-          {/* TAB 4: SITE CONTENT CMS */}
-          {adminTab === 'content' && (
-            <AdminSiteContent
-              content={siteContent}
-              excursions={excursionsList}
-              onSaveContent={handleSaveSiteContent}
-              onResetContent={handleResetSiteContent}
-              onViewPublicSite={() => setCurrentView('landing')}
-            />
           )}
 
           {/* TAB 5: ANALYTICS & REPORTS */}
@@ -2110,223 +2215,22 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* CALENDAR & DATE SELECTOR */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-cyan-50/30 border border-slate-200 space-y-3.5">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <CalendarDays className="w-4 h-4 text-[#00A896]" />
-                        <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900">
-                          1. Fecha de Salida en Bariloche
-                        </h4>
-                      </div>
-                      
-                      {/* Native date picker for choosing specific day */}
-                      <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-mono text-slate-500">Otra fecha:</span>
-                        <input
-                          type="date"
-                          min={today.toISOString().split('T')[0]}
-                          value={modalSelectedDate}
-                          onChange={(e) => {
-                            if (e.target.value) setModalSelectedDate(e.target.value);
-                          }}
-                          className="px-2.5 py-1 bg-white border border-slate-300 rounded-lg text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-[#00A896]"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Horizontal 14-day date selector strip */}
-                    <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                      {upcomingDates.map((item) => {
-                        const isSelected = item.dateStr === modalSelectedDate;
-                        return (
-                          <button
-                            key={item.dateStr}
-                            type="button"
-                            onClick={() => setModalSelectedDate(item.dateStr)}
-                            className={`p-2.5 rounded-xl border text-center transition-all shrink-0 min-w-[64px] flex flex-col items-center gap-1 cursor-pointer ${
-                              isSelected
-                                ? 'bg-[#00A896] text-white border-[#00A896] shadow-sm ring-2 ring-[#00A896]/20'
-                                : item.isAvailable
-                                ? 'bg-white border-slate-200 hover:border-slate-300 text-slate-700'
-                                : 'bg-slate-100/70 border-slate-200 text-slate-400 opacity-60'
-                            }`}
-                          >
-                            <span className="text-[10px] uppercase font-bold tracking-wider">
-                              {item.weekday}
-                            </span>
-                            <span className="text-base font-black font-mono leading-none">
-                              {item.dayNum}
-                            </span>
-                            <span className="text-[10px] font-mono opacity-80">
-                              {item.monthName}
-                            </span>
-                            {/* Availability indicator dot */}
-                            <span
-                              className={`w-1.5 h-1.5 rounded-full mt-0.5 ${
-                                isSelected 
-                                  ? 'bg-white' 
-                                  : item.isAvailable 
-                                  ? 'bg-emerald-500' 
-                                  : 'bg-rose-400'
-                              }`}
-                            />
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    {/* Selected Date Status Alert */}
-                    <div className={`p-3 rounded-xl text-xs flex items-center justify-between gap-3 ${
-                      isSelectedDateAvailable 
-                        ? 'bg-emerald-50 border border-emerald-200 text-emerald-900' 
-                        : 'bg-amber-50 border border-amber-200 text-amber-900'
-                    }`}>
-                      <div className="flex items-center gap-2">
-                        <span>{isSelectedDateAvailable ? '✓' : '⚠️'}</span>
-                        <span className="font-semibold capitalize">
-                          {formattedSelectedDate}
-                        </span>
-                        <span>•</span>
-                        <span className="text-[11px]">
-                          {isSelectedDateAvailable
-                            ? 'Salidas y turnos disponibles para este día'
-                            : 'Fecha sin salidas programadas habituales (se puede consultar cupo especial)'}
-                        </span>
-                      </div>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold shrink-0 ${
-                        isSelectedDateAvailable ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
-                      }`}>
-                        {isSelectedDateAvailable ? 'Disponible' : 'Consultar'}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* 2. INTERACTIVE SHIFTS & CAPACITY SELECTOR */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-emerald-50/40 border border-slate-200 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-[#00A896]" />
-                        <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900">
-                          2. {t.modal.availableShiftsTitle}
-                        </h4>
-                      </div>
-                      <span className="text-[11px] font-mono text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full font-bold">
-                        Cupos en vivo
-                      </span>
-                    </div>
-                    
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      {t.modal.availableShiftsDesc}
-                    </p>
-
-                    {enabledShifts.length > 0 ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-                        {enabledShifts.map((shift) => {
-                          const isSelected = selectedShift?.id === shift.id;
-                          const isSoldOut = shift.availableSpots <= 0;
-                          const isLowSpots = shift.availableSpots > 0 && shift.availableSpots <= 4;
-
-                          return (
-                            <div
-                              key={shift.id}
-                              onClick={() => {
-                                if (!isSoldOut && isSelectedDateAvailable) {
-                                  setSelectedShiftId(shift.id);
-                                }
-                              }}
-                              className={`p-3 rounded-xl border text-xs transition-all relative flex flex-col justify-between gap-2 ${
-                                !isSelectedDateAvailable
-                                  ? 'bg-slate-100/60 border-slate-200 opacity-60 cursor-not-allowed'
-                                  : isSoldOut
-                                  ? 'bg-slate-100/70 border-slate-200 opacity-60 cursor-not-allowed'
-                                  : isSelected
-                                  ? 'bg-white border-[#00A896] ring-2 ring-[#00A896]/20 shadow-md cursor-pointer'
-                                  : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-sm cursor-pointer'
-                              }`}
-                            >
-                              <div className="flex items-start justify-between gap-2">
-                                <div>
-                                  <div className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
-                                    <span>{shift.name}</span>
-                                    {isSelected && isSelectedDateAvailable && (
-                                      <span className="w-2 h-2 rounded-full bg-[#00A896]" />
-                                    )}
-                                  </div>
-                                  <div className="text-[11px] text-slate-500 font-mono flex items-center gap-1 mt-0.5">
-                                    <Clock className="w-3 h-3 text-slate-400" />
-                                    <span>{shift.time}</span>
-                                  </div>
-                                </div>
-
-                                {/* Cupos Status Badge */}
-                                {isSoldOut ? (
-                                  <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[10px] font-mono font-bold shrink-0">
-                                    {t.modal.soldOut}
-                                  </span>
-                                ) : isLowSpots ? (
-                                  <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-mono font-bold shrink-0 animate-pulse">
-                                    {t.modal.lastSpots.replace('{n}', shift.availableSpots.toString())}
-                                  </span>
-                                ) : (
-                                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold shrink-0">
-                                    {shift.availableSpots} {t.modal.spotsAvailable}
-                                  </span>
-                                )}
-                              </div>
-
-                              <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100 font-mono">
-                                <span className="text-slate-400">Cupo total: {shift.totalCapacity}</span>
-                                <span className={`font-bold ${isSelected && isSelectedDateAvailable ? 'text-[#00A896]' : 'text-slate-600'}`}>
-                                  {isSelected && isSelectedDateAvailable ? `✓ ${t.modal.selectedShift}` : t.modal.selectShift}
-                                </span>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <div className="p-3 rounded-xl bg-slate-100 text-slate-500 text-xs italic text-center">
-                        Consultar horarios especiales directamente por WhatsApp.
-                      </div>
-                    )}
-
-                    {/* Passenger Counter & Estimated Total */}
-                    <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-200/80">
-                      <div className="flex items-center gap-3 w-full sm:w-auto">
-                        <span className="text-xs font-mono text-slate-700 font-bold">{t.modal.passengers}:</span>
-                        <div className="flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white shadow-sm">
-                          <button
-                            type="button"
-                            onClick={() => setModalPassengers(prev => Math.max(1, prev - 1))}
-                            className="px-3 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-sm"
-                          >
-                            -
-                          </button>
-                          <span className="px-4 py-1 text-xs font-mono font-bold text-slate-900">
-                            {modalPassengers}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const maxAllowed = selectedShift ? selectedShift.availableSpots : 20;
-                              setModalPassengers(prev => Math.min(Math.max(1, maxAllowed), prev + 1));
-                            }}
-                            className="px-3 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-sm"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-                        <span className="text-xs font-mono text-slate-500">{t.modal.totalEstimated}:</span>
-                        <span className="text-base font-black text-[#00A896] font-mono">
-                          USD ${totalEstimate}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  {/* 1 & 2. INTERACTIVE MONTHLY CALENDAR, SHIFTS & LIVE CAPACITY */}
+                  <PublicExcursionCalendar
+                    excursion={activeExcursion}
+                    activePrice={activePrice}
+                    currentLang={currentLang}
+                    bookings={bookings}
+                    selectedDate={modalSelectedDate}
+                    onSelectDate={(newDate) => setModalSelectedDate(newDate)}
+                    selectedShiftId={selectedShiftId}
+                    onSelectShiftId={(newShiftId) => setSelectedShiftId(newShiftId)}
+                    passengers={modalPassengers}
+                    onChangePassengers={(newPax) => setModalPassengers(newPax)}
+                    onConfirmWhatsApp={() => {
+                      window.open(waUrl, '_blank');
+                    }}
+                  />
 
                   {/* Highlights */}
                   {activeContent.highlights && activeContent.highlights.length > 0 && (
@@ -2426,6 +2330,22 @@ export default function App() {
             </div>
           );
         })()}
+      </AnimatePresence>
+
+      {/* MANUAL DESK PASSENGER LOAD MODAL (ANTI-OVERBOOKING) */}
+      <AnimatePresence>
+        {isManualBookingModalOpen && (
+          <ManualPassengerModal
+            isOpen={isManualBookingModalOpen}
+            onClose={() => setIsManualBookingModalOpen(false)}
+            excursions={excursionsList}
+            bookings={bookings}
+            defaultDate={manualModalDefaultDate}
+            defaultExcursionId={manualModalDefaultExcursionId}
+            onSaveBooking={handleSaveManualBooking}
+            currentUser={userName || 'Luis (Admin)'}
+          />
+        )}
       </AnimatePresence>
 
       {/* NEW TICKET MODAL */}
