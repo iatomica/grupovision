@@ -133,7 +133,7 @@ export const TopSuggestionsBanner: React.FC<TopSuggestionsBannerProps> = ({
         <div 
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
-          className="relative rounded-3xl overflow-hidden shadow-2xl min-h-[460px] sm:min-h-[500px] flex flex-col justify-end p-6 sm:p-10 lg:p-12 border border-slate-300/40 group"
+          className="relative rounded-3xl overflow-hidden shadow-2xl min-h-[460px] sm:min-h-[500px] flex flex-col justify-end p-4 sm:p-10 lg:p-12 border border-slate-300/40 group w-full"
         >
           {/* 1. Full Banner Image Covering Entire Card */}
           <img
@@ -149,19 +149,19 @@ export const TopSuggestionsBanner: React.FC<TopSuggestionsBannerProps> = ({
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent pointer-events-none" />
 
           {/* 3. Top Banner Badges Row (Floating on Top-Left) */}
-          <div className="absolute top-6 left-6 sm:top-8 sm:left-10 flex flex-wrap items-center gap-2 z-10">
-            <span className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-black tracking-wider uppercase shadow-md flex items-center gap-1.5 backdrop-blur-xs">
-              <Tag size={13} />
+          <div className="absolute top-4 left-4 sm:top-8 sm:left-10 flex flex-wrap items-center gap-1.5 sm:gap-2 z-10 max-w-[calc(100%-2rem)]">
+            <span className="px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[11px] sm:text-xs font-black tracking-wider uppercase shadow-md flex items-center gap-1.5 backdrop-blur-xs">
+              <Tag size={12} className="sm:w-[13px] sm:h-[13px]" />
               <span>{currentItem.badge}</span>
             </span>
 
-            <span className="px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-mono font-bold flex items-center gap-1.5 border border-white/25 shadow-xs">
-              <Clock size={12} className="text-emerald-300" />
+            <span className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white text-[11px] sm:text-xs font-mono font-bold flex items-center gap-1.5 border border-white/25 shadow-xs">
+              <Clock size={11} className="sm:w-3 sm:h-3 text-emerald-300" />
               <span>{displayDuration}</span>
             </span>
 
-            <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-emerald-500/25 backdrop-blur-md text-emerald-300 border border-emerald-400/30 text-xs font-bold font-mono shadow-xs">
-              <ShieldCheck size={13} />
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-emerald-500/25 backdrop-blur-md text-emerald-300 border border-emerald-400/30 text-[11px] sm:text-xs font-bold font-mono shadow-xs">
+              <ShieldCheck size={12} className="sm:w-[13px] sm:h-[13px]" />
               <span>Cupos Limitados</span>
             </span>
           </div>
@@ -173,43 +173,43 @@ export const TopSuggestionsBanner: React.FC<TopSuggestionsBannerProps> = ({
           </div>
 
           {/* 4. Banner Content (Bottom & Left Aligned, High Contrast & Crisp) */}
-          <div className="relative z-10 max-w-3xl space-y-4 pt-16 sm:pt-12">
+          <div className="relative z-10 max-w-3xl space-y-3 sm:space-y-4 pt-20 sm:pt-12 w-full">
             
-            <h3 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.08] tracking-tight drop-shadow-md">
+            <h3 className="text-2xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.1] tracking-tight drop-shadow-md break-words">
               {displayTitle}
             </h3>
 
-            <p className="text-slate-200 text-sm sm:text-base lg:text-lg leading-relaxed line-clamp-3 font-normal drop-shadow-xs max-w-2xl">
+            <p className="text-slate-200 text-xs sm:text-base lg:text-lg leading-relaxed line-clamp-3 font-normal drop-shadow-xs max-w-2xl">
               {currentItem.tagline}
             </p>
 
             {/* Price & Savings Tag */}
-            <div className="pt-2 flex flex-wrap items-baseline gap-3 sm:gap-4">
-              <div className="flex items-baseline gap-2.5 bg-slate-950/40 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/15">
-                <span className="text-slate-400 text-sm sm:text-base font-mono line-through">
+            <div className="pt-2 flex flex-wrap items-baseline gap-2 sm:gap-4 max-w-full">
+              <div className="flex flex-wrap items-baseline gap-2 bg-slate-950/40 backdrop-blur-md px-3 sm:px-4 py-2 rounded-2xl border border-white/15">
+                <span className="text-slate-400 text-xs sm:text-base font-mono line-through">
                   ${currentItem.originalPrice.toLocaleString('es-AR')}
                 </span>
-                <span className="text-3xl sm:text-4xl lg:text-5xl font-black text-emerald-400 font-mono tracking-tight drop-shadow-sm">
+                <span className="text-2xl sm:text-4xl lg:text-5xl font-black text-emerald-400 font-mono tracking-tight drop-shadow-sm">
                   ${currentItem.finalPrice.toLocaleString('es-AR')}
                 </span>
-                <span className="text-xs sm:text-sm font-mono text-slate-300 font-semibold">
-                  ARS / persona
+                <span className="text-[11px] sm:text-sm font-mono text-slate-300 font-semibold">
+                  ARS / pax
                 </span>
               </div>
 
               {savings > 0 && (
-                <span className="px-3.5 py-2 rounded-2xl bg-emerald-500/20 backdrop-blur-md text-emerald-300 text-xs sm:text-sm font-black font-mono border border-emerald-400/40 shadow-xs">
+                <span className="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-2xl bg-emerald-500/20 backdrop-blur-md text-emerald-300 text-xs sm:text-sm font-black font-mono border border-emerald-400/40 shadow-xs">
                   Ahorrás ${savings.toLocaleString('es-AR')}
                 </span>
               )}
             </div>
 
             {/* Action CTAs & Slide Dots */}
-            <div className="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-3">
+            <div className="pt-3 sm:pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 w-full">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
                 <button
                   onClick={() => onSelectExcursion(currentItem.excursionId || matchedExcursion?.id || '')}
-                  className="bg-[#00A896] hover:bg-[#028090] text-white text-xs sm:text-sm font-extrabold px-6 py-3.5 rounded-2xl transition-all shadow-lg shadow-[#00A896]/30 flex items-center space-x-2 hover:scale-[1.02] active:scale-95 cursor-pointer"
+                  className="bg-[#00A896] hover:bg-[#028090] text-white text-xs sm:text-sm font-extrabold px-5 py-3 sm:px-6 sm:py-3.5 rounded-2xl transition-all shadow-lg shadow-[#00A896]/30 flex items-center justify-center space-x-2 hover:scale-[1.02] active:scale-95 cursor-pointer w-full sm:w-auto"
                 >
                   <span>Ver Excursión &amp; Reservar</span>
                   <ArrowRight size={16} />
@@ -219,7 +219,7 @@ export const TopSuggestionsBanner: React.FC<TopSuggestionsBannerProps> = ({
                   href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="bg-[#25D366] hover:bg-[#20bd5a] text-black text-xs sm:text-sm font-black px-5 py-3.5 rounded-2xl transition-all flex items-center space-x-2 shadow-lg shadow-black/20 hover:scale-[1.02] active:scale-95 cursor-pointer"
+                  className="bg-[#25D366] hover:bg-[#20bd5a] text-black text-xs sm:text-sm font-black px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl transition-all flex items-center justify-center space-x-2 shadow-lg shadow-black/20 hover:scale-[1.02] active:scale-95 cursor-pointer w-full sm:w-auto"
                 >
                   <MessageSquare size={16} className="fill-current" />
                   <span>WhatsApp Directo</span>

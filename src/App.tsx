@@ -54,11 +54,17 @@ import {
   Tag,
   AtSign,
   CalendarDays,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Eye,
+  EyeOff,
+  AlertCircle,
+  KeyRound,
+  ChevronDown
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { EXCURSIONS_DATA, Excursion } from './data/excursionsData';
+import { authenticate, saveSession, getSavedSession, clearSession } from './data/authUsers';
 import { 
   LanguageCode, 
   LANGUAGES, 
@@ -299,7 +305,25 @@ export default function App() {
   const [currentView, setCurrentView] = useState<'landing' | 'login' | 'admin-board' | 'traveler-board' | 'advisor-board'>('landing');
   const [userRole, setUserRole] = useState<'admin' | 'asesor' | 'traveler' | 'operador' | null>(null);
   const [userName, setUserName] = useState<string>('');
-  const [userEmail, setUserEmail] = useState<string>('luis@grupovision.tur.ar');
+  const [userEmail, setUserEmail] = useState<string>('');
+
+  // Login Form States (Credenciales usuario / contraseña)
+  const [loginIdentifier, setLoginIdentifier] = useState<string>('');
+  const [loginPassword, setLoginPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
+
+  // Restore saved session on mount if present
+  useEffect(() => {
+    const saved = getSavedSession();
+    if (saved) {
+      setUserRole(saved.role);
+      setUserName(saved.name);
+      setUserEmail(saved.email);
+    }
+  }, []);
+
   const [adminTab, setAdminTab] = useState<'promos' | 'content' | 'kanban' | 'staff' | 'analytics'>('promos');
   const [operationsSubView, setOperationsSubView] = useState<'calendar' | 'kanban'>('calendar');
   const [isManualBookingModalOpen, setIsManualBookingModalOpen] = useState(false);
@@ -475,31 +499,49 @@ export default function App() {
     setIsBannerCollapsed(scrollTop > 50);
   };
 
-  // Handlers for Login & Role Selection
-  const handleLoginAs = (role: 'admin' | 'asesor' | 'traveler' | 'operador') => {
-    setUserRole(role);
-    if (role === 'admin') {
-      setUserName('Luis (Admin General)');
-      setUserEmail('luis@grupovision.tur.ar');
-      setCurrentView('admin-board');
-    } else if (role === 'asesor') {
-      setUserName('Thomas (Asesor Comercial)');
-      setUserEmail('thomas@grupovision.tur.ar');
-      setCurrentView('advisor-board');
-    } else if (role === 'traveler') {
-      setUserName('Carolina Rossi');
-      setUserEmail('carolina.rossi@gmail.com');
-      setCurrentView('traveler-board');
-    } else {
-      setUserName('Santiago (Operador Mostrador)');
-      setUserEmail('santiago@grupovision.tur.ar');
-      setCurrentView('admin-board');
+  // Handler for Form Login with Credentials (Usuario y Contraseña)
+  const handleFormLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError(null);
+    setIsLoggingIn(true);
+
+    const authenticatedUser = authenticate(loginIdentifier, loginPassword);
+
+    if (!authenticatedUser) {
+      setIsLoggingIn(false);
+      setLoginError('Credenciales incorrectas. Verificá tu usuario o correo corporativo y contraseña.');
+      return;
     }
+
+    // Establecer estado de usuario y guardar sesión
+    setUserRole(authenticatedUser.role);
+    setUserName(authenticatedUser.name);
+    setUserEmail(authenticatedUser.email);
+    saveSession(authenticatedUser);
+
+    setActivityLogs(prev => [
+      {
+        id: `log-${Date.now().toString().slice(-4)}`,
+        user: `${authenticatedUser.name} (${authenticatedUser.roleLabel})`,
+        action: `Inició sesión en el sistema (${authenticatedUser.branch || 'Acceso web'})`,
+        timestamp: 'Justo ahora',
+        type: 'auth'
+      },
+      ...prev
+    ]);
+
+    setIsLoggingIn(false);
+    setLoginIdentifier('');
+    setLoginPassword('');
+    setCurrentView(authenticatedUser.defaultView);
   };
 
   const handleLogout = () => {
+    clearSession();
     setUserRole(null);
     setUserName('');
+    setUserEmail('');
+    setLoginError(null);
     setCurrentView('landing');
   };
 
@@ -827,7 +869,7 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col selection:bg-[#00A896] selection:text-white font-sans">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col selection:bg-[#00A896] selection:text-white font-sans overflow-x-hidden w-full max-w-full">
       
       {/* 1. TOP UTILITY BAR (Solo visible para usuarios autenticados) */}
       {userRole && (
@@ -876,8 +918,8 @@ export default function App() {
       )}
 
       {/* 2. MAIN HEADER NAVIGATION */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 h-16 sm:h-20 flex items-center shadow-sm">
-        <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 flex items-center justify-between gap-3">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 h-16 sm:h-20 flex items-center shadow-sm w-full max-w-full">
+        <div className="max-w-7xl w-full mx-auto px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-3">
           
           {/* Logo Oficial Grupo Visión */}
           <a 
@@ -889,7 +931,7 @@ export default function App() {
             <img 
               src="/images/logo.png" 
               alt="Grupo Visión Viajes y Turismo" 
-              className="h-9 sm:h-11 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+              className="h-8 sm:h-11 md:h-12 max-w-[125px] xs:max-w-[150px] sm:max-w-none w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
             />
           </a>
 
@@ -925,9 +967,9 @@ export default function App() {
           </nav>
 
           {/* Right Action Buttons */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Language & Currency Differential Selector */}
-            <div className="flex items-center bg-slate-100 hover:bg-slate-200/80 p-1 rounded-xl border border-slate-200/80 transition-colors shadow-inner" title="Cambiar idioma y tarifa">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+            {/* Desktop: Selector de idioma en botones */}
+            <div className="hidden md:flex items-center bg-slate-100 hover:bg-slate-200/80 p-1 rounded-xl border border-slate-200/80 transition-colors shadow-inner" title="Cambiar idioma y tarifa">
               {LANGUAGES.map((langOpt) => {
                 const isActive = currentLang === langOpt.code;
                 return (
@@ -948,6 +990,27 @@ export default function App() {
               })}
             </div>
 
+            {/* Mobile: Selector de idioma como <select> compacto para no ocupar lugar */}
+            <div className="md:hidden relative shrink-0">
+              <label htmlFor="header-mobile-lang-select" className="sr-only">Seleccionar idioma</label>
+              <div className="relative flex items-center">
+                <select
+                  id="header-mobile-lang-select"
+                  value={currentLang}
+                  onChange={(e) => handleLanguageChange(e.target.value as LanguageCode)}
+                  aria-label="Seleccionar idioma"
+                  className="appearance-none bg-slate-100 hover:bg-slate-200/90 border border-slate-200 text-slate-900 font-bold text-xs pl-2.5 pr-6 py-1.5 rounded-xl shadow-xs focus:outline-none focus:ring-2 focus:ring-[#00A896] cursor-pointer"
+                >
+                  {LANGUAGES.map((langOpt) => (
+                    <option key={langOpt.code} value={langOpt.code} className="text-slate-900 font-bold">
+                      {langOpt.flag} {langOpt.code.toUpperCase()}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-500 absolute right-1.5 pointer-events-none" />
+              </div>
+            </div>
+
             <a 
               href="https://wa.me/5492944235278?text=Hola!%20Deseo%20consultar%20por%20excursiones%20en%20Bariloche" 
               target="_blank"
@@ -961,25 +1024,27 @@ export default function App() {
             {userRole ? (
               <button
                 onClick={() => setCurrentView(userRole === 'admin' ? 'admin-board' : userRole === 'asesor' ? 'advisor-board' : 'traveler-board')}
-                className="inline-flex items-center gap-1.5 sm:gap-2 bg-[#00A896] hover:bg-[#028090] text-white font-bold text-[11px] sm:text-xs px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl transition-all shadow-md shadow-[#00A896]/20 shrink-0"
+                className="inline-flex items-center gap-1.5 bg-[#00A896] hover:bg-[#028090] text-white font-bold text-[11px] sm:text-xs px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-xl transition-all shadow-md shadow-[#00A896]/20 shrink-0"
               >
                 <Sliders className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span>{t.nav.panel} {userRole === 'admin' ? 'Operativo' : userRole === 'asesor' ? 'Asesor' : 'VIP'}</span>
+                <span className="hidden xs:inline sm:inline">{t.nav.panel} {userRole === 'admin' ? 'Operativo' : userRole === 'asesor' ? 'Asesor' : 'VIP'}</span>
+                <span className="xs:hidden sm:hidden">Panel</span>
               </button>
             ) : (
               <button
                 onClick={() => setCurrentView('login')}
-                className="inline-flex items-center gap-1.5 sm:gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-[11px] sm:text-xs px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl transition-all shadow-md shrink-0"
+                className="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-[11px] sm:text-xs px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-xl transition-all shadow-md shrink-0"
               >
                 <Lock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00A896]" />
-                <span>{t.nav.access}</span>
+                <span className="hidden xs:inline sm:inline">{t.nav.access}</span>
+                <span className="xs:hidden sm:hidden">Acceso</span>
               </button>
             )}
 
             {/* Mobile Menu Button */}
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-              className="md:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 active:scale-95 transition-all shrink-0"
+              className="md:hidden p-1.5 sm:p-2 rounded-xl text-slate-700 hover:bg-slate-100 active:scale-95 transition-all shrink-0"
               aria-label="Abrir menú"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5 text-slate-900" /> : <Menu className="w-5 h-5 text-slate-900" />}
@@ -999,27 +1064,25 @@ export default function App() {
             transition={{ duration: 0.2, ease: 'easeOut' }}
             className="transform-gpu md:hidden bg-white border-b border-slate-200 overflow-hidden px-4 py-4 sm:px-6 space-y-3 text-sm font-semibold text-slate-800 shadow-xl"
           >
-            {/* Mobile Language & Rate Selector */}
+            {/* Mobile Menu Language Selector con <select> */}
             <div className="py-2.5 border-b border-slate-100">
-              <span className="text-[11px] font-mono text-slate-400 block mb-2">{t.langSelector.label}</span>
-              <div className="flex items-center gap-2">
-                {LANGUAGES.map((langOpt) => {
-                  const isActive = currentLang === langOpt.code;
-                  return (
-                    <button
-                      key={langOpt.code}
-                      onClick={() => handleLanguageChange(langOpt.code)}
-                      className={`flex-1 py-2 px-2 rounded-xl text-xs font-bold border transition-all flex items-center justify-center gap-1.5 ${
-                        isActive
-                          ? 'bg-[#00A896]/10 border-[#00A896] text-[#00A896] shadow-sm'
-                          : 'border-slate-200 bg-white text-slate-600'
-                      }`}
-                    >
-                      <span className="text-sm">{langOpt.flag}</span>
-                      <span>{langOpt.name}</span>
-                    </button>
-                  );
-                })}
+              <label htmlFor="drawer-lang-select" className="text-[11px] font-mono text-slate-400 block mb-1.5">
+                {t.langSelector.label}
+              </label>
+              <div className="relative">
+                <select
+                  id="drawer-lang-select"
+                  value={currentLang}
+                  onChange={(e) => handleLanguageChange(e.target.value as LanguageCode)}
+                  className="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-900 font-bold text-xs pl-3 pr-8 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00A896] cursor-pointer"
+                >
+                  {LANGUAGES.map((langOpt) => (
+                    <option key={langOpt.code} value={langOpt.code}>
+                      {langOpt.flag} {langOpt.name} ({langOpt.guideLabel})
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
               <span className="text-[10px] text-slate-500 mt-1.5 block">
                 {currentLang === 'en' ? t.langSelector.rateNoticeEn : t.langSelector.rateNoticeEsPt}
@@ -1141,7 +1204,7 @@ export default function App() {
           />
 
           {/* EXCURSIONS CATALOG */}
-          <section id="excursiones" className="py-24 max-w-7xl mx-auto px-6">
+          <section id="excursiones" className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 w-full">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
               <div>
                 <span className="text-[#00A896] text-xs font-mono font-bold uppercase tracking-widest block mb-2">{t.catalog.badge} ({filteredExcursions.length} {t.catalog.excursions.toUpperCase()})</span>
@@ -1149,7 +1212,7 @@ export default function App() {
               </div>
 
               {/* Dynamic Category Tabs (Only Shows Categories with at least 1 Item) */}
-              <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-white border border-slate-200 shadow-sm text-xs font-semibold">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 p-1 sm:p-1.5 rounded-2xl bg-white border border-slate-200 shadow-sm text-xs font-semibold max-w-full">
                 {availableCategories.map(cat => (
                   <button 
                     key={cat}
@@ -1317,7 +1380,7 @@ export default function App() {
             <div className="absolute top-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full filter blur-3xl pointer-events-none z-0" />
             <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full filter blur-3xl pointer-events-none z-0" />
 
-            <div className="max-w-7xl mx-auto px-6 relative z-10 space-y-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 space-y-12 w-full">
               <div className="text-center max-w-3xl mx-auto space-y-4">
                 <span className="px-3.5 py-1.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono text-xs font-bold inline-flex items-center gap-1.5">
                   <Award className="w-3.5 h-3.5" />
@@ -1335,7 +1398,7 @@ export default function App() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <motion.div 
                   whileHover={{ y: -4 }}
-                  className="transform-gpu md:col-span-2 bg-slate-800/80 backdrop-blur-xl border border-slate-700/80 rounded-3xl p-8 space-y-6 flex flex-col justify-between shadow-xl"
+                  className="transform-gpu md:col-span-2 bg-slate-800/80 backdrop-blur-xl border border-slate-700/80 rounded-3xl p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-xl"
                 >
                   <div className="space-y-4">
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-cyan-500/20">
@@ -1347,11 +1410,11 @@ export default function App() {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-4 pt-6 border-t border-slate-700/80 text-center font-mono">
+                  <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-6 border-t border-slate-700/80 text-center font-mono">
                     {siteContent.about.fleetMetrics.map((metric, mIdx) => (
-                      <div key={mIdx} className="bg-slate-900/60 p-3 rounded-2xl border border-slate-700/50">
-                        <div className="text-2xl font-black text-cyan-400">{metric.value}</div>
-                        <div className="text-[10px] text-slate-400 font-semibold mt-0.5">{metric.label}</div>
+                      <div key={mIdx} className="bg-slate-900/60 p-2.5 sm:p-3 rounded-2xl border border-slate-700/50">
+                        <div className="text-xl sm:text-2xl font-black text-cyan-400">{metric.value}</div>
+                        <div className="text-[9px] sm:text-[10px] text-slate-400 font-semibold mt-0.5">{metric.label}</div>
                       </div>
                     ))}
                   </div>
@@ -1359,7 +1422,7 @@ export default function App() {
 
                 <motion.div 
                   whileHover={{ y: -4 }}
-                  className="transform-gpu bg-slate-800/80 backdrop-blur-xl border border-slate-700/80 rounded-3xl p-8 space-y-6 flex flex-col justify-between shadow-xl"
+                  className="transform-gpu bg-slate-800/80 backdrop-blur-xl border border-slate-700/80 rounded-3xl p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-xl"
                 >
                   <div className="space-y-4">
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-emerald-500/20">
@@ -1385,7 +1448,7 @@ export default function App() {
           {/* ========================================================================= */}
           {/* NEW BLOCK 2: BANNER DINÁMICO DE EXPERIENCIAS VIP & PAQUETES A MEDIDA */}
           {/* ========================================================================= */}
-          <section id="corredor" className="py-20 max-w-7xl mx-auto px-6">
+          <section id="corredor" className="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 w-full">
             <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-950 text-white rounded-3xl p-8 md:p-12 relative overflow-hidden shadow-2xl border border-slate-800">
               <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
                 <div className="space-y-6 max-w-2xl">
@@ -1470,81 +1533,111 @@ export default function App() {
       )}
 
       {/* ========================================================================= */}
-      {/* VIEW 2: LOGIN VIEW */}
+      {/* VIEW 2: LOGIN VIEW (FORMULARIO CON USUARIO Y CONTRASEÑA) */}
       {/* ========================================================================= */}
       {currentView === 'login' && (
-        <section className="py-20 flex-1 flex items-center justify-center px-6">
+        <section className="py-16 sm:py-20 flex-1 flex items-center justify-center px-4 sm:px-6">
           <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="max-w-md w-full rounded-3xl bg-white border border-slate-200 shadow-2xl p-8 space-y-6"
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="max-w-md w-full rounded-3xl bg-white border border-slate-200/90 shadow-2xl p-6 sm:p-8 space-y-6"
           >
+            {/* Header del Login */}
             <div className="text-center space-y-2">
-              <div className="w-12 h-12 rounded-2xl bg-[#00A896]/10 border border-[#00A896]/30 flex items-center justify-center text-[#00A896] mx-auto mb-3">
-                <Lock className="w-6 h-6" />
+              <div className="w-14 h-14 rounded-2xl bg-[#00A896]/10 border border-[#00A896]/30 flex items-center justify-center text-[#00A896] mx-auto mb-2 shadow-inner">
+                <Lock className="w-7 h-7" />
               </div>
-              <h2 className="text-2xl font-black text-slate-900">Acceso al Sistema Receptivo</h2>
-              <p className="text-slate-500 text-xs font-mono">GRUPO VISIÓN · PERFILES DE INGRESO</p>
+              <h2 className="text-2xl font-black text-slate-900 tracking-tight">Acceso al Sistema Receptivo</h2>
+              <p className="text-slate-500 text-xs font-mono uppercase tracking-wider">Grupo Visión EVT · Portal Operativo</p>
             </div>
 
-            <div className="space-y-3 pt-2">
-              <span className="text-xs font-mono font-bold text-slate-400 block uppercase tracking-wider">Seleccionar Perfil de Acceso:</span>
+            {/* Mensaje de Error si falla la autenticación */}
+            {loginError && (
+              <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-2.5 animate-in fade-in duration-200">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600 mt-0.5" />
+                <span className="font-semibold leading-relaxed">{loginError}</span>
+              </div>
+            )}
 
-              <button
-                onClick={() => handleLoginAs('admin')}
-                className="w-full p-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white text-left transition-all shadow-md flex items-center justify-between group"
-              >
-                <div>
-                  <div className="font-bold text-sm flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-cyan-400" /> Luis · Rol Administrador General
+            {/* Formulario de Inicio de Sesión */}
+            <form onSubmit={handleFormLogin} className="space-y-4 pt-1">
+              <div>
+                <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Usuario o Correo Corporativo
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <User className="w-4 h-4" />
                   </div>
-                  <span className="text-slate-400 text-xs">Acceso total, kanban, tarifas/promos, analíticas y reportes CSV</span>
+                  <input
+                    type="text"
+                    required
+                    value={loginIdentifier}
+                    onChange={(e) => {
+                      setLoginIdentifier(e.target.value);
+                      if (loginError) setLoginError(null);
+                    }}
+                    placeholder="Ej. admin, asesor o tu@grupovision.tur.ar"
+                    autoComplete="username"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:border-[#00A896] focus:ring-2 focus:ring-[#00A896]/20 bg-slate-50/50 text-slate-900 text-sm font-medium transition-all outline-none"
+                  />
                 </div>
-                <ChevronRight className="w-5 h-5 text-cyan-400 group-hover:translate-x-1 transition-transform" />
-              </button>
+              </div>
 
-              <button
-                onClick={() => handleLoginAs('asesor')}
-                className="w-full p-4 rounded-2xl bg-cyan-950 hover:bg-cyan-900 text-white text-left transition-all shadow-md border border-cyan-800 flex items-center justify-between group"
-              >
-                <div>
-                  <div className="font-bold text-sm flex items-center gap-2 text-cyan-300">
-                    <UserCheck className="w-4 h-4 text-cyan-400" /> Thomas · Rol Asesor Comercial
+              <div>
+                <label className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Contraseña
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <KeyRound className="w-4 h-4" />
                   </div>
-                  <span className="text-slate-300 text-xs">Directorio de viajeros, emisión de tickets y % de descuento discrecional</span>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    value={loginPassword}
+                    onChange={(e) => {
+                      setLoginPassword(e.target.value);
+                      if (loginError) setLoginError(null);
+                    }}
+                    placeholder="••••••••••••"
+                    autoComplete="current-password"
+                    className="w-full pl-10 pr-11 py-3 rounded-xl border border-slate-200 focus:border-[#00A896] focus:ring-2 focus:ring-[#00A896]/20 bg-slate-50/50 text-slate-900 text-sm font-medium transition-all outline-none font-mono"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+                    aria-label={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
-                <ChevronRight className="w-5 h-5 text-cyan-400 group-hover:translate-x-1 transition-transform" />
-              </button>
+              </div>
 
-              <button
-                onClick={() => handleLoginAs('traveler')}
-                className="w-full p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-900 text-left transition-all shadow-sm flex items-center justify-between group"
-              >
-                <div>
-                  <div className="font-bold text-sm flex items-center gap-2">
-                    <User className="w-4 h-4 text-cyan-600" /> Rol Viajero VIP
-                  </div>
-                  <span className="text-slate-500 text-xs">Vouchers descargables, itinerarios, ofertas y soporte con asesor</span>
-                </div>
-                <ChevronRight className="w-5 h-5 text-cyan-600 group-hover:translate-x-1 transition-transform" />
-              </button>
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  disabled={isLoggingIn}
+                  className="w-full py-3.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white font-bold text-sm transition-all shadow-lg shadow-slate-900/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70"
+                >
+                  <Lock className="w-4 h-4 text-[#00A896]" />
+                  <span>{isLoggingIn ? 'Verificando...' : 'Iniciar Sesión'}</span>
+                  <ArrowRight className="w-4 h-4 text-slate-300 ml-1" />
+                </button>
+              </div>
+            </form>
 
-              <button
-                onClick={() => handleLoginAs('operador')}
-                className="w-full p-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-left transition-all border border-slate-200 flex items-center justify-between group"
-              >
-                <div>
-                  <div className="font-bold text-xs flex items-center gap-2">
-                    <Truck className="w-3.5 h-3.5 text-slate-600" /> Santiago · Rol Operador Mostrador / Logística
-                  </div>
-                  <span className="text-slate-500 text-[11px]">Gestión de avance de tickets receptivos y logística de flota</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-slate-600 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-
+            {/* Pie de navegación */}
             <div className="pt-4 border-t border-slate-100 text-center">
-              <button onClick={() => setCurrentView('landing')} className="text-xs font-mono text-slate-500 hover:text-slate-900">
+              <button 
+                onClick={() => {
+                  setLoginError(null);
+                  setCurrentView('landing');
+                }} 
+                className="text-xs font-mono font-semibold text-slate-500 hover:text-slate-900 transition-colors inline-flex items-center gap-1.5 cursor-pointer"
+              >
                 ← Volver al sitio web público
               </button>
             </div>

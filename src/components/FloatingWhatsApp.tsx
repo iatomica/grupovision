@@ -10,7 +10,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ isVisible = 
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 flex items-center justify-center select-none">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex items-center justify-center select-none">
       {/* WHATSAPP ACTION BUTTON */}
       <motion.a
         href="https://wa.me/5492944235278?text=Hola!%20Deseo%20consultar%20por%20excursiones%20en%20Bariloche%20con%20Grupo%20Vision"
