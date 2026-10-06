@@ -1,115 +1,39 @@
 [
   {
-    "id": "refugio-roca-negra-copia-290",
-    "title": "Refugio Roca Negra (Copia)",
-    "category": "Invierno",
-    "season": "Invierno",
-    "duration": "Día Completo (8h)",
-    "difficulty": "Fácil",
-    "image": "/images/excursiones/refugio-roca-negra.webp",
-    "description": "Caminata con raquetas para nieve",
-    "fullDetails": "El refugio \"Roca Negra\" está ubicado a más\nde mil seiscientos metros sobre el nivel del mar, y ofrece una vista panorámica\ndel lago Nahuel Huapi y del Parque Nacional con sus lagos, islas y montañas. Es\nuna parada intermedia, antes de llegar a la cima del cerro López\n\nPara acceder\nal sendero se debe llegar hasta el cruce del Arroyo López con la Ruta\nProvincial 77, dentro del circuito panorámico, comúnmente conocido como\nCircuito Chico.\n\n Desde la base del Cerro López,\ncomienza la aventura de ascenso en camionetas 4x4, por un escarpado camino de\nmontaña entre el bosque de Coihues centenarios y altas Lengas. Luego de tomar\nlas primeras fotografías, se da comienzo a la caminata, junto con el guía se\nprocese a equiparse con Raquetas de nieve; con ellas podremos transitar por zonas nevadas sin hundirnos. Durante\nel recorrido, los guías contaran acerca del lugar y disfrutaran de la belleza\nnatural que la montaña tiene para ofrecerles. Finalizada la caminata, en el\nRefugio Roca Negra les darán una cálida bienvenida donde disfrutarán de una\nFondue de chocolate acompañada con fruta fresca, galletas y turrones o de una\nFondue de Queso. Luego, descenderán nuevamente en las camionetas 4x4 hasta\nla base, donde terminará la excursión y se llevará a los pasajeros a sus\nrespectivos hoteles.",
-    "highlights": [
-      "Lago Moreno.",
-      "Cerro López.",
-      "Ascensos en camionetas 4×4.",
-      "Caminatas con Raquetas",
-      "Refugio de montaña Roca Negra.",
-      "Vistas de lagos, bosques y cordillera de los Andes"
-    ],
-    "includes": [
-      "Traslado",
-      "Raquetas de nieve",
-      "Ascenso en camionetas 4x4",
-      "Almuerzo/ Merienda",
-      "Guías"
-    ],
-    "notIncludes": [
-      "Ropa de nieve"
-    ],
-    "additionalInfo": "Horarios de salida:\n*Por la mañana- (Fondue de queso) A partir de las 10.00hs a 16.30hs\n*Por la tarde-(Fondue de Chocolate) A partir de las 14:00 hs a 20:30hs\n*Mayores $ \n*Menores de 12 a 5 años $",
-    "faq": [
-      {
-        "question": "¿Incluye comidas?",
-        "answer": "Sí, de acuerdo con el horario elegido para el paseo, podrá disfrutar de una rica Fondue de Queso o de una Fondue de Chocolate"
-      },
-      {
-        "question": "¿Se suspende por lluvia?",
-        "answer": "No. no se suspende"
-      },
-      {
-        "question": "¿Es necesario llevar ropa de nieve?",
-        "answer": "Si, ropa de nieve, abrigada e impermeable."
-      }
-    ],
-    "recommendedFor": "Parejas, Familias y Grupos",
-    "departureTime": "14:00 hs",
-    "priceNum": 25,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/refugio-roca-negra.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 30,
-    "shifts": [
-      {
-        "id": "refugio-roca-negra-shift-1",
-        "name": "Turno Mañana",
-        "time": "14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "refugio-roca-negra-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {},
-    "isFeatured": false
-  },
-  {
     "id": "refugio-roca-negra",
-    "title": "Refugio Roca Negra",
+    "title": "Roca Negra —Travesia en  4x4, Raquetas de Nieve y Fondue",
     "category": "Invierno",
     "season": "Invierno",
     "duration": "Día Completo (8h)",
     "difficulty": "Fácil",
     "image": "/images/excursiones/refugio-roca-negra.webp",
-    "description": "Caminata con raquetas para nieve",
-    "fullDetails": "El refugio \"Roca Negra\" está ubicado a más\nde mil seiscientos metros sobre el nivel del mar, y ofrece una vista panorámica\ndel lago Nahuel Huapi y del Parque Nacional con sus lagos, islas y montañas. Es\nuna parada intermedia, antes de llegar a la cima del cerro López\n\nPara acceder\nal sendero se debe llegar hasta el cruce del Arroyo López con la Ruta\nProvincial 77, dentro del circuito panorámico, comúnmente conocido como\nCircuito Chico.\n\n Desde la base del Cerro López,\ncomienza la aventura de ascenso en camionetas 4x4, por un escarpado camino de\nmontaña entre el bosque de Coihues centenarios y altas Lengas. Luego de tomar\nlas primeras fotografías, se da comienzo a la caminata, junto con el guía se\nprocese a equiparse con Raquetas de nieve; con ellas podremos transitar por zonas nevadas sin hundirnos. Durante\nel recorrido, los guías contaran acerca del lugar y disfrutaran de la belleza\nnatural que la montaña tiene para ofrecerles. Finalizada la caminata, en el\nRefugio Roca Negra les darán una cálida bienvenida donde disfrutarán de una\nFondue de chocolate acompañada con fruta fresca, galletas y turrones o de una\nFondue de Queso. Luego, descenderán nuevamente en las camionetas 4x4 hasta\nla base, donde terminará la excursión y se llevará a los pasajeros a sus\nrespectivos hoteles.",
+    "description": "Descubrí la cara invernal del Cerro López en una experiencia de día completo que combina ascenso en Land Rover 4x4, caminata con raquetas de nieve y fondue en el refugio Roca Negra. Una propuesta ideal para disfrutar la nieve, los bosques y las vistas de la Cordillera.",
+    "fullDetails": "Roca Negra es una experiencia diurna pensada para disfrutar la nieve y los paisajes del Cerro López sin necesidad de tener experiencia previa. La aventura comienza con el traslado desde Bariloche hasta la base del cerro, donde subirás en vehículos Land Rover 4x4 por caminos de montaña rodeados de bosque nativo.\n\nAl llegar al área del refugio, recibirás las raquetas de nieve para realizar una caminata guiada por senderos nevados. El recorrido permite descubrir el entorno de lenga y coihue, contemplar las vistas de la Cordillera y vivir la nieve de una manera activa, accesible y segura.\n\nLa experiencia finaliza en el refugio Roca Negra con una propuesta de fondue. El turno de la mañana incluye fondue de queso y el turno de la tarde, fondue de chocolate. Las bebidas no están incluidas.\n\nUna opción excelente para familias, parejas y grupos que buscan una jornada diferente de nieve, naturaleza y gastronomía patagónica.",
     "highlights": [
-      "Lago Moreno.",
-      "Cerro López.",
-      "Ascensos en camionetas 4×4.",
-      "Caminatas con Raquetas",
-      "Refugio de montaña Roca Negra.",
-      "Vistas de lagos, bosques y cordillera de los Andes"
+      "Te trasladarás desde Bariloche hasta la base del Cerro López.",
+      "Ascenderás en vehículos Land Rover 4x4.",
+      "Recorrerás senderos nevados con raquetas de nieve.",
+      "Descubrirás bosques nativos y vistas de la Cordillera.",
+      "Disfrutarás una propuesta de fondue en el refugio.",
+      "Elegirás entre la experiencia de mañana con fondue de queso o la de tarde con fondue de chocolate."
     ],
     "includes": [
-      "Traslado",
-      "Raquetas de nieve",
-      "Ascenso en camionetas 4x4",
-      "Almuerzo/ Merienda",
-      "Guías"
+      "Traslado ida y vuelta entre Bariloche y la base del Cerro López.",
+      "Ascenso y descenso en vehículos Land Rover 4x4.",
+      "Caminata guiada con raquetas de nieve.",
+      "Raquetas de nieve durante la actividad.",
+      "Guías especializados.",
+      "Fondue de queso en el turno de la mañana.",
+      "Fondue de chocolate en el turno de la tarde."
     ],
     "notIncludes": [
-      "Ropa de nieve"
+      "Bebidas.",
+      "Indumentaria de nieve, salvo que se indique expresamente al momento de reservar.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
     ],
-    "additionalInfo": "Horarios de salida:\n*Por la mañana- (Fondue de queso) A partir de las 10.00hs a 16.30hs\n*Por la tarde-(Fondue de Chocolate) A partir de las 14:00 hs a 20:30hs\n*Mayores $ \n*Menores de 12 a 5 años $",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Traslado desde Bariloche hacia la base del Cerro López.\n• Recepción e inicio del ascenso en Land Rover 4x4.\n• Llegada al área del refugio y entrega de raquetas de nieve.\n• Caminata guiada por senderos habilitados, según las condiciones de nieve.\n• Regreso al refugio Roca Negra.\n• Fondue según el turno elegido.\n• Descenso en 4x4 y traslado de regreso a Bariloche.\n• El orden de las actividades puede variar por condiciones de nieve, clima y operación del complejo.\n• Roca Negra Travesia en 4x4 Raquetas de Nieve y Fondue\n\nTURNOS Y MODALIDADES:\n• Turno mañana — 10:00 a 16:00 hs\n• Incluye ascenso en Land Rover 4x4, caminata guiada con raquetas de nieve y fondue de queso.\n• Turno tarde — 14:00 a 20:00 hs\n• Incluye ascenso en Land Rover 4x4, caminata guiada con raquetas de nieve y fondue de chocolate.\n\nRECOMENDACIONES:\n• Usar ropa de abrigo, campera impermeable, guantes, gorro y calzado apto para nieve.\n• Informar con anticipación alergias, restricciones alimentarias o dietas especiales.\n• Consultar previamente si hay indumentaria de nieve disponible.\n• Seguir siempre las indicaciones de los guías.\n• La actividad está sujeta a condiciones de nieve, clima y operación del complejo.\n\nDATOS DE LA EXPERIENCIA:\n• Temporada: invierno, sujeta a condiciones de nieve.\n• Ubicación: Cerro López, Bariloche.\n• Turno mañana: 10:00 a 16:00 hs.\n• Turno tarde: 14:00 a 20:00 hs.\n• Actividad física: baja a moderada.\n• Dificultad: baja; no se requiere experiencia previa.\n• Edad tarifaria: adultos y menores de 4 a 11 años.\n• Público recomendado: familias, parejas, grupos y viajeros que buscan una experiencia de nieve durante el día.",
     "faq": [
       {
         "question": "¿Incluye comidas?",
@@ -124,43 +48,9 @@
         "answer": "Si, ropa de nieve, abrigada e impermeable."
       }
     ],
-    "recommendedFor": "Parejas, Familias y Grupos",
+    "recommendedFor": "familias, parejas, grupos y viajeros que buscan una experiencia de nieve durante el día.",
     "departureTime": "14:00 hs",
-    "priceNum": 25,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/refugio-roca-negra.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 30,
-    "shifts": [
-      {
-        "id": "refugio-roca-negra-shift-1",
-        "name": "Turno Mañana",
-        "time": "14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "refugio-roca-negra-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 25
   },
   {
     "id": "cabalgata-la-fragua",
@@ -223,66 +113,39 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 9,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/cabalgata-la-fragua.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 10,
-    "shifts": [
-      {
-        "id": "cabalgata-la-fragua-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "cabalgata-la-fragua-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 9
   },
   {
     "id": "camino-de-los-7-lagos-san-martin-de-los-andes",
-    "title": "Camino de los 7 Lagos  - San Martín de los Andes",
+    "title": "San Martín de los Andes por la Ruta de los 7 Lagos",
     "category": "Tradicional",
     "season": "Todo el Año",
-    "duration": "Día Completo (8h)",
+    "duration": "11 a 12 horas.",
     "difficulty": "Fácil",
     "image": "/images/excursiones/camino-de-los-7-lagos-san-martin-de-los-andes.webp",
-    "description": "Conozca el maravilloso  Camino de los 7 Lagos, la ciudad de Villa La Angostura y la hermosa San Martin de los Andes",
-    "fullDetails": "Es una de las excursiones  tradicionales que nos ofrece la Patagonia Andina, recorre en su trayecto de 360 kilómetros. Saliendo hacia al norte  por ruta nacional 237 cruzando el río Limay , dejando atrás  la provincia de Rio Negro e ingresando a la provincia del Neuquén , se va bordeando  la costa norte del lago Nahuel Huapi por la ruta nacional 231 que nos une con la ciudad de Villa la Angostura.Durante este recorrido veremos el  brazo Huemul,  Isla Victoria y un pequeño bosquecillo de Arrayanes, de esta forma arribamos a Villa La Angostura, una típica aldea de montaña, donde haremos un pequeño alto en el camino para recorrer su calle principal. Desde aquí iniciamos el recorrido por el Camino de los 7 lagos, el cual va bordeando la cordillera de los andes, inmerso en un frondoso bosque húmedo donde podremos reconocer las más importantes especies de flora autóctona,  este camino nos deslumbrará con sus paisajes y lagos mágicamente distribuidos en la región, a partir del  lago Correntoso , el primero de los siete , se iran sucediendo  cada uno con sus particulares vistas, llegaremos al mirador de Lago Espejo, y luego con la  laguna Bailey Willis , siguiendo  el  recorrido nos volveremos a encontrar con el brazo norte del Lago Correntoso , cruzaremos el puente sobre el arroyo Ruca Malén y màs adelante el puente sobre el río Pichi Traful  hasta llegar al lago Escondido con un pequeño mirador donde podrás tomar unas hermosas fotografías .\nDe aquí en más tendremos una seguidilla de lagos comenzando por el Villarino, enfrentado al lago Falkner el cual  posee una hermosas playas de arena y un paisaje de ensueño con el cerro Buque sobre su costa sur. Siguiendo  nuestro camino llegaremos a la formidable cascada de Vuliñanco, con su salto de mas de 35 mts., luego veremos el lago Machónico, con su espectacular mirador natural  y desde aquí iremos directamente al encuentro de nuestro último lago, El Lácar, el cual corona la ciudad de San Martín de los Andes, una urbanización realmente deslumbrante tanto por sus paisajes como  por su rica arquitectura. Sus calles repletas de rosales, hace de  esta ciudad un hermoso jardín patagónico. Llegaremos a San Martín de los Andes en horas del mediodía donde  permaneceremos aproximadamente dos horas para  almorzar y recorrerla ciudad.\nEl regreso se realiza por el mismo camino.",
+    "description": "Recorré una de las rutas panorámicas más espectaculares de la Patagonia en una excursión de día completo. Lagos de montaña, bosques andinos, miradores inolvidables y tiempo libre para conocer San Martín de los Andes, a orillas del lago Lácar.",
+    "fullDetails": "San Martín de los Andes por la Ruta de los 7 Lagos es una de las excursiones más completas y paisajísticas de la región. Durante el día recorrerás un tramo inolvidable de la Ruta Nacional 40, atravesando los Parques Nacionales Nahuel Huapi y Lanín, entre lagos de origen glaciar, bosques nativos, montañas y miradores.\n\nEl camino une Bariloche con San Martín de los Andes y permite disfrutar de algunos de los lagos más bellos de la Patagonia, como Nahuel Huapi, Correntoso, Espejo, Escondido, Falkner, Villarino y Machónico, entre otros paisajes de montaña. Durante el recorrido se realizan paradas panorámicas para contemplar el entorno y tomar fotografías.\n\nAntes de llegar a destino, se visita la zona de Villa La Angostura, reconocida por su arquitectura de montaña y su entorno natural. Finalmente se llega a San Martín de los Andes, una ciudad encantadora ubicada a orillas del lago Lácar, donde tendrás tiempo libre para almorzar, caminar por el centro y disfrutar de la tranquilidad de la cordillera.\n\nEs una experiencia ideal para quienes desean descubrir la Patagonia en su máxima expresión: naturaleza, lagos, montañas y pueblos de montaña en una jornada inolvidable.",
     "highlights": [
-      "Salida de Bariloche por costa norte de Lago Nahuel Huapi",
-      "Ciudad de Villa la Angostura",
-      "Camino de los 7 Lagos",
-      "Lagos : Espejo, Correntoso, Falkner, Villarino, Escondido, Machònico, Lacar",
-      "Ciudad de San Martin de los Andes"
+      "Recorrerás la famosa Ruta de los 7 Lagos.",
+      "Disfrutarás lagos de origen glaciar, bosques andinos y paisajes de montaña.",
+      "Realizarás paradas panorámicas para tomar fotografías.",
+      "Conocerás la zona de Villa La Angostura.",
+      "Tendrás tiempo libre en San Martín de los Andes, a orillas del lago Lácar.",
+      "Recorrerás paisajes de los Parques Nacionales Nahuel Huapi y Lanín."
     ],
     "includes": [
-      "Recorrido de la excursión y Guía"
+      "Traslado ida y vuelta desde Bariloche.",
+      "Guía de turismo.",
+      "Paradas panorámicas previstas en el itinerario.",
+      "Tiempo libre en San Martín de los Andes."
     ],
     "notIncludes": [
-      "Almuerzo"
+      "Comidas y bebidas.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
     ],
-    "additionalInfo": "*Valor del paseo $100.000- por persona\n*Llevar ropa y calzado cómodo. \n*Los menores que ocupen asiento abonan la excursión",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Salida desde Bariloche por la mañana.\n• Inicio del recorrido por la Ruta Nacional 40, bordeando el lago Nahuel Huapi.\n• Paso por la zona de Villa La Angostura.\n• Continuación por la Ruta de los 7 Lagos, con paradas panorámicas en distintos lagos y miradores del camino.\n• Llegada a San Martín de los Andes, a orillas del lago Lácar.\n• Tiempo libre para almorzar, recorrer el centro de la ciudad y disfrutar del entorno.\n• Regreso a Bariloche por la tarde.\n• El orden de las paradas, los lagos visitados y los tiempos puede variar por razones climáticas, de tránsito u operativas.\n• San Martín de los Andes por la Ruta de los 7 Lagos\n\nRECOMENDACIONES:\n• Usar calzado cómodo y ropa adecuada al clima.\n• Llevar abrigo, incluso en verano, ya que las temperaturas pueden variar durante el recorrido.\n• Llevar agua, protector solar, anteojos de sol y cámara fotográfica.\n• Llevar dinero o un medio de pago para almuerzo y consumos personales.\n• Es una excursión de día completo: se recomienda llevar lo necesario para pasar varias horas fuera del hotel.\n\nDATOS DE LA EXPERIENCIA:\n• Duración aproximada: 11 a 12 horas.\n• Modalidad: servicio regular o privado.\n• Temporada: todo el año, sujeto a condiciones climáticas y de acceso.\n• Dificultad: baja.\n• Actividad física: baja, con caminatas cortas y opcionales.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.",
     "faq": [
       {
         "question": "Cuales son los horarios de la excursión?",
@@ -297,67 +160,42 @@
         "answer": "No, no incluye almuerzo"
       }
     ],
-    "recommendedFor": "Parejas, Familias y Grupos",
+    "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 7,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/camino-de-los-7-lagos-san-martin-de-los-andes.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 10,
-    "shifts": [
-      {
-        "id": "camino-de-los-7-lagos-san-martin-de-los-andes-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "camino-de-los-7-lagos-san-martin-de-los-andes-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 7
   },
   {
     "id": "cerro-catedral",
-    "title": "Cerro Catedral",
+    "title": "Cerro Catedral Panorámico",
     "category": "Tradicional",
-    "season": "Todo el Año",
-    "duration": "Día Completo (8h)",
+    "season": "Invierno",
+    "duration": "medio día.",
     "difficulty": "Fácil",
     "image": "/images/excursiones/cerro-catedral.webp",
-    "description": "Visita al centro de Esquí más importante de Sudamérica",
-    "fullDetails": "Sus picos se asemejan a las torres de un templo medieval del estilo gótico, de ahí su nombre. El cerro Catedral, ubicado a 19 kilómetros de la ciudad de San Carlos de Bariloche, abre camino a los habitantes del mundo deseosos de experimentar la aventura que prometen los deportes de montaña. Su  Altura  máxima es de 2.338 metros de altura sobre el nivel del mar, el Catedral es pionero entre los centros de esquí de Sudamérica, hoy es el más completo y sigue modernizando sus instalaciones para ofrecer al visitante la más avanzada infraestructura. Podemos acceder a su cumbre a través de los diferentes medios de elevación y desde ella podemos admirar un impactante paisaje hacia la parte central de la cordillera de los Andes, con vistas al Cerro Tronador y el volcán Puntiagudo de Chile. Con opciones a todas las modalidades de esquí, incluyendo el fuera de pista, aquéllos que practican el freestyle y snowboard tendrán un área especialmente diseñada con bumps y rails para demostrar sus habilidades en el nuevo snowpark. Catedral también es escenario para las más importantes competencias internacionales. \nAdemás, Catedral cuenta con un avanzado sistema de fabricación de nieve que da como resultado copos reales que cubren una superficie esquiable de alrededor de 10 hectáreas.  Durante el invierno se puede realizar  Esquí Alpino, Esquí de Fondo, Esquí de Travesía,  Snowboard, Trineos, Snow Cats ( motos de nieve) Parapente,  y durante el verano las actividades más importantes son las de Trekking, Montañismo , Mountain Bike y Four Trax ( cuatriciclos). El cerro catedral cuenta con variados servicios para sus visitantes durante todo el año  paradores, restaurantes de primer nivel, locales de indumentaria y souvenirs, servicio médico en la base del cerro, acceso a internet en la base y estación 1600, ski rental, amplio estacionamiento, centro de informes, guardería infantil, escuela de esquí, shopping, discotecas, etc.",
+    "description": "Descubrí uno de los centros de montaña más importantes de Sudamérica en una excursión panorámica de medio día al Cerro Catedral. Disfrutá paisajes de altura, vistas de los lagos y la Cordillera de los Andes, con la posibilidad de realizar un ascenso opcional en medios de elevación.",
+    "fullDetails": "Cerro Catedral Panorámico es una excursión de medio día pensada para quienes desean conocer uno de los paisajes de montaña más imponentes de Bariloche durante la temporada invernal. El recorrido se dirige hacia la base del Cerro Catedral, atravesando un entorno de bosques, montañas y vistas abiertas hacia el Parque Nacional Nahuel Huapi.\n\nAl llegar al cerro tendrás tiempo para recorrer la base, disfrutar del ambiente de montaña y contemplar los paisajes que rodean uno de los centros de ski más reconocidos de Sudamérica. Quienes lo deseen podrán realizar, de manera opcional, un ascenso en los medios de elevación habilitados para acceder a vistas panorámicas de la Cordillera de los Andes, los lagos y las cumbres de la región.\n\nEs una propuesta ideal para viajeros que quieren conocer Cerro Catedral sin practicar ski o snowboard, disfrutar de la nieve cuando las condiciones lo permiten y vivir una experiencia de montaña accesible y memorable.",
     "highlights": [
-      "Traslado con guía desde el Hotel a la base del Cerro Catedral",
-      "Centro de Esquí más importante de Sudamérica",
-      "Visita Villa Catedral",
-      "Ascenso opcional a los medios de elevación"
+      "Viajarás desde Bariloche hacia la base del Cerro Catedral.",
+      "Disfrutarás paisajes de bosque, montaña y vistas del Parque Nacional Nahuel Huapi.",
+      "Conocerás uno de los centros de ski más importantes de Sudamérica.",
+      "Tendrás tiempo libre para recorrer la base y disfrutar del ambiente de montaña.",
+      "Podrás realizar opcionalmente un ascenso en medios de elevación habilitados."
     ],
     "includes": [
-      "Recorrido de la excursión y Guía"
+      "Traslado ida y vuelta desde Bariloche.",
+      "Guía de turismo.",
+      "Tiempo libre en la base del Cerro Catedral."
     ],
     "notIncludes": [
-      "Ascenso en los medios de elevación"
+      "Ascenso en medios de elevación.",
+      "Alquiler de ropa o equipamiento de nieve.",
+      "Ski, snowboard, clases o pases de medios de elevación para actividades de nieve.",
+      "Comidas y bebidas.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
     ],
-    "additionalInfo": "*Valor del paseo $ 45.000- por persona\n*Durante los meses de invierno, es importante llevar ropa y calzado adecuado para nieve\n*El resto del año llevar ropa y calzado cómodo. \n*Política de menores: \n*Menores  entre 0 y 3 años no abonan el paseo, sin derecho a asiento",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Salida desde Bariloche en horario a confirmar.\n• Traslado hacia el Cerro Catedral, disfrutando del paisaje de montaña durante el camino.\n• Llegada a la base del cerro y tiempo libre para recorrer el área.\n• Posibilidad de realizar el ascenso opcional en medios de elevación, sujeto a disponibilidad, condiciones climáticas y operación del centro de montaña.\n• Tiempo para disfrutar del paisaje y tomar fotografías.\n• Regreso a Bariloche.\n• El orden de las actividades y los tiempos pueden variar por razones climáticas, de tránsito u operativas.\n• Cerro Catedral Panorámico\n\nRECOMENDACIONES:\n• Usar calzado cerrado, cómodo e impermeable o apto para nieve.\n• Llevar abrigo, campera impermeable, guantes, gorro y anteojos de sol.\n• Consultar previamente el estado de los medios de elevación y las condiciones meteorológicas.\n• Llevar agua y dinero o un medio de pago para consumos personales.\n• El ascenso está sujeto a disponibilidad y se abona por separado.\n\nDATOS DE LA EXPERIENCIA:\n• Duración aproximada: medio día.\n• Temporada: de julio a septiembre.\n• Modalidad: servicio regular o privado.\n• Dificultad: baja.\n• Actividad física: baja.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.\n• Ascenso en medios de elevación: opcional y abonado por separado.",
     "faq": [
       {
         "question": "Cuales son los horarios de la excursión ?",
@@ -376,72 +214,42 @@
         "answer": "Se realizan caminatas recorriendo la base y la villa Catedral"
       }
     ],
-    "recommendedFor": "Parejas, Familias y Grupos",
+    "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 2,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/cerro-catedral.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 5,
-    "shifts": [
-      {
-        "id": "cerro-catedral-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "cerro-catedral-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 2
   },
   {
     "id": "cerro-tronador-y-glaciares",
-    "title": "Cerro Tronador y Glaciares",
+    "title": "Cerro Tronador y Ventisquero Negro",
     "category": "Tradicional",
     "season": "Todo el Año",
-    "duration": "Día Completo (8h)",
+    "duration": "10 a 11 horas.",
     "difficulty": "Fácil",
     "image": "/images/excursiones/cerro-tronador-y-glaciares.webp",
-    "description": "Visita al Corazón de la cordillera, para apreciar el cerro más imponente del Parque Nacional junto a sus glaciares, y su magnífico ventisquero negro",
-    "fullDetails": "Excursión de todo el día Dentro de la amplísima variedad de posibilidades que brinda la  zona patagónica, la visita a cerro Tronador y sus glaciares, puede ser el lugar elegido para una experiencia inolvidable.  A  90 Km de la ciudad de S.C. de Bariloche se encuentra el Cerro Tronador con 3478 m de altura. El recorrido se inicia por la ruta 40 sur que bordea el Lago Gutiérrez y  en su margen oeste se encuentra el imponente paisaje del Cerro Catedral Sur, luego se recorre la costa Este al lago Mascardi  hasta llegar al desvío de caminos que nos permite llegar al corazón de la cordillera de los andes, el camino es enripiado y flanqueado por exuberante vegetación autóctona. En su recorrido atraviesa el puente sobre el río Manso,  el camping Los Rápidos y más adelante  transita la costa del brazo Oeste del lago Mascardi, conociendo el mirador de la maravillosa  Isla PIUKE (Isla Corazón).\nSe atraviesa el Gran  Valle de Los VURILOCHES con sus magníficas vistas, el cual finaliza en Pampa Linda, pintoresca zona con una perspectiva maravillosa del Cerro Tronador y sus Glaciares, en este lugar se realiza un alto para almorzar. El paseo continua  hasta arribar al ventisquero Negro, uno de los cuatro glaciares que posee el cerro Tronador, este lugar es el más impactante de la excursión debido a las características del mismo, más adelante se llega al punto culmine del paseo al llegar a la base del majestuoso cerro donde se aprecia las paredes de sus glaciares en la altura y sus innumerables caídas de agua\nRegreso por el mismo camino",
+    "description": "Viví una jornada inolvidable en el corazón del Parque Nacional Nahuel Huapi. Recorré lagos, bosques y valles de montaña hasta llegar al imponente Cerro Tronador y al Ventisquero Negro, uno de los paisajes glaciares más impactantes de Bariloche.",
+    "fullDetails": "Cerro Tronador y Ventisquero Negro es una excursión de día completo hacia uno de los escenarios naturales más impresionantes de la Patagonia. El recorrido atraviesa la zona sur del Parque Nacional Nahuel Huapi, entre lagos, bosques nativos, ríos y montañas, con paisajes que cambian a cada tramo del camino.\n\nDurante el viaje se bordean los lagos Gutiérrez y Mascardi, se atraviesa Villa Mascardi y se continúa hacia Pampa Linda, un valle de montaña rodeado de bosques y cumbres andinas. Desde allí, el paisaje se vuelve cada vez más imponente hasta llegar al área del Cerro Tronador, cuyo nombre proviene del estruendo que producen los desprendimientos de hielo en sus glaciares.\n\nUno de los momentos más especiales de la excursión es la visita al Ventisquero Negro, un glaciar de tonalidades oscuras formado por sedimentos que descienden desde el hielo. Tendrás tiempo para contemplar este paisaje único, tomar fotografías y disfrutar de la inmensidad de la montaña.\n\nUna experiencia ideal para quienes buscan conocer la naturaleza más salvaje y espectacular de Bariloche.",
     "highlights": [
-      "Ruta 40 sur",
-      "Lago Gutiérrez",
-      "Lago Mascardi",
-      "Rápidos del Rio Manso",
-      "Valles de los Vuriloches",
-      "Pampa Linda",
-      "Ventisquero Negro",
-      "Caminata por la base del Cerro Tronador con vistas a los glaciares"
+      "Recorrerás la zona sur del Parque Nacional Nahuel Huapi.",
+      "Disfrutarás vistas de los lagos Gutiérrez y Mascardi.",
+      "Conocerás Villa Mascardi y el valle de Pampa Linda.",
+      "Llegarás a la base del imponente Cerro Tronador.",
+      "Visitarás el Ventisquero Negro y sus paisajes glaciares.",
+      "Tendrás tiempo para tomar fotografías y disfrutar de la naturaleza patagónica."
     ],
     "includes": [
-      "Recorrido de la excursión y Guía"
+      "Traslado ida y vuelta desde Bariloche.",
+      "Guía de turismo.",
+      "Paradas panorámicas previstas en el itinerario.",
+      "Visita al área del Ventisquero Negro."
     ],
     "notIncludes": [
-      "Entrada a Parques Nacionales $ 15000 turistas argentinos - $35000 turistas extranjeros",
-      "Comidas"
+      "Entrada al Parque Nacional Nahuel Huapi.",
+      "Comidas y bebidas.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
     ],
-    "additionalInfo": "*Valor del paseo $90.000- por persona\n*Llevar ropa y calzado cómodo para caminar \n*En época invernal, ropa y calzado adecuado para nieve\n*Política de menores: \n*Menores  entre 0 y 3 años no abonan el paseo, sin derecho a asiento",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Salida desde Bariloche por la mañana.\n• Recorrido junto al lago Gutiérrez y continuación hacia la zona de Villa Mascardi.\n• Bordeo del lago Mascardi y tránsito por caminos de montaña dentro del Parque Nacional Nahuel Huapi.\n• Llegada a Pampa Linda, un valle rodeado de bosques y cumbres andinas.\n• Continuación hacia el área del Cerro Tronador, con tiempo para contemplar el paisaje y tomar fotografías.\n• Visita al Ventisquero Negro.\n• Tiempo libre para almorzar, sujeto a la disponibilidad operativa de los servicios del área.\n• Regreso a Bariloche por la tarde.\n• El orden de las paradas y los tiempos puede variar por razones climáticas, de tránsito u operativas.\n• Cerro Tronador y Ventisquero Negro\n\nRECOMENDACIONES:\n• Usar calzado cómodo y cerrado, adecuado para terreno irregular.\n• Llevar abrigo, campera impermeable y ropa en capas.\n• Llevar agua, protector solar, anteojos de sol y cámara fotográfica.\n• Llevar dinero o un medio de pago para el ingreso al Parque Nacional y consumos personales.\n• Es una excursión de día completo: se recomienda llevar lo necesario para pasar varias horas fuera del hotel.\n• El recorrido está sujeto a las condiciones climáticas y al estado de los caminos.\n\nDATOS DE LA EXPERIENCIA:\n• Duración aproximada: 10 a 11 horas.\n• Modalidad: servicio regular o privado.\n• Temporada: todo el año, sujeto a condiciones climáticas y de acceso.\n• Dificultad: baja.\n• Actividad física: baja, con caminatas cortas y opcionales.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.",
     "faq": [
       {
         "question": "Cuales son los horarios de la excursión ?",
@@ -456,75 +264,40 @@
         "answer": "No, no incluye almuerzo"
       }
     ],
-    "recommendedFor": "Parejas, Familias y Grupos",
+    "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/cerro-tronador-y-glaciares.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 10,
-    "shifts": [
-      {
-        "id": "cerro-tronador-y-glaciares-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "cerro-tronador-y-glaciares-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 6
   },
   {
     "id": "circuito-chico",
     "title": "Circuito Chico",
     "category": "Tradicional",
     "season": "Todo el Año",
-    "duration": "Día Completo (8h)",
+    "duration": "4 horas.",
     "difficulty": "Fácil",
     "image": "/images/excursiones/circuito-chico.webp",
-    "description": "Esta excursión es la esencia de San Carlos de Bariloche, nos invita a conocer y entender la belleza natural que nos rodea",
-    "fullDetails": "Tradicional paseo de medio día, es la carta de presentación de San Carlos de Bariloche, Tiene un  recorrido de  60 km que se inicia  por la Av. Ezequiel Bustillo  bordeando el lago Nahuel Huapi, el más grande de los lagos de la región, el cual nos ira acompañando en gran parte del circuito. En los primeros kmts. del recorrido,  podrán  contemplar el desarrollo urbanístico de  los barrios residenciales  con sus  construcciones típicas; casas de pioneros, club náutico, barrio Melipal, como también las diferentes especies arbóreas como los cipreses , maitenes, cohiues y ñires que serán a partir de ahora parte importante del circuito, el cual, durante el verano se enriquece con arbustos de rosa mosqueta, plantas de moras, frambuesas y retamas de un brillante color amarillo, junto a flores silvestres que enmarcan todo un espectáculo de color y formas. En el Km 8 del paseo se arribara a Playa Bonita, el balneario más importante de la ciudad  y frente a ella la Histórica Isla Huemul; luego se conoce Bahía Serena,  cerro Campanario , pudiendo acceder a la cumbre por medio de aerosillas, donde hay una confitería y una vista excepcional de paisaje de 360 grados. Continuando el itinerario se continúa  hacia la península de Llao-Llao donde se  visita la capilla San Eduardo, Puerto. Pañuelo y enmarcado por los lagos Perito Moreno y Nahuel Huapi el hotel Llao-Llao y sus canchas de golf, en este punto, el paisaje, se convierte en una conjunción de colores y formas que dan una impresionante vista de este Parque Nacional Nahuel Huapi El paseo continúa  internándose en una  zona de bosques de cohiues y cañas colihues conformando una reserva que pretende preservar todo este ambiente poco alterado por el hombre, es el Parque Municipal del Llao-Llao digno de ser recorrido por sus caminos interiores que permiten observar la proliferación de  diferentes ejemplares de árboles autóctonos. A continuación se distingue el acceso a Villa Tacul y  Lago Escondido, también  se visita el Lago Moreno, su unión natural al Lago Nahuel Huapi en el arroyo Angostura, y desde alli  se llega al  sitio  más importante del circuito \"Punto Panoramico\" , desde donde se puede admirar uno de los paisajes más impactantes de toda la región, para finalizar se recorre la base del cerro López, laguna El Trébol y desde allí  se retoma la Av.Bustillo para regresar al centro de la ciudad.",
+    "description": "Descubrí los paisajes más emblemáticos de Bariloche en una excursión panorámica por la Avenida Bustillo, entre lagos, bosques y montañas. Conocé la Capilla San Eduardo, la zona de Llao Llao y el Punto Panorámico, con tiempo para disfrutar cada vista y tomar fotografías inolvidables.",
+    "fullDetails": "Circuito Chico es una de las excursiones imprescindibles de Bariloche y la mejor manera de descubrir, en pocas horas, los paisajes que hacen única a esta ciudad patagónica. El recorrido bordea el lago Nahuel Huapi por la Avenida Bustillo, atravesando bosques de montaña y miradores con vistas a lagos, penínsulas y cumbres andinas.\n\nDurante la excursión se visita la zona de Llao Llao, Puerto Pañuelo y la Capilla San Eduardo, donde se realiza una parada para contemplar el Hotel Llao Llao y su entorno natural. El paseo continúa hacia el Punto Panorámico, uno de los miradores más fotografiados de la región, con una vista privilegiada del lago Moreno, la península Llao Llao y las montañas.\n\nA lo largo del recorrido, un guía compartirá información sobre la historia, la naturaleza y las curiosidades de Bariloche. De manera opcional, quienes lo deseen podrán realizar el ascenso en aerosilla al Cerro Campanario, reconocido por ofrecer una de las mejores vistas panorámicas de la ciudad.",
     "highlights": [
-      "Costa sur del lago Nahuel Huapi",
-      "Barrios Residenciales",
-      "Cerro Campanario ( ascenso opcional )",
-      "Mirador Punto Panorámico",
-      "Lago Moreno – Lago Escondido",
-      "Laguna El Trébol",
-      "Cerro Capilla – Cerro López",
-      "Hotel Llao Llao",
-      "Capilla San Eduardo"
+      "Recorrerás la Avenida Bustillo junto al lago Nahuel Huapi.",
+      "Conocerás la zona de Llao Llao, Puerto Pañuelo y la Capilla San Eduardo.",
+      "Disfrutarás una parada con vista al Hotel Llao Llao y su entorno.",
+      "Visitarás el Punto Panorámico, con vistas al lago Moreno y la península Llao Llao.",
+      "Tendrás la posibilidad de realizar opcionalmente el ascenso al Cerro Campanario."
     ],
     "includes": [
-      "Valor del paseo $45.000- por persona",
-      "Recorrido de la excursión y Guía"
+      "Traslado durante todo el recorrido.",
+      "Guía de turismo.",
+      "Paradas panorámicas previstas en el itinerario."
     ],
     "notIncludes": [
-      "Ascenso a Cerro Campanario",
-      "Costo del Ascenso :  Mayores $22.000 Menores $ 11.000 ( entre 06 a 12 años )",
-      "Menores de 06 años no pagan ascenso"
+      "Ascenso en aerosilla al Cerro Campanario.",
+      "Comidas y bebidas.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
     ],
-    "additionalInfo": "*Valor del paseo $45.000- por persona\n*Salidas todos los días\n- De  08:30 hs. a 13:00 hs\n- De 14:00 hs. a 18:00 hs (Bilingüe)\n*Llevar ropa y calzado cómodo. \n*Los menores que ocupen asiento abonan la excursión",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Salida desde Bariloche e inicio del recorrido por la Avenida Bustillo, bordeando el lago Nahuel Huapi.\n• Paso por Playa Bonita y continuación hacia la península Llao Llao.\n• Parada en la Capilla San Eduardo, con vistas al Hotel Llao Llao, Puerto Pañuelo y el lago Nahuel Huapi.\n• Recorrido por el área de Llao Llao, entre bosques, lagos y montañas.\n• Parada en el Punto Panorámico para contemplar el lago Moreno, la península Llao Llao y el paisaje andino.\n• Opción de realizar el ascenso en aerosilla al Cerro Campanario, sujeto a disponibilidad y condiciones operativas.\n• Regreso a Bariloche.\n• El orden de las paradas y los tiempos puede variar por razones climáticas u operativas.\n• Circuito Chico\n\nRECOMENDACIONES:\n• Usar calzado cómodo y ropa adecuada al clima.\n• Llevar abrigo durante todo el año.\n• Llevar agua, protector solar, anteojos de sol y cámara fotográfica.\n• Consultar previamente el horario y punto de encuentro.\n• El ascenso al Cerro Campanario es opcional y se abona por separado.\n\nDATOS DE LA EXPERIENCIA:\n• Duración aproximada: 4 horas.\n• Modalidad: servicio regular o privado.\n• Temporada: todo el año.\n• Dificultad: baja.\n• Actividad física: mínima.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.",
     "faq": [
       {
         "question": "Cuantos kilómetros se recorren ?",
@@ -543,74 +316,43 @@
         "answer": "No, el hotel no permite en ingreso de excursiones"
       }
     ],
-    "recommendedFor": "Parejas, Familias y Grupos",
+    "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs",
-    "priceNum": 2,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/circuito-chico.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 5,
-    "shifts": [
-      {
-        "id": "circuito-chico-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "circuito-chico-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 2
   },
   {
     "id": "circuito-grande-villa-traful-villa-la-angostura",
-    "title": "Circuito Grande - Villa Traful - Villa La Angostura",
+    "title": "Circuito Grande — Villa Traful y Villa La Angostura",
     "category": "Tradicional",
     "season": "Todo el Año",
-    "duration": "Día Completo (8h)",
+    "duration": "día completo.",
     "difficulty": "Fácil",
     "image": "/images/excursiones/circuito-grande-villa-traful-villa-la-angostura.webp",
-    "description": "Una increíble combinación de paisajes !!  Estepa, Ríos, Montañas, Bosques y Lagos. Conozca Villa Traful y Villa La Angostura",
-    "fullDetails": "Excursión de Todo el día Salida 08:30 hs Regreso 18:00, los días Lunes, Miércoles y Viernes Opera únicamente desde Noviembre hasta Abril Este paseo comienza saliendo de Bariloche hacia el noreste, llegando a la desembocadura natural del lago Nahuel Huapi donde nace el río Limay, límite natural entre las provincias de Río Negro y Neuquén. El camino nos lleva bordeando sus costas contemplando un paisaje de estepa donde nos deslumbra con sus formaciones naturales como el Anfiteatro y el Valle Encantado, llamado así por sus inmensas y extrañas formaciones rocosas que la naturaleza fue moldeando con el transcurso de los años sobre los cerros, aquí podremos descubrir  las figuras que los lugareños  han bautizado como el dedo de dios, el centinela, tren expreso. Los siameses, entre otros. Luego llegaremos a la confluencia de Limay con el Rio Traful quien nos acompañara en esta nueva etapa. Aquí la ruta se transforma en un camino de ripio, el cual nos sorprenderá por su transformación de paisajes a medida que vayamos avanzando de la estepa al bosque andino, en las laderas de las montañas veremos los nidos de Cóndores , cruzaremos el rio Cuyin Manzano y Minero hasta llegar al famoso Mirador del Viento sobre el Lago Traful y así llegar a esta hermosa villa de montaña. Villa Traful\nSi bien fue creada en 1936 sus orígenes se remontan a finales de 1600 cuando desde diferentes puntos de la región llegaron los primeros pobladores  en su mayoría Mapuches, hoy cuenta con una población estable de aproximadamente 700 habitantes. Caminaremos por la villa, su pintoresco muelle sobre el lago y luego seguiremos camino hacia el Oeste donde conoceremos Puerto Arrayán y asi llegar a Paso Portezuelo, donde ingresaremos al Camino de los Siete Lagos para conocer el Lago Correntoso , el puente Ruca Malen , Lago Espejo y extremo noroeste del Nahuel Huapi. De esta forma arribamos a Villa La Angostura “Jardin de la Patagonia” se encuentra ubicada al sur de la Provincia del Neuquén, a solo 35 kmts. de la frontera con el vecino país chileno, en la margen noreste del Lago Nahuel Huapi . Rodeada de tupidos bosques autóctonos y enmarcados por imponentes cumbres, es uno de esos lugares ideales en cualquiera de las cuatro estaciones. Recibe su nombre por el itsmo Angostura de la Península de Quetrihue, donde se encuentra el famoso Bosque de los Arrayanes. \nDurante el recorrido conoceremos  los puntos más sobresalientes del centro de la ciudad, La capilla Nuestra Señora de la Asunción (1936), la famosa residencia El Messidor, Edificio de Parques Nacionales y a unos metros, el muelle de Puerto Angostura, sobre bahía Mansa y al muelle de Bahía Brava. (y sus bellísimas playas, que en verano nos invita a disfrutarlas), Luego del almuerzo visitaremos Puerto Manzano, Bahia Manzano, lugares que tienen un especial atractivo.\nPor la tarde bordeando el lago Nahuel Huapi, regresamos a Bariloche",
+    "description": "Descubrí una de las rutas más sorprendentes del norte patagónico en una excursión de día completo por Villa Traful y Villa La Angostura. Recorré estepa, ríos, bosques andinos, lagos y miradores únicos, con tiempo para conocer dos de las villas más pintorescas de Neuquén.",
+    "fullDetails": "Circuito Grande es una excursión de día completo que une algunos de los paisajes más variados y sorprendentes de la región. El recorrido comienza saliendo de Bariloche hacia el noreste, hasta llegar a la desembocadura del lago Nahuel Huapi, donde nace el río Limay y se marca el límite natural entre las provincias de Río Negro y Neuquén.\n\nEl camino continúa junto al río Limay, atravesando paisajes de estepa y formaciones rocosas únicas como el Anfiteatro y el Valle Encantado. Allí la naturaleza creó siluetas que los pobladores identifican con nombres como el Dedo de Dios, el Centinela y los Siameses.\n\nLuego se llega a la confluencia de los ríos Limay y Traful. A partir de ese punto, el recorrido avanza por caminos de ripio y el paisaje se transforma gradualmente: la estepa da paso al bosque andino, los valles se vuelven más cerrados y las cumbres acompañan el trayecto hasta Villa Traful. Desde el Mirador del Viento se obtiene una de las panorámicas más imponentes del lago Traful.\n\nEn Villa Traful tendrás tiempo para caminar por su pintoresco muelle y disfrutar de la tranquilidad de esta pequeña villa. El regreso se realiza por el Camino de los Siete Lagos, visitando lugares como Puerto Arrayán, Paso Portezuelo, el lago Correntoso, el puente Ruca Malén y el lago Espejo. Finalmente se llega a Villa La Angostura, con tiempo para conocer sus puntos más representativos, y a Puerto Manzano antes de regresar a Bariloche.",
     "highlights": [
-      "Valor del Paseo $90.000-",
-      "Rio Limay",
-      "Limite de Rio Negro y Neuquén",
-      "Valle Encantado",
-      "Confluencia del Rio Traful y Limay",
-      "Mirador Lago Traful",
-      "Villa Traful",
-      "Lago Correntoso",
-      "Lago Espejo",
-      "Villa la Angostura",
-      "Costa Norte Lago Nahuel Huapi"
+      "Conocerás el nacimiento del río Limay en la desembocadura del lago Nahuel Huapi.",
+      "Descubrirás el Anfiteatro y las formaciones rocosas del Valle Encantado.",
+      "Contemplarás la confluencia de los ríos Limay y Traful.",
+      "Visitarás el Mirador del Viento, con una vista excepcional del lago Traful.",
+      "Tendrás tiempo libre en Villa Traful y su muelle.",
+      "Recorrerás parte del Camino de los Siete Lagos.",
+      "Conocerás Villa La Angostura, Puerto Manzano y la costa norte del lago Nahuel Huapi."
     ],
     "includes": [
-      "Recorrido de la excursión y Guía"
+      "Recorrido completo de la excursión.",
+      "Guía durante la actividad.",
+      "Paradas panorámicas previstas en el itinerario.",
+      "Tiempo libre en Villa Traful.",
+      "Tiempo libre en Villa La Angostura."
     ],
     "notIncludes": [
-      "Comidas"
+      "Comidas y bebidas.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
     ],
-    "additionalInfo": "* Valor del Paseo $90.000 -\n*Guia Bilingue $130.000.- \n*Llevar ropa y calzado cómodo para caminar \n*Política de menores: \n*Menores  entre 0 y 3 años no abonan el paseo, sin derecho a asiento",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Salida desde Bariloche a las 08:30 hs.\n• Recorrido hacia el noreste hasta la desembocadura del lago Nahuel Huapi y el nacimiento del río Limay.\n• Paso por el Anfiteatro y el Valle Encantado.\n• Parada en la confluencia de los ríos Limay y Traful.\n• Continuación por caminos de ripio hacia el Mirador del Viento y Villa Traful.\n• Tiempo libre para caminar por Villa Traful y su muelle.\n• Recorrido hacia el oeste por Puerto Arrayán y Paso Portezuelo, ingresando al Camino de los Siete Lagos.\n• Paradas panorámicas en el lago Correntoso, puente Ruca Malén y lago Espejo.\n• Llegada a Villa La Angostura, con tiempo para recorrer sus puntos destacados.\n• Visita a Puerto Manzano y Bahía Manzano.\n• Regreso a Bariloche, bordeando el lago Nahuel Huapi.\n• El orden de las paradas y los tiempos puede variar por razones climáticas, de tránsito u operativas.\n• Circuito Grande Villa Traful y Villa La Angostura\n\nRECOMENDACIONES:\n• Usar calzado cómodo y ropa adecuada para caminar.\n• Llevar abrigo, campera impermeable y protección solar.\n• Llevar agua, anteojos de sol y cámara fotográfica.\n• Llevar dinero o un medio de pago para almuerzo y consumos personales.\n• Es una excursión de día completo con tramos de camino de ripio.\n• Consultar previamente las condiciones climáticas y el estado de los caminos.\n\nDATOS DE LA EXPERIENCIA:\n• Duración aproximada: día completo.\n• Horario: 08:30 a 18:00 hs.\n• Días de salida: lunes, miércoles y viernes.\n• Temporada: de noviembre a abril.\n• Distancia aproximada: 250 km.\n• Modalidad: servicio regular o privado.\n• Dificultad: baja.\n• Actividad física: baja, con caminatas cortas y opcionales.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.",
     "faq": [
       {
         "question": "Cuales son los horarios de la excursión ?",
@@ -637,74 +379,44 @@
         "answer": "No, esa visita se realiza en otras excursiones"
       }
     ],
-    "recommendedFor": "Parejas, Familias y Grupos",
+    "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/circuito-grande-villa-traful-villa-la-angostura.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 10,
-    "shifts": [
-      {
-        "id": "circuito-grande-villa-traful-villa-la-angostura-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "circuito-grande-villa-traful-villa-la-angostura-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 6
   },
   {
     "id": "el-bolson-chacras-lago-puelo",
-    "title": "El Bolsón - Chacras - Lago Puelo",
+    "title": "El Bolsón y Lago Puelo",
     "category": "Tradicional",
     "season": "Todo el Año",
-    "duration": "Día Completo (8h)",
+    "duration": "día completo.",
     "difficulty": "Fácil",
     "image": "/images/excursiones/el-bolson-chacras-lago-puelo.webp",
-    "description": "El Bolsón y la Comarca Andina  nos deslumbra con sus increíbles paisajes  patagónicos !!!",
-    "fullDetails": "Excursión de Todo el día Salida 08:30 hs Regreso 18:00, los días Jueves, Sábados\nPartiendo hacia el sur  desde Bariloche por la Ruta Nacional 258 , bordeando los lagos Gutiérrez, Mascardi y Guillelmo, después de atravesar la Pampa del Toro, el Cañadón de la Mosca y El Foyel, esta excursión nos lleva a la localidad de El Bolsón, enclavada en un valle con características climáticas especiales que facilitan el desarrollo agrícola del poblado y nos invita a realizar esta visita a sus atractivos principales.\nEl Bolsón debe su nombre a la conformación geográfica cerrada por montañas y antiguos glaciares que la circundan, dejándola bajo el cobijo de la alta montaña que limitan al Sur con el Paralelo 42, al Norte con el Cordón Paleta, al Este el Cerro Piltriquitrón y al Oeste con la Cordillera de los Andes, siendo parte componente de la denominada \"Comarca Andina\". \nEntre sus puntos más sobresalientes visitaremos la famosa y pintoresca  Feria Artesanal, ubicada en la plaza central de la ciudad.\nMás adelante, atravesando fincas y chacras cubiertas por cultivos de lúpulo, trigo, maíz, frutillas, frambuesas, grosellas, cerezas y manzanas, visitamos una chacra modelo para conocer las características de las plantaciones y ver su producción \nLuego llegaremos  al lago Puelo para disfrutar de su singular tonalidad celeste-turquesa y sus alrededores, donde tendremos tiempo para disfrutar de sus costas \nPor la tarde regresamos por el mismo camino",
+    "description": "Recorré la Comarca Andina del Paralelo 42 en una excursión de día completo hacia El Bolsón y Lago Puelo. Conocé la feria regional, los sabores de la producción local y las aguas turquesa del Parque Nacional Lago Puelo, rodeadas de bosques y Cordillera.",
+    "fullDetails": "El Bolsón y Lago Puelo es una excursión de día completo que invita a descubrir una de las regiones más auténticas y pintorescas de la Patagonia. El recorrido parte desde Bariloche hacia el sur por la Ruta Nacional 40, atravesando valles, lagos y paisajes de bosque nativo hasta llegar a la Comarca Andina del Paralelo 42.\n\nLa primera visita es El Bolsón, una localidad reconocida por su ambiente relajado, su producción artesanal, sus frutas finas y su identidad ligada a la naturaleza. Tendrás tiempo libre para recorrer el centro, conocer comercios locales y, en los días de funcionamiento, visitar la Feria Regional de Artesanos en Plaza Pagano.\n\nLa excursión continúa hacia Lago Puelo, en la provincia de Chubut. Allí se visita el área del Parque Nacional Lago Puelo, donde las aguas de tonalidades turquesa, los bosques y las cumbres crean uno de los paisajes más característicos de la Comarca Andina.\n\nEs una propuesta ideal para quienes desean combinar naturaleza, cultura local, productos regionales y paisajes diferentes a los de Bariloche en una misma jornada.",
     "highlights": [
-      "Lago Gutiérrez",
-      "Lago Mascardi",
-      "Lago Guillemo",
-      "Rio Villegas",
-      "Rio Foyel",
-      "Centro de El Bolsón",
-      "Feria Artesanal",
-      "Chacras De Fruta Fina",
-      "Lago Puelo"
+      "Recorrerás la Ruta Nacional 40 hacia el sur de Bariloche.",
+      "Descubrirás paisajes de lagos, valles y bosque nativo.",
+      "Conocerás El Bolsón y su identidad artesanal.",
+      "Tendrás tiempo libre para visitar la feria regional, cuando se encuentre operativa.",
+      "Podrás conocer productos locales y propuestas gastronómicas de la Comarca Andina.",
+      "Visitarás el Parque Nacional Lago Puelo y sus aguas turquesa."
     ],
     "includes": [
-      "Recorrido de la excursión y Guía"
+      "Traslado ida y vuelta desde Bariloche.",
+      "Guía de turismo.",
+      "Visita a El Bolsón.",
+      "Tiempo libre en el centro de la localidad.",
+      "Visita al área del Parque Nacional Lago Puelo."
     ],
     "notIncludes": [
-      "Comidas",
-      "Entrada Parque Nacional Lago Puelo",
-      "$ 15000 turistas argentinos - $35000 turistas extranjeros"
+      "Entrada al Parque Nacional Lago Puelo.",
+      "Comidas y bebidas.",
+      "Compras en feria, comercios o puestos locales.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
     ],
-    "additionalInfo": "*Valor del paseo $85.000- por persona\n*Llevar ropa y calzado cómodo para caminar \n*Política de menores: \n*Menores  entre 0 y 3 años no abonan el paseo, sin derecho a asiento",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Salida desde Bariloche por la mañana.\n• Recorrido hacia el sur por la Ruta Nacional 40, con vistas de lagos, valles y bosque nativo.\n• Llegada a El Bolsón.\n• Tiempo libre para recorrer el centro, conocer comercios locales y visitar la Feria Regional de Artesanos, según día y horario de funcionamiento.\n• Tiempo libre para almorzar o disfrutar productos regionales.\n• Traslado hacia Lago Puelo.\n• Visita al área del Parque Nacional Lago Puelo y tiempo para disfrutar del paisaje.\n• Regreso a Bariloche por la tarde.\n• El orden de las paradas y los tiempos puede variar por razones climáticas, de tránsito u operativas.\n• El Bolsón y Lago Puelo\n\nRECOMENDACIONES:\n• Usar calzado cómodo y ropa adecuada al clima.\n• Llevar abrigo y una campera impermeable; las condiciones pueden variar durante el recorrido.\n• Llevar agua, protector solar, anteojos de sol y cámara fotográfica.\n• Llevar dinero o un medio de pago para almuerzo, ingreso al Parque Nacional y consumos personales.\n• Consultar previamente los días y horarios de la Feria Regional de Artesanos.\n• La excursión está sujeta a las condiciones climáticas y al estado de las rutas.\n\nDATOS DE LA EXPERIENCIA:\n• Duración aproximada: día completo.\n• Modalidad: servicio regular o privado.\n• Temporada: todo el año, sujeta a condiciones climáticas y de acceso.\n• Dificultad: baja.\n• Actividad física: baja, con caminatas cortas y opcionales.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.",
     "faq": [
       {
         "question": "Cuales son los horarios de la excursión?",
@@ -735,71 +447,45 @@
         "answer": "No , No está Incluida"
       }
     ],
-    "recommendedFor": "Parejas, Familias y Grupos",
+    "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/el-bolson-chacras-lago-puelo.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 10,
-    "shifts": [
-      {
-        "id": "el-bolson-chacras-lago-puelo-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "el-bolson-chacras-lago-puelo-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 6
   },
   {
     "id": "el-refugio",
-    "title": "El Refugio",
+    "title": "Refugio Arelauquen — 4x4, Moto de Nieve y Cena",
     "category": "Invierno",
     "season": "Invierno",
     "duration": "Día Completo (8h)",
     "difficulty": "Fácil",
     "image": "/images/excursiones/el-refugio.webp",
-    "description": "Aventura en motos de nieve",
-    "fullDetails": "Este restaurante de montaña se\nencuentra ubicado en ARELAUQUEN GOLF & CC sobre un mirador natural a 1300\nmts de altura en la cumbre sur del Cerro Otto. \n\nLa excursion hasta El Refugio nos proporciona una aventura que combina un ascenso en camionetas 4x4 y luego un trayecto en moto de nieve. \n\nUna inolvidable travesía de curvas y contracurvas ascendiendo en el profundo\nsilencio del bosque de lengas cubiertas de nieve y bajo un manto de estrellas.\nLuego de sentir la adrenalina de la subida, la tranquilidad y calidez del\nRefugio reconfortan. La luz de las velas junto al fuego de la chimenea,\npermiten disfrutar de la incomparable vista.\n\nEl\nrefugio, un deck de madera cubierto de nieve balconeando sobre los lagos Nahuel\nHuapi, Gutiérrez y Moreno brinda la mejor vista de la cordillera y el más bello\npaisaje patagónico.",
+    "description": "Viví una noche de aventura en el entorno nevado de Arelauquen. Ascendé en vehículos 4x4, recorré senderos invernales en moto de nieve y disfrutá una cena en un refugio de montaña rodeado de bosque y Cordillera.",
+    "fullDetails": "Refugio Arelauquen combina tres momentos inolvidables en una misma experiencia: un ascenso en vehículos 4x4, una travesía guiada en moto de nieve y una cena en un refugio de montaña.\n\nLa aventura comienza con el ascenso en 4x4 por caminos de nieve y bosque, una forma diferente de ingresar al entorno andino de Arelauquen. Al llegar al punto de partida de la travesía, recibirás las indicaciones de seguridad y conducción antes de subir a la moto de nieve.\n\nCada vehículo es compartido por dos pasajeros. Acompañado por guías especializados, recorrerás senderos nevados entre lengas y paisajes invernales hasta llegar al refugio. Allí podrás relajarte, disfrutar del ambiente cálido del interior y compartir una cena en plena naturaleza.\n\nEs una propuesta ideal para quienes buscan una experiencia nocturna completa, con aventura, nieve y gastronomía patagónica.",
     "highlights": [
-      "ARELAUQUEN GOLF & CC¨",
-      "Transfer desde el Hotel hasta Arelauquen y transfer de regreso al hotel",
-      "Motos de nieve",
-      "Ascenso en camionetas 4x4",
-      "Cena en Refugio"
+      "Ascenderás en vehículos 4x4 por caminos de nieve.",
+      "Recibirás instrucciones de seguridad y conducción.",
+      "Realizarás una travesía guiada en moto de nieve.",
+      "Compartirás una moto de nieve con otro pasajero.",
+      "Recorrerás bosques nevados y paisajes del entorno de Arelauquen.",
+      "Disfrutarás una cena en un refugio de montaña."
     ],
     "includes": [
-      "Transfer",
-      "Moto de nieve",
-      "Ascenso en 4x4",
-      "Cena"
+      "Ascenso en vehículos 4x4.",
+      "Travesía guiada en moto de nieve.",
+      "Una moto de nieve doble cada dos pasajeros.",
+      "Instrucciones de seguridad y conducción.",
+      "Guías especializados durante la actividad.",
+      "Cena en refugio de montaña."
     ],
     "notIncludes": [
-      "Ropa de nieve"
+      "Traslados desde o hacia el complejo, salvo que se indiquen expresamente al momento de reservar.",
+      "Bebidas no especificadas dentro de la cena.",
+      "Indumentaria de nieve, salvo que se indique expresamente.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
     ],
-    "additionalInfo": "*Incluye transfer desde el Hotel hasta Arelauquen y transfer de regreso al hotel\n* Motos de nieve (2 personas por moto) \n*Tiempo aproximado de excursión 3:30h desde la recepción del club\n*Turnos 18h, 19h, 20:30h y 21:30\n*Grupos de 16 personas por turno.\n*Tarifa Mayores (+12 años) u$d.- (dolores américanos)",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Presentación en el punto de encuentro del complejo.\n• Recepción e inicio del ascenso en vehículos 4x4.\n• Llegada al punto de partida de la travesía.\n• Charla de seguridad, asignación de motos e inicio del recorrido guiado.\n• Llegada al refugio de montaña.\n• Cena y tiempo para disfrutar del entorno.\n• Regreso al punto de partida según el circuito operativo.\n• El orden de las actividades puede variar por condiciones de nieve, clima y operación del complejo.\n• Refugio Arelauquen 4x4 Moto de Nieve y Cena\n\nRECOMENDACIONES:\n• Usar ropa de abrigo, campera impermeable, guantes, gorro y calzado apto para nieve.\n• Informar con anticipación alergias, restricciones alimentarias o dietas especiales.\n• Consultar previamente si el servicio incluye indumentaria de nieve o traslados.\n• Seguir siempre las indicaciones de los guías.\n• La actividad está sujeta a las condiciones de nieve, clima y operación del complejo.\n• La conducción de la moto de nieve se realiza bajo las condiciones y requisitos establecidos por el prestador.\n\nDATOS DE LA EXPERIENCIA:\n• Temporada: invierno, sujeta a condiciones de nieve.\n• Ubicación: Arelauquen, Bariloche.\n• Actividad física: baja a moderada.\n• Dificultad: baja; no se requiere experiencia previa.\n• Vehículo: moto de nieve doble, compartida por dos pasajeros.\n• Público recomendado: parejas, grupos de amigos, familias y viajeros que buscan una experiencia de nieve completa.",
     "faq": [
       {
         "question": "¿Incluye comida?",
@@ -810,67 +496,37 @@
         "answer": "No"
       }
     ],
-    "recommendedFor": "Parejas, Familias y Grupos",
+    "recommendedFor": "parejas, grupos de amigos, familias y viajeros que buscan una experiencia de nieve completa.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 52,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/el-refugio.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 65,
-    "shifts": [
-      {
-        "id": "el-refugio-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "el-refugio-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 52
   },
   {
     "id": "free-walking-tour",
-    "title": "Free Walking Tour",
+    "title": "Walking Tour Bariloche · Historia, Arquitectura y Lago Nahuel Huapi",
     "category": "Tradicional",
     "season": "Todo el Año",
-    "duration": "Día Completo (8h)",
+    "duration": "2 horas",
     "difficulty": "Fácil",
     "image": "/images/excursiones/free-walking-tour.webp",
-    "description": "¡La mejor manera de descubrir Bariloche!!  Su apasionante historia, su arquitectura, su cultura y la influencia de los inmigrantes europeos, caminando por los barrios del casco histórico.",
-    "fullDetails": "Valor: Sin Cargo (Al finalizar cada asistente entrega al guía la cantidad que considere, de acuerdo a la satisfacción obtenida)Salidas:  09:45 hs. y  17:45  Duración: 2 hs.\nNivel de Dificultad: Bajo - Medio El recorrido nos lleva a conocer la historia de San Carlos de Bariloche, a través de su gente, sus principales barrios del casco histórico. Como influyeron las comunidades europeas, especialmente la Alemana, entendiendo la idiosincrasia de los habitantes de principios de siglo 20 hasta nuestros días.\nRecorreremos sus calles para conocer las edificaciones más icónicas de la ciudad, sus variados estilos, la importancia que tuvieron y como se fueron transformando con el trascurso del tiempo. Conoceremos como se fue formando culturalmente la ciudad, cuáles fueron las principales influencias y como de un pueblo agrícola ganadero se fue trasformando en el destino turístico más importante de la Argentina.\nMitos, Leyendas y verdades sobre el pasado de la Alemania nazi de la postguerra en la ciudad, enriqueciendo las miradas del participante a través de los diferentes lugares documentados.\nUn paseo necesario, para comenzar a comprender lo que la mayoría de los visitantes la denominan la JOYA PATAGONICA",
+    "description": "Descubrí Bariloche caminando por las calles de su casco histórico. Un recorrido guiado que combina historia, arquitectura y paisajes para conocer la esencia de la Joya de la Patagonia.",
+    "fullDetails": "Conocé Bariloche desde una mirada local en una caminata guiada por los rincones más emblemáticos de su centro histórico. Durante dos horas recorreremos el Centro Cívico, la Catedral Nuestra Señora del Nahuel Huapi, la tradicional calle Mitre y la costanera del lago Nahuel Huapi, descubriendo las historias, personajes y curiosidades que dieron identidad a la ciudad.\n\nA lo largo del recorrido, un guía profesional compartirá la evolución de Bariloche, su arquitectura de inspiración alpina, el desarrollo del montañismo, la cultura patagónica y los secretos que muchas veces pasan desapercibidos para quienes la visitan por primera vez.\n\nLa experiencia finaliza junto al lago, con una de las postales más representativas de la Patagonia y recomendaciones personalizadas para seguir disfrutando Bariloche.",
     "highlights": [
-      "Salida desde San Martin 398",
-      "Caminata de 02:00 hs por el casco histórico de la ciudad",
-      "Barrio Cervecero - Club Andino Bariloche – Barrio Belgrano – Capilla de la Inmaculada – Paseo de las Colectividades – Catedral Nuestra Señora del Nahuel Huapi – Centro Cívico"
+      "Recorrido guiado por el casco histórico de Bariloche.",
+      "Centro Cívico, Calle Mitre, Iglesia Catedral y costanera del Lago Nahuel Huapi.",
+      "Historia, arquitectura y cultura local contadas por un guía profesional.",
+      "Ideal para comenzar tu viaje y descubrir la ciudad desde otra perspectiva."
     ],
     "includes": [
-      "Caminata",
-      "Guías"
+      "Guía profesional",
+      "Caminata guiada de aproximadamente 2 horas",
+      "Recomendaciones gastronómicas y culturales"
     ],
     "notIncludes": [
-      "Extras de ningún tipo"
+      "Comidas y bebidas",
+      "Traslado al punto de encuentro",
+      "Gastos personales"
     ],
-    "additionalInfo": "*Valor Sin Cargo (Al finalizar cada asistente entrega al guía la cantidad que considere, de acuerdo a la satisfacción obtenida)\n*Ropa adecuada para las condiciones del clima y calzado cómodo\n*Apto para todas las edades\n*Horarios:\n 9:45 a 12:30 hs\n17:45 a 20:00 hs ( Enero , Febrero y Marzo)  \n16:45 a 19:00 hs ( resto del año)",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Centro Cívico\n• Historia fundacional y arquitectura patagónica.\n• Calle Mitre\n• Vida local, chocolaterías y patrimonio urbano.\n• Catedral\n• Uno de los edificios más emblemáticos de la ciudad.\n• Lago Nahuel Huapi\n• Miradores, fotografías y recomendaciones locales.\n• Walking Tour Bariloche Historia Arquitectura y Lago Nahuel Huapi\n\nDATOS DE LA EXPERIENCIA:\n• Duración: 2 horas\n• Modalidad: Caminata guiada\n• Salidas: 10:15 y 17:45\n• Dificultad: Baja\n• Ideal para: Primer día en Bariloche\n• Punto de encuentro: Av. San Martín 398",
     "faq": [
       {
         "question": "En qué momento del año se puede realizar ?",
@@ -915,73 +571,43 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "12:30 hs",
-    "priceNum": 0,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/free-walking-tour.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 40,
-    "shifts": [
-      {
-        "id": "free-walking-tour-shift-1",
-        "name": "Turno Mañana",
-        "time": "12:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "free-walking-tour-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 0
   },
   {
     "id": "isla-victoria-y-bosque-de-arrayanes",
-    "title": "Isla Victoria y Bosque de  Arrayanes",
+    "title": "Isla Victoria y Bosque de Arrayanes",
     "category": "Navegación",
     "season": "Todo el Año",
-    "duration": "Día Completo (8h)",
+    "duration": "día completo.",
     "difficulty": "Fácil",
     "image": "/images/excursiones/isla-victoria-y-bosque-de-arrayanes.webp",
-    "description": "Navegamos el Lago Nahuel Huapi para conocer el Maravilloso Bosque de los Arrayanes y la gran Isla Victoria",
-    "fullDetails": "Salidas todos los días, en varios horarios\nEste paseo se puede iniciar  tanto desde el Hotel ó  desde Puerto Pañuelo lugar enclavado en la península de Llao-Llao a 25 Kmts del centro de la ciudad\nSi comenzamos desde el hotel , es por medio de un traslado terrestre  que nos lleva hasta el Puerto.\nUna vez en el puerto se realiza el embarque y comienza el recorrido lacustre por el maravilloso lago Nahuel Huapi, admirando el color de sus aguas, el verdor de la vegetación de sus costas y los picos nevados de las montañas que sobresalen en el horizonte este hermoso paisaje que fue transformándose en el transcurso de millones de años por diversos procesos geológicos. Se navega durante aproximadamente una hora por la zona central del lago, hasta llegar a  puerto Quetrihue situado al sur de la península de igual nombre. Aquí nos encontramos  con el mundialmente famoso  Bosque de Arrayanes  que da nombre a este Parque Nacional.   Este árbol inconfundible por su corteza color canela y muy lisa, al desprenderse deja manchas claras y rojizas, que dan al bosque un color absolutamente distinto a todos. En el final del verano los arrayanes se cubren de flores blancas que en otoño darán un fruto color negro brillante, algunos ejemplares llegan a tener entre 500 y 650 años de edad.\nLuego de realizar el recorrido por sus senderos se inicia una nueva navegación  hacia la Isla Victoria  de aproximadamente 30 minutos  hasta llegar a Puerto Anchorena .\nLa isla tiene un largo máximo de 20 Km y un ancho de 4 Km, y está dividida en tres sectores de los cuales el único habilitado al turismo es el central, los demás son áreas intangibles\nEste lugar habitado hace miles de años por aborígenes que dejaron evidencias de su presencia y podrás comprobarlo en las cuevas y pinturas rupestres existentes en la isla: También observarás las diferentes especies de flora en una  caminata guiada por los senderos donde iras conociendo las diferentes características de las especies, tales como,  sequoias gigantes, tuyas, eucaliptos, pinos, robles junto a cipreses, cohiues y ñires que en su follaje esconden gran diversidad de pájaros. En lo alto de la fronda percibirás el vuelo de algún CORMORAN imperial. \nPodrás llegar hasta  Playa del Toro, durante el verano, es un magnifico balneario \nSe regresa a Puerto Pañuelo luego de 30 minutos de navegación y desde aquí al hotel",
+    "description": "Navegá por el lago Nahuel Huapi y descubrí dos de los paisajes más encantadores de Bariloche: Isla Victoria y el Bosque de Arrayanes. Una experiencia de día completo que combina navegación, senderos de baja dificultad y bosques únicos de la Patagonia.",
+    "fullDetails": "Isla Victoria y Bosque de Arrayanes es una de las excursiones lacustres más tradicionales y fascinantes de Bariloche. La experiencia comienza con una navegación desde Puerto Pañuelo por las aguas del lago Nahuel Huapi, rodeado de montañas, bosques y paisajes del Parque Nacional.\n\nLa primera parte de la jornada permite descubrir Isla Victoria, una isla de gran valor natural e histórico. Allí podrás recorrer senderos de bosque, contemplar el lago desde distintos puntos y disfrutar del paisaje patagónico en un entorno tranquilo y protegido.\n\nLa navegación continúa hacia la península de Quetrihue, donde se encuentra el Bosque de Arrayanes. Este bosque es uno de los pocos del mundo con ejemplares de arrayán de gran tamaño y antigüedad, reconocibles por su corteza color canela y su aspecto singular. Una caminata suave por sus senderos permite apreciar de cerca este paisaje único.\n\nEs una excursión ideal para quienes desean combinar navegación, naturaleza y caminatas accesibles, disfrutando una jornada diferente en el corazón del Parque Nacional Nahuel Huapi.",
     "highlights": [
-      "Puerto Pañuelo",
-      "Península de Quetrihue",
-      "Bosque de Arrayanes",
-      "Isla Victoria",
-      "Puerto Anchorena",
-      "Caminatas Guiadas",
-      "Flora autóctona  e introducida",
-      "Playa del Toro"
+      "Navegarás por el lago Nahuel Huapi desde Puerto Pañuelo.",
+      "Descubrirás los paisajes de Isla Victoria.",
+      "Recorrerás senderos de bosque de baja dificultad.",
+      "Visitarás la península de Quetrihue.",
+      "Caminarás por el Bosque de Arrayanes, uno de los más singulares de la Patagonia.",
+      "Disfrutarás vistas del lago, las montañas y la naturaleza del Parque Nacional."
     ],
     "includes": [
-      "CONSULTE TARIFAS PLAN FAMILIAR",
-      "Navegación y Caminatas con guía durante la excursión"
+      "Navegación por el lago Nahuel Huapi.",
+      "Visita a Isla Victoria.",
+      "Visita al Bosque de Arrayanes.",
+      "Guía durante la excursión.",
+      "Caminatas por senderos habilitados."
     ],
     "notIncludes": [
-      "Traslado al puerto",
-      "Tasa de embarque",
-      "Ingreso al Parque Nacional $ 15000 turistas argentinos - $35000 turistas extranjeros",
-      "Comidas"
+      "Traslado desde o hacia el hotel, salvo que se contrate expresamente.",
+      "Entrada al Parque Nacional Nahuel Huapi.",
+      "Tasa de embarque.",
+      "Comidas y bebidas.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
     ],
-    "additionalInfo": "*Valor del paseo Mayor  $140.000-por persona ( No Incluye Traslado a Puerto)\n*Valor del paseo Menor o Jubilado  $70.000- por persona ( No Incluye Traslado a Puerto)\n*Traslado a Puerto Pañuelo $22.000- por persona\n* CONSULTE TARIFAS PLAN FAMILIAR\n*Llevar ropa y calzado cómodo para caminar \n-El servicio se puede contratar con y sin traslado a puerto pañuelo ida y vuelta.\nPolítica de menores: \nMenores  entre 0 y 3 años no abonan el paseo\nMenores de 4 a 12 años abonan el 50% del precio de la embarcación\nJubilados ARGENTINOS (ÚNICAMENTE  presentando credencial)  abonan el 50% del precio de la embarcación\nPara quienes no tengan movilidad propia aconsejamos reservar el servicio CON TRASLADO ya que el puerto queda 25 km de la ciudad.\nEl recorrido de nuestro traslado se realiza por algunos hoteles específicos. Si Ud. está en un hotel que no se encuentra en el listado, puede buscar el punto que le quede más cercano o bien seleccionar nuestra oficina comercial del centro.\nLos puntos de partida posibles son:\nHOTEL PANAMERICANO (San Martin 536)\nHOTEL NH EDELWEISS  (San Martin 202)\nHOTEL NAHUEL HUAPI (Moreno 252)\nHOTEL TRES REYES (12 de octubre 135)\nMitre 219\nKM 1.5 (Puerta Hotel Patagonia)\nKM 2,5 (Puerta Hoteles DESIGN SUITES-VILLA HUINID)\nKM 6 (Puerta Hotel LA CASCADA)\nKM 7 (Puerta Hoteles NIDO DEL CONDOR –ROCHESTER-LIROLAY)\nKM 7,5 (Puerta Hotel CHARMING)\nKM 11,5 (Puerta Hotel EL CASCO)\nKM 25 (Puerta Hotel LLAO LLAO)",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Presentación en Puerto Pañuelo y embarque.\n• Navegación por el lago Nahuel Huapi con vistas de la península Llao Llao y el paisaje montañoso de la región.\n• Desembarco en Isla Victoria y tiempo para recorrer senderos habilitados, según el circuito operativo del día.\n• Navegación hacia la península de Quetrihue.\n• Desembarco y caminata por los senderos del Bosque de Arrayanes.\n• Tiempo para tomar fotografías y disfrutar del entorno.\n• Navegación de regreso a Puerto Pañuelo.\n• El orden de los desembarcos, senderos y tiempos puede variar por razones climáticas, de navegación u operativas.\n• Isla Victoria y Bosque de Arrayanes\n\nRECOMENDACIONES:\n• Usar calzado cómodo y cerrado, apto para caminar por senderos.\n• Llevar abrigo, campera impermeable y ropa adecuada al clima.\n• Llevar agua, protector solar, anteojos de sol y cámara fotográfica.\n• Llevar dinero o un medio de pago para el ingreso al Parque Nacional, la tasa de embarque y consumos personales.\n• Llegar con anticipación al puerto para realizar el embarque.\n• La excursión depende de las condiciones climáticas y de navegación.\n\nDATOS DE LA EXPERIENCIA:\n• Duración aproximada: día completo.\n• Modalidad: navegación regular o privada.\n• Temporada: todo el año, sujeta a condiciones de navegación.\n• Dificultad: baja.\n• Actividad física: baja, con caminatas suaves por senderos.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.",
     "faq": [
       {
         "question": "Opera todo el año ?",
@@ -1032,71 +658,37 @@
         "answer": "Sí. La tarifa de jubilados es exclusiva para residentes Argentinos. La misma NO aplica para personas que residan en otros países aunque estas sean jubilados y pensionados. Se deberá presentar la credencial de jubilado al momento de embarque."
       }
     ],
-    "recommendedFor": "Parejas, Familias y Grupos",
+    "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/isla-victoria-y-bosque-de-arrayanes.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 10,
-    "shifts": [
-      {
-        "id": "isla-victoria-y-bosque-de-arrayanes-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "isla-victoria-y-bosque-de-arrayanes-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 6
   },
   {
     "id": "kayac-lago-gutierrez",
-    "title": "Kayac Lago Gutierrez",
+    "title": "Kayak en Lago Gutiérrez",
     "category": "Aventura",
-    "season": "Todo el Año",
-    "duration": "Día Completo (8h)",
+    "season": "Verano",
+    "duration": "medio día.",
     "difficulty": "Moderado",
     "image": "/images/excursiones/kayac-lago-gutierrez.webp",
-    "description": "Navegar en Kayak en el lago Gutiérrez, IMPERDIBLE!!!",
-    "fullDetails": "Excursión de medio Salida 13:00 hs Regreso 17:30 hs Nivel de Dificultad: Bajo  Traslado desde la ciudad la costa  Noroeste del lago Gutiérrez. Al llegar los guías darán una charlas de seguridad, donde se explica desde cómo subirse al kayak, hasta que hacer en caso de imprevistos y nos equiparemos con:   Chalecos salvavidas especiales para kayak y los remos  Se embarca, y dependiendo de las condiciones del lago (si hay o no viento) y del grupo, se decide por donde se realiza la navegación.\nEl tiempo total de estadía en el lago es de aproximadamente 2 horas, lo que incluye una parada en alguna de sus playas desoladas y paradisíacas. Descubra una actividad que lo llenará de buenos momentos, con la sensación única de flotar muy pero muy cerca de la superficie, inmerso en un mundo diferente.\nDespués volvemos a embarcar y regresamos.",
+    "description": "Descubrí el Lago Gutiérrez desde el agua en una experiencia de kayak de medio día. Navegá rodeado de bosques y paisajes patagónicos, con instrucción previa, dos horas de actividad y merienda incluida.",
+    "fullDetails": "Viví una tarde diferente en el Lago Gutiérrez, uno de los espejos de agua más atractivos de Bariloche. La experiencia comienza con el traslado hacia el punto de inicio, donde recibirás una instrucción previa antes de salir a navegar.\n\nDurante dos horas, recorrerás el lago en kayak y podrás disfrutar del entorno desde una perspectiva única: el agua, los bosques de la costa y las vistas que ofrece este rincón de la Patagonia. No se trata solo de una actividad deportiva, sino de una forma tranquila y cercana de conectar con el paisaje.\n\nAl finalizar la navegación, disfrutarás de una merienda antes del regreso a Bariloche. Es una propuesta ideal para quienes buscan combinar actividad al aire libre, naturaleza y un momento de desconexión durante la tarde.",
     "highlights": [
-      "Traslado a  Lago Gutiérrez",
-      "Charla Técnica",
-      "Navegación en Kayac",
-      "Avistaje de Flora y Fauna"
+      "Navegarás en kayak por el Lago Gutiérrez.",
+      "Recibirás una instrucción previa antes de comenzar.",
+      "Disfrutarás dos horas de actividad en el agua.",
+      "Compartirás una merienda al finalizar la experiencia."
     ],
     "includes": [
-      "Traslados",
-      "Equipamiento",
-      "Guías Bilingues",
-      "Navegación en Kayac",
-      "Seguro"
+      "Traslado ida y vuelta.",
+      "Instrucción previa a la actividad.",
+      "Dos horas de navegación en kayak.",
+      "Merienda."
     ],
     "notIncludes": [
-      "Fotografías"
+      "Servicios no detallados expresamente como incluidos.",
+      "Gastos personales."
     ],
-    "additionalInfo": "* Valor $80.000 por pax  con traslado\n*Ser mayor de 04 años\n*Saber Nadar\n*Estado Físico acorde a la actividad\n*Estar dispuesto a cumplir estrictamente las explicaciones y órdenes de los guías durante la navegación\n*Llevar Documentos\n*Llevar Protector Solar",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Traslado hacia Lago Gutiérrez.\n• Instrucción previa.\n• Navegación en kayak.\n• Merienda.\n• Regreso a Bariloche.\n• Kayak en Lago Gutiérrez\n\nRECOMENDACIONES:\n• Llevar ropa cómoda y adecuada para actividades al aire libre.\n• Se recomienda llevar abrigo liviano, protección solar y una muda de ropa.\n• Seguir siempre las indicaciones del equipo a cargo.\n• La actividad puede modificarse o reprogramarse según las condiciones climáticas y del lago.\n\nDATOS DE LA EXPERIENCIA:\n• Modalidad: kayak en lago.\n• Duración: medio día.\n• Horario estimado: de 13 a 17 h.\n• Tiempo de navegación: 2 horas.\n• Ubicación: Lago Gutiérrez, Bariloche.\n• Temporada: primavera, verano y otoño, sujeta a condiciones climáticas.",
     "faq": [
       {
         "question": "Que debo llevar a la excursión?",
@@ -1125,68 +717,44 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 4,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/kayac-lago-gutierrez.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 5,
-    "shifts": [
-      {
-        "id": "kayac-lago-gutierrez-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "kayac-lago-gutierrez-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 4
   },
   {
     "id": "motos-de-nieve",
-    "title": "Motos de Nieve",
+    "title": "La Cueva — After Ski y Cena",
     "category": "Invierno",
     "season": "Invierno",
     "duration": "Día Completo (8h)",
     "difficulty": "Fácil",
     "image": "/images/excursiones/motos-de-nieve.webp",
-    "description": "Travesía en Motos de Nieve",
-    "fullDetails": "La travesía en motos de nieve se lleva a cabo en la ladera\ndel Cerro Catedral, en un recorrido de 7 kms con paradas en miradores naturales.\n\nEs una actividad ideal para quienes quieren realizar la\nexperiencia y combinarlo con otras actividades dentro del centro de esquí.\n\nLa excursión atraviesa arroyos y bosques de lengas, hasta\nlos 1400 metros de altura, con paradas en miradores naturales, recorriendo un\nárea del cerro que sólo puede ser visitada con estos vehículos todo-terreno,\nconociendo un Catedral diferente.",
+    "description": "Disfrutá una experiencia invernal en Cerro Catedral que combina una travesía guiada en moto de nieve y una propuesta gastronómica en La Cueva. Elegí entre el ambiente relajado del After Ski al atardecer o una cena nocturna de varios pasos en un refugio rodeado de nieve.",
+    "fullDetails": "La Cueva propone dos maneras de disfrutar una experiencia diferente en Cerro Catedral: After Ski o Nocturno & Cena. Ambas combinan una travesía guiada en moto de nieve por un sector exclusivo del centro de ski con una propuesta gastronómica en un ambiente cálido y acogedor.\n\nLa experiencia comienza con el traslado hacia Cerro Catedral y la recepción en La Cueva. Luego de recibir las indicaciones de seguridad y conducción, se inicia el recorrido en moto de nieve por caminos nevados, bosques y paisajes de altura. Cada moto es compartida por dos pasajeros, siempre acompañados por guías especializados.\n\nEn la modalidad After Ski, la travesía se combina con una propuesta gastronómica para disfrutar el atardecer y el ambiente de la cordillera. En la opción Nocturno & Cena, el recorrido se realiza de noche y finaliza con una cena de varios pasos, inspirada en sabores regionales.\n\nEs una experiencia ideal para quienes quieren combinar nieve, aventura y gastronomía sin necesidad de practicar ski o snowboard.",
     "highlights": [
-      "Cerro Catedral",
-      "Centro de esquí",
-      "Bosque de lengas",
-      "Motos de nieve",
-      "Cuatriciclos"
+      "Te trasladarás desde Bariloche hacia Cerro Catedral.",
+      "Recibirás indicaciones de seguridad y conducción.",
+      "Realizarás una travesía guiada en moto de nieve.",
+      "Recorrerás bosques y senderos nevados dentro de un sector exclusivo del centro de ski.",
+      "Compartirás una moto de nieve con otro pasajero.",
+      "Disfrutarás una propuesta gastronómica en La Cueva.",
+      "Podrás elegir entre la modalidad After Ski o Nocturno & Cena."
     ],
     "includes": [
-      "Guías",
-      "Ascenso en Cuatriciclos",
-      "Ascenso en Motos de Nieve"
+      "Traslado ida y vuelta entre Bariloche y Cerro Catedral.",
+      "Travesía guiada en moto de nieve.",
+      "Una moto de nieve doble cada dos pasajeros.",
+      "Instrucciones de seguridad y conducción.",
+      "Guías especializados durante la actividad.",
+      "Propuesta gastronómica según la modalidad elegida.",
+      "Cena de varios pasos en la modalidad Nocturno & Cena."
     ],
     "notIncludes": [
-      "Traslado ida y vuelta"
+      "Indumentaria de nieve, salvo que se indique expresamente al momento de reservar.",
+      "Bebidas no especificadas dentro de la propuesta gastronómica.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
     ],
-    "additionalInfo": "*Las excursiones se realizan en cuatriciclos y/o motos de nieve según las condiciones de nieve.\n*Recomendamos concurrir con ropa y calzado impermeable adecuado para “la montaña\"\n*HORARIOS\n*10:00 hs/ 11:15 hs/ 12:30 hs/ 13:15 hs/ 15:00 hs\n*Valor por moto u$d ( Dolares americanos)  (1 o 2 personas)",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Traslado desde Bariloche hacia Cerro Catedral.\n• Recepción en La Cueva e indicaciones de seguridad.\n• Asignación de motos e inicio de la travesía guiada.\n• Recorrido por caminos nevados y bosques del centro de ski.\n• Regreso a La Cueva.\n• Propuesta gastronómica según la modalidad elegida: After Ski o Nocturno & Cena.\n• Traslado de regreso a Bariloche.\n• El orden de las actividades puede variar por condiciones climáticas, de nieve u operativas.\n• La Cueva After Ski y Cena\n\nTURNOS Y MODALIDADES:\n• After Ski\n• Una travesía guiada en moto de nieve seguida de una propuesta gastronómica en el living de La Cueva. Ideal para disfrutar de la tarde, el entorno nevado y los últimos colores del día en Cerro Catedral.\n• Nocturno & Cena\n• Una travesía guiada en moto de nieve por paisajes nocturnos de Cerro Catedral, seguida de una cena de varios pasos en La Cueva. Una propuesta pensada para vivir la nieve desde una perspectiva diferente, en un ambiente íntimo y cálido.\n\nRECOMENDACIONES:\n• Usar ropa de abrigo, campera impermeable, guantes, gorro y calzado apto para nieve.\n• Informar con anticipación alergias, restricciones alimentarias o dietas especiales.\n• Seguir en todo momento las indicaciones de los guías.\n• Consultar previamente qué indumentaria está incluida o disponible.\n• La actividad está sujeta a las condiciones de nieve, clima y operación del centro de ski.\n• La conducción de la moto de nieve se realiza bajo las condiciones y requisitos establecidos por el prestador.\n\nDATOS DE LA EXPERIENCIA:\n• Temporada: invierno, sujeta a condiciones de nieve.\n• Modalidades: After Ski y Nocturno & Cena.\n• Ubicación: Base de Cerro Catedral, Bariloche.\n• Actividad física: baja.\n• Dificultad: baja; no se requiere experiencia previa.\n• Vehículo: moto de nieve doble, compartida por dos pasajeros.\n• Público recomendado: parejas, grupos de amigos, familias y viajeros que buscan una experiencia invernal diferente.",
     "faq": [
       {
         "question": "¿Dónde se realiza la actividad?",
@@ -1201,43 +769,9 @@
         "answer": "A partir de los 6 años"
       }
     ],
-    "recommendedFor": "Parejas, Familias y Grupos",
+    "recommendedFor": "parejas, grupos de amigos, familias y viajeros que buscan una experiencia invernal diferente.",
     "departureTime": "10:00 hs",
-    "priceNum": 22,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/motos-de-nieve.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 30,
-    "shifts": [
-      {
-        "id": "motos-de-nieve-shift-1",
-        "name": "Turno Mañana",
-        "time": "10:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "motos-de-nieve-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 22
   },
   {
     "id": "navegacion-en-brazo-tristeza",
@@ -1292,70 +826,39 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 7,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/navegacion-en-brazo-tristeza.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 10,
-    "shifts": [
-      {
-        "id": "navegacion-en-brazo-tristeza-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "navegacion-en-brazo-tristeza-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 7
   },
   {
     "id": "piedras-blancas",
-    "title": "Piedras Blancas",
+    "title": "Piedras Blancas — Trineos y Magic Carpet",
     "category": "Invierno",
     "season": "Invierno",
     "duration": "Día Completo (8h)",
     "difficulty": "Fácil",
     "image": "/images/excursiones/piedras-blancas.webp",
-    "description": "Parque de Nieve",
-    "fullDetails": "Piedras Blancas es un importante centro de atracción turística con características propias y exclusivas, pensado para el turista que toma contacto por primera vez con la nieve. Se encuentra ubicado casi en la cima del Cerro Otto, a 1400 msnm.Es además un lugar con historia. Porque fue aquí que comenzó a desarrollarse el esquí en nuestro país, con la primera escuela dirigida por el mítico Otto Meiling.\nTomando las aerosillas se accede a la cumbre del cerro y donde se puede  apreciar y fotografiar paisajes únicos. Una vez allí podrás descender de la misma forma o deslizándote en trineos a través de curvas y descensos muy divertidos.Piedras Blancas cuenta con 3000 metros de pistas exclusivas para trineos, algo único en Sudamérica, y medios de elevación para 1200 pax/hora.",
+    "description": "Disfrutá una jornada de nieve en Piedras Blancas, uno de los complejos invernales más tradicionales de Bariloche. El ingreso incluye ascensos para las pistas de trineo y para Magic Carpet, una propuesta ideal para compartir en familia y vivir la nieve de forma divertida.",
+    "fullDetails": "Piedras Blancas es una experiencia de nieve pensada para quienes quieren disfrutar del invierno en Bariloche de una manera entretenida y accesible. El complejo cuenta con pistas especialmente preparadas para descender en trineo y sectores con Magic Carpet, un sistema de ascenso que permite volver cómodamente a las áreas de actividad.\n\nCon el ingreso tendrás acceso al complejo, cuatro ascensos para las pistas de trineo y dos ascensos en Magic Carpet. Es una propuesta ideal para familias, parejas y grupos que desean pasar tiempo en la nieve, jugar, deslizarse y disfrutar del entorno invernal sin necesidad de practicar ski o snowboard.\n\nEl traslado desde Bariloche puede contratarse como servicio adicional, con diferentes franjas horarias de ida y vuelta para adaptarse a la duración de tu visita.",
     "highlights": [
-      "Complejo Piedras Blancas",
-      "Medios de elevacion",
-      "Pistas de trineos",
-      "Puntos Gastronómicos",
-      "Charlas de Seguridad",
-      "Guardarropa"
+      "Ingresarás al complejo invernal Piedras Blancas.",
+      "Disfrutarás cuatro ascensos para las pistas de trineo.",
+      "Contarás con dos ascensos en Magic Carpet.",
+      "Vivirás una actividad de nieve ideal para compartir en familia o con amigos.",
+      "Podrás sumar el traslado ida y vuelta desde Bariloche como adicional."
     ],
     "includes": [
-      "Ingreso a complejo",
-      "Trineos",
-      "Medios de elevacion ( 04 ascensos Aerosilla - 02 Magic Carpet)"
+      "Entrada al complejo Piedras Blancas.",
+      "Cuatro ascensos para trineo.",
+      "Dos ascensos en Magic Carpet."
     ],
     "notIncludes": [
-      "Comidas",
-      "Ropa de nieve"
+      "Traslado desde o hacia el complejo, salvo que se contrate como adicional.",
+      "Comidas y bebidas.",
+      "Indumentaria de nieve.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
     ],
-    "additionalInfo": "*Ingreso al complejo\n*Trineos $ .-\n*Pista Infantil \n*Traslado $ \n*Menores de 0 a 3 años no abonan traslado,sin derecho a butaca",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Piedras Blancas Trineos y Magic Carpet\n\nRECOMENDACIONES:\n• Usar ropa de abrigo, campera impermeable, guantes, gorro y calzado apto para nieve.\n• Consultar previamente la disponibilidad de indumentaria y equipamiento en el complejo.\n• Llegar con anticipación al horario de traslado o ingreso seleccionado.\n• Seguir siempre las indicaciones del personal del complejo.\n• La actividad está sujeta a condiciones de nieve, clima y operación.\n\nDATOS DE LA EXPERIENCIA:\n• Temporada: invierno, sujeta a condiciones de nieve.\n• Ubicación: Piedras Blancas, Bariloche.\n• Actividad física: baja.\n• Dificultad: baja.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.\n• Traslado: adicional opcional.",
     "faq": [
       {
         "question": "¿Incluye almuerzo?",
@@ -1370,79 +873,46 @@
         "answer": "Si, ropa de nieve, abrigada e impermeable"
       }
     ],
-    "recommendedFor": "Parejas, Familias y Grupos",
+    "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 9,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/piedras-blancas.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 10,
-    "shifts": [
-      {
-        "id": "piedras-blancas-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "piedras-blancas-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 9
   },
   {
     "id": "puerto-blest-y-cascada-de-los-cantaros",
-    "title": "Puerto Blest y Cascada de los Cantaros",
+    "title": "Puerto Blest y Cascada de los Cántaros",
     "category": "Navegación",
     "season": "Todo el Año",
-    "duration": "Día Completo (8h)",
-    "difficulty": "Fácil",
+    "duration": "día completo.",
+    "difficulty": "Moderado",
     "image": "/images/excursiones/puerto-blest-y-cascada-de-los-cantaros.webp",
-    "description": "Navegar  el Lago Nahuel Huapi  hasta el corazón de la cordillera de los andes, una excursión única !!",
-    "fullDetails": "Este paseo se puede iniciar  tanto desde el Hotel ó  desde Puerto Pañuelo lugar enclavado en la península de Llao-Llao a 25 Kmts del centro de la ciudadSi comenzamos desde el hotel , es por medio de un traslado terrestre  que nos lleva hasta el Puerto. Luego del embarque  comienza la navegación  recorriendo  el angosto y extenso brazo Blest del lago Nahuel Huapi donde se observa  un paisaje espectacular rodeado de bosques  tupidos,  montañas imponentes y las aguas transparentes de glaciares milenarios. La entrada al brazo Blest está custodiada por la Isla Centinela, lugar donde descansan los restos del creador de Los Parques Nacionales, Francisco Pascacio Moreno y los cerros Capilla y Millaqueo. Minutos  después al pasar por las Islas Mellizas se encuentra la máxima profundidad del lago de 464 mts. , màs adelante la Playa de las Arañas y la Cascada Blanca\nDespués de una hora de navegación llegamos a Puerto  Cántaros ubicado en la Bahía Blest en pleno corazón de la cordillera inmerso en plena Selva Valdiviana, uno de los lugares más lluviosos del país (3000 mm de precipitaciones anuales) que  ofrece una selva siempre verde con árboles de gran tamaño, como el coihue y el alerce, alternando con un piso arbustivo  donde se enlazan lianas y enredaderas, todo cubierto permanentemente por una atmósfera húmeda, que permite el desarrollo de hierbas, musgos y hongos. En Puerto Blest se puede visitar la hostería, de cálido estilo y un interesante centro de interpretación de esta zona, situado a pocos metros de la anterior. A pocos metros se encuentra el Río Frías que desemboca al lago llevando un color lechoso que tiñe de un verde esmeralda este sector. Existe la posibilidad de realizar, desde aquí,  una segunda parte de este  maravilloso paseo que consiste en recorrer 3 kmts. por el  único camino vehicular que nos lleva a  Puerto Alegre,  a orillas del espectacular Lago Frías,  este lago ,de un color verde indescriptible, se puede navegar  durante  20 minutos para llegar a Puerto Frías donde nace el camino internacional  PEREZ ROSALES que comunica con el  vecino país Chileno. Esta opción de navegar el Lago Frías, tiene costo adicional, pero también existe la posibilidad de conocer el Lago realizando una caminata bordeando el rio Frias hasta las orillas de este hermoso  lago. Al regresar a Puerto Blest, se realiza un alto para almorzar (la Hosteria cuenta con servicios de restaurante). Luego el paseo continua navegando hasta la Cascada de Los Cántaros, que por medio de una escalinata nos lleva a conocer los maravillosos saltos y llegar a su parte más alta donde se encuentra la Laguna Cantaros que da origen a la cascada. Luego de esta última etapa, se regresa a la embarcación para regresar a Puerto Pañuelo.",
+    "description": "Navegá por el lago Nahuel Huapi hasta Puerto Blest, uno de los rincones más verdes y espectaculares del Parque Nacional. Descubrí la Cascada de los Cántaros entre senderos de bosque y sumá, de manera opcional, la navegación por las aguas color esmeralda del Lago Frías.",
+    "fullDetails": "Puerto Blest y Cascada de los Cántaros es una excursión lacustre de día completo que invita a descubrir uno de los sectores más húmedos, verdes y sorprendentes del Parque Nacional Nahuel Huapi. La experiencia comienza con una navegación desde Puerto Pañuelo por el brazo Blest del lago Nahuel Huapi, rodeado de montañas, bosques nativos y paisajes patagónicos.\n\nEl primer desembarco se realiza en Puerto Blest, un lugar de gran belleza natural ubicado al pie de la Cordillera de los Andes. Allí tendrás tiempo para recorrer el área, disfrutar del entorno y apreciar la vegetación característica de esta región.\n\nLa excursión continúa hacia la Cascada de los Cántaros, donde un sendero de bosque conduce junto al arroyo que alimenta la cascada. Durante la caminata podrás observar distintos saltos de agua, vegetación nativa y vistas del lago, hasta llegar al sector principal de la cascada. El recorrido incluye tramos con escaleras y desnivel moderado.\n\nDe manera opcional, podrás sumar una navegación por el Lago Frías, reconocido por el color turquesa de sus aguas, originado en los sedimentos de los glaciares del Cerro Tronador. Una experiencia ideal para combinar navegación, bosque, cascadas y paisajes de montaña en una jornada inolvidable.",
     "highlights": [
-      "Puerto Pañuelo",
-      "Puerto Blest",
-      "Cascada de los Cantaros",
-      "Lago Cantaros",
-      "Rio Frias",
-      "Lago Frias",
-      "Selva Valdiviana"
+      "Navegarás por el brazo Blest del lago Nahuel Huapi.",
+      "Desembarcarás en Puerto Blest, al pie de la Cordillera de los Andes.",
+      "Recorrerás senderos rodeados de vegetación nativa.",
+      "Visitarás la Cascada de los Cántaros y sus distintos saltos de agua.",
+      "Disfrutarás vistas de lagos, bosques y montañas.",
+      "Podrás sumar opcionalmente la navegación por el Lago Frías."
     ],
     "includes": [
-      "Valor del paseo Mayor  $140.000- por persona ( No Incluye Traslado a Puerto)",
-      "Valor del paseo Menor o Jubilado  $70.000- por persona ( No Incluye Traslado a Puerto)",
-      "Valor de Lago Frias Mayor  $54.000.- por persona",
-      "Valor  de Lago Frias Menor o Jubilado  $27.000- por persona",
-      "Traslado a Puerto Pañuelo $22.000- por persona",
-      "Navegación y Caminatas con guía durante la excursión"
+      "Navegación por el lago Nahuel Huapi hacia Puerto Blest.",
+      "Visita a Puerto Blest.",
+      "Visita a la Cascada de los Cántaros.",
+      "Guía durante la excursión.",
+      "Caminata por senderos habilitados."
     ],
     "notIncludes": [
-      "Traslado al puerto",
-      "Tasa de embarque",
-      "Ingreso al Parque Nacional $ 15000 turistas argentinos - $35000 turistas extranjeros",
-      "Navegaciòn por Lago Frias",
-      "Comidas"
+      "Traslado desde o hacia el hotel, salvo que se contrate expresamente.",
+      "Entrada al Parque Nacional Nahuel Huapi.",
+      "Tasa de embarque.",
+      "Navegación por el Lago Frías.",
+      "Comidas y bebidas.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
     ],
-    "additionalInfo": "*Valor del paseo Mayor  $140.000- por persona ( No Incluye Traslado a Puerto)\n*Valor del paseo Menor o Jubilado  $70.000- por persona ( No Incluye Traslado a Puerto)\n*Valor de Lago Frias Mayor  $54.000- por persona\n*Valor  de Lago Frias Menor o Jubilado  $27.000- por persona\n*Traslado a Puerto Pañuelo $22.000- por persona\n* Llevar ropa y calzado cómodo para caminar \nEl servicio se puede contratar con y sin traslado a puerto pañuelo ida y vuelta.\nPolítica de menores: \nMenores  entre 0 y 3 años no abonan el paseo\nMenores de 4 a 12 años abonan el 50% del precio de la embarcación\nJubilados ARGENTINOS (ÚNICAMENTE  presentando credencial)  abonan el 50% del precio de la embarcación\nPara quienes no tengan movilidad propia aconsejamos reservar el servicio CON TRASLADO ya que el puerto queda 25 km de la ciudad.\nEl recorrido de nuestro traslado se realiza por algunos hoteles específicos. Si Ud. está en un hotel que no se encuentra en el listado, puede buscar el punto que le quede más cercano o bien seleccionar nuestra oficina comercial del centro.\n\nLos puntos de partida posibles son:\nHOTEL SHERATON (San Martin 536)\nHOTEL NH EDELWEISS (San Martin 202)\nHOTEL TRES REYES (12 de Octubre 135)\nMitre 219\nKM 1 (Puerta Hotel Patagonia)\nKM 2,5 (Puerta Hoteles DESIGN SUITES-VILLA HUINID)\nKM 6 (Puerta Hotel LA CASCADA)\nKM 7 (Puerta Hoteles NIDO DEL CONDOR –ROCHESTER-LIROLAY)\nKM 7,5 (Puerta Hotel CHARMING)\nKM 11,5 (Puerta Hotel EL CASCO)\nKM 25 (Puerta Hotel LLAO LLAO)",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Presentación en Puerto Pañuelo y embarque.\n• Navegación por el lago Nahuel Huapi hacia Puerto Blest.\n• Desembarco en Puerto Blest y tiempo para recorrer el área.\n• Navegación o traslado hacia el sector de la Cascada de los Cántaros, según el circuito operativo.\n• Caminata por el sendero de la cascada, con tiempo para disfrutar del bosque, los saltos de agua y las vistas.\n• Navegación opcional por el Lago Frías, sujeto a disponibilidad y condiciones operativas.\n• Navegación de regreso a Puerto Pañuelo.\n• El orden de los desembarcos, senderos y tiempos puede variar por razones climáticas, de navegación u operativas.\n• Puerto Blest y Cascada de los Cántaros\n\nRECOMENDACIONES:\n• Usar calzado cómodo, cerrado y con buena suela para caminar por senderos y escaleras.\n• Llevar abrigo, campera impermeable y ropa adecuada al clima.\n• Llevar agua, protector solar, anteojos de sol y cámara fotográfica.\n• Llevar dinero o un medio de pago para la entrada al Parque Nacional, la tasa de embarque, la navegación opcional por Lago Frías y consumos personales.\n• La caminata a la Cascada de los Cántaros incluye escaleras y tramos de desnivel moderado.\n• Llegar con anticipación al puerto para realizar el embarque.\n• La excursión depende de las condiciones climáticas y de navegación.\n\nDATOS DE LA EXPERIENCIA:\n• Duración aproximada: día completo.\n• Modalidad: navegación regular o privada.\n• Temporada: todo el año, sujeta a condiciones de navegación.\n• Dificultad: baja a moderada.\n• Actividad física: moderada en el recorrido a la Cascada de los Cántaros.\n• Público recomendado: personas con movilidad suficiente para caminar por senderos y subir escaleras.\n• Navegación por Lago Frías: opcional y abonada por separado.",
     "faq": [
       {
         "question": "Opera todo el año ?",
@@ -1497,43 +967,9 @@
         "answer": "Sí. La tarifa de jubilados es exclusiva para residentes Argentinos. La misma NO aplica para personas que residan en otros países aunque estas sean jubilados y pensionados. Se deberá presentar la credencial de jubilado al momento de embarque."
       }
     ],
-    "recommendedFor": "Parejas, Familias y Grupos",
+    "recommendedFor": "personas con movilidad suficiente para caminar por senderos y subir escaleras.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 7,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/puerto-blest-y-cascada-de-los-cantaros.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 10,
-    "shifts": [
-      {
-        "id": "puerto-blest-y-cascada-de-los-cantaros-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "puerto-blest-y-cascada-de-los-cantaros-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 7
   },
   {
     "id": "rafting-rio-manso-al-limite",
@@ -1594,41 +1030,7 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 14,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/rafting-rio-manso-al-limite.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 20,
-    "shifts": [
-      {
-        "id": "rafting-rio-manso-al-limite-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "rafting-rio-manso-al-limite-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 14
   },
   {
     "id": "rafting-rio-manso-desde-villegas",
@@ -1681,70 +1083,38 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 12,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/rafting-rio-manso-desde-villegas.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 15,
-    "shifts": [
-      {
-        "id": "rafting-rio-manso-desde-villegas-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "rafting-rio-manso-desde-villegas-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 12
   },
   {
     "id": "ski-nordico",
-    "title": "Ski Nordico",
+    "title": "Día de Ski Nórdico en Cerro Otto",
     "category": "Invierno",
     "season": "Invierno",
     "duration": "Día Completo (8h)",
     "difficulty": "Fácil",
     "image": "/images/excursiones/ski-nordico.webp",
-    "description": "Ski Nórdico o de Travesía",
-    "fullDetails": "El centro de Ski Nórdico, se encuentra ubicado en el Cerro\nOtto, a sólo 6km del centro de la ciudad. A 1280 mts. sobre el nivel del mar,\nen un entorno rodeado de bosques de Lengas y de vistas únicas, acompañadas de\nla nieve hacen que los paisajes sean únicos y soñados.\n\nEn el Km. 1 de la Avenida de los Pioneros se encuentra el acceso al Cerro Otto.\nUna vez que se ingresa a dicho acceso se deberá recorrer 5 km hasta el centro\ninvernal “Piedras Blancas”.\nPasando la playa de estacionamiento de este Centro se continuará 1 km más hasta\nllegar al Centro de Ski Nórdico.\n\nEl Ski nórdico es la conjunción perfecta entre el deporte y\nla naturaleza, una modalidad para practicar y disfrutar en familia. Esta\nmodalidad de ski te permite desplazarte tanto en subidas como en bajadas. Esto\nes gracias a la forma del ski, que posee en la base un tipo de escama.  De esta manera, el esquiador podrá incursionar\nen pistas trazadas por el bosque, disfrutando de toda la naturaleza y del paisaje\nque lo rodea. La actividad consta de una clase grupal, con una duración\naproximada de una hora y media, son muy participativas ideales para realizar en\nfamilia o amigos. El instructor, luego de enseñarles los primeros pasos, los\nacompaña por las pistas en un recorrido por el bosque hasta miradores con\nexcelentes vistas.\n\nPor otro lado, el centro cuenta con paseos en cuatriciclos\ncon orugas, una actividad única en Latinoamérica. Los cuadriciclos que utilizan\nson 4×4 “Can-Am BRP” biplaza homologados para 2 personas, equipados con orugas\nApache para nieve.  La actividad consiste\nen un paseo guiado por el bosque, de unos 40 min. aproximadamente, parando en\nmiradores donde se pueden apreciar maravillosos paisajes. Es sin duda, una\nactividad para disfrutar en familia en un divertido paseo.",
+    "description": "Descubrí el esquí de fondo en un entorno de bosque nevado, a pocos kilómetros del centro de Bariloche. Recibí una clase grupal, el equipo completo y acceso a las pistas para disfrutar una jornada diferente sobre la nieve.",
+    "fullDetails": "Viví una experiencia de invierno distinta en el Centro de Ski Nórdico, ubicado en Cerro Otto, a solo 6 km del centro de Bariloche. Esta actividad propone iniciarse o disfrutar del esquí de fondo, una modalidad que permite desplazarse tanto en terrenos llanos como en suaves subidas y bajadas.\n\nAl llegar, recibirás el equipo completo —esquíes, botas y bastones— y participarás de una clase grupal con instructor. Durante aproximadamente 1 hora y 15 minutos aprenderás las técnicas iniciales, el manejo del equipo y las nociones necesarias para desplazarte con seguridad sobre la nieve.\n\nLuego de la clase, podrás continuar recorriendo las pistas preparadas hasta las 17 h. El circuito atraviesa un bosque de lengas y ofrece espacios para conectar con el paisaje invernal de Cerro Otto. Es una propuesta ideal para realizar en familia, con amigos o en pareja, tanto para quienes se acercan por primera vez a esta modalidad como para quienes desean seguir practicándola.",
     "highlights": [
-      "Cerro Otto",
-      "Centro de Ski Nórdico.",
-      "Bosque  de Lengas.",
-      "Vistas panorámicas del lago Nahuel Huapi",
-      "Escuela de Ski Nordico",
-      "Cuatriciclos con orugas"
+      "Aprenderás los fundamentos del esquí de fondo con un instructor.",
+      "Recibirás el equipo completo para realizar la actividad.",
+      "Recorrerás pistas trazadas entre bosques nevados.",
+      "Continuarás disfrutando de las pistas luego de la clase, hasta las 17 h."
     ],
     "includes": [
-      "Equipo Ski Nordico",
-      "Cuatriciclos",
-      "Clases grupales"
+      "Equipo de ski nórdico: esquíes, botas y bastones.",
+      "Clase grupal con instructor de aproximadamente 1 hora y 15 minutos.",
+      "Derecho de uso de pistas hasta las 17 h."
     ],
     "notIncludes": [
-      "Ropa de nieve",
-      "Comidas"
+      "Traslado al Centro de Ski Nórdico.",
+      "Ropa de nieve.",
+      "Lockers.",
+      "Servicio de fotografía.",
+      "Comidas y bebidas.",
+      "Gastos personales."
     ],
-    "additionalInfo": "*Dia de Ski Nórdico-por persona-u$D.- ( Dolares americanos) \n*Paseo en moto de nieve -2 personas-u$D.- ( Dolares americanos) \n*Ski +Moto de nieve - promo dos personas-u$D .- ( Dolares americanos ) \n*Traslado Ida y vuelta- por -persona-u$D.- ( Dolares americanos)",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Llegada al Centro de Ski Nórdico en Cerro Otto.\n• Entrega y ajuste de esquíes, botas y bastones.\n• Clase grupal de ski nórdico con instructor.\n• Recorrido acompañado por las pistas del bosque.\n• Tiempo libre para continuar utilizando las pistas hasta las 17 h.\n• Día de Ski Nórdico en Cerro Otto\n\nRECOMENDACIONES:\n• Actividad apta para mayores de 5 años.\n• No apta para mujeres embarazadas.\n• Llevar ropa adecuada para nieve, campera y pantalón impermeables, guantes, antiparras o lentes de sol y protector solar.\n• No se recomienda realizar la actividad con bolsos o mochilas pesadas, ya que pueden afectar la estabilidad.\n• El traslado puede contratarse de forma opcional, sujeto a disponibilidad.\n\nDATOS DE LA EXPERIENCIA:\n• Modalidad: ski nórdico o esquí de fondo.\n• Nivel: apto para principiantes y personas con experiencia previa.\n• Clase: grupal, no individual, de hasta 14 participantes.\n• Duración de la clase: aproximadamente 1 hora y 15 minutos.\n• Ubicación: Cerro Otto, a 6 km del centro de Bariloche.\n• Temporada: invierno, sujeta a condiciones de nieve.",
     "faq": [
       {
         "question": "¿QUÉ INCLUYE?",
@@ -1773,41 +1143,7 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 16,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/ski-nordico.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 20,
-    "shifts": [
-      {
-        "id": "ski-nordico-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "ski-nordico-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 16
   },
   {
     "id": "teleferico-cerro-otto",
@@ -1859,66 +1195,34 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "10:00 hs",
-    "priceNum": 2,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/teleferico-cerro-otto.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 5,
-    "shifts": [
-      {
-        "id": "teleferico-cerro-otto-shift-1",
-        "name": "Turno Mañana",
-        "time": "10:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "teleferico-cerro-otto-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 2
   },
   {
     "id": "velero-el-orgulloso",
-    "title": "Velero \"El Orgulloso\"",
+    "title": "Navegación en Velero por el Lago Nahuel Huapi (El Orgulloso)",
     "category": "Navegación",
     "season": "Todo el Año",
-    "duration": "Día Completo (8h)",
+    "duration": "2 horas.",
     "difficulty": "Fácil",
     "image": "/images/excursiones/velero-el-orgulloso.webp",
-    "description": "Navegación en velero por el lago Nahuel Huapi",
-    "fullDetails": "Excursión de medio día Salidas:  10:00 hs - 13:30 hs – 17:00 hs  Nivel de Dificultad: Bajo El Lago Nahuel Huapi, un verdadero paraíso náutico en la Patagonia Argentina. Te invitamos a disfrutarlo en su estado más puro... Iniciamos nuestra experiencia a bordo del Velero El Orgulloso desde el Puerto Municipal ( av. Bustillo kmt 13), navegaremos por el Brazo Campanario del lago Nahuel Huapi, bordeando la península San Pedro hasta llegar a Puerto Bueno, una hermosa y solitaria bahía.  Teniendo en cuenta las condiciones climáticas, el viaje continúa a “lago abierto” dirigiéndonos hacia la Isla de los Víveres y Puerto Venado en la Costa de Neuquén, observándose la Bahía Serena, la Isla Huemul y de las Gallinas. Descubriremos playas y bahías solitarias que muy pocos conocen, realizando paradas para compartir infusiones y disfrutar de la naturalezaSALIDAS EXCLUSIVAS:   Temática “Sorprende a quien quieras” Festejamos navegando cumpleaños, Aniversarios, tardes románticas con servicio de catering a bordo.",
+    "description": "Navegá por las aguas del Lago Nahuel Huapi en velero y descubrí Bariloche desde una perspectiva diferente. Una experiencia tranquila que combina paisajes, navegación y una merienda a bordo.",
+    "fullDetails": "Viví una experiencia de navegación a vela desde Puerto Petunia, sobre las aguas del Lago Nahuel Huapi. La travesía recorre el Brazo Campanario, bordeando la península de San Pedro y disfrutando de vistas abiertas hacia la Cordillera de los Andes.\n\nDurante dos horas, el velero navega por sectores de lago abierto y bahías tranquilas, siempre de acuerdo con las condiciones climáticas. El recorrido permite apreciar el entorno natural de la costa de Bariloche, los bosques que rodean el lago y distintos puntos panorámicos de la zona.\n\nEn una pausa de la navegación, disfrutarás de una merienda a bordo. Es una propuesta ideal para quienes buscan conocer el Nahuel Huapi de una forma diferente, relajada y cercana a la naturaleza.",
     "highlights": [
-      "Salida desde Puerto Municipal (kmt 13,500 Av. Bustillo)",
-      "Charla Técnica",
-      "Navegación de 03 horas"
+      "Navegarás a vela por el Lago Nahuel Huapi.",
+      "Recorrerás el Brazo Campanario.",
+      "Disfrutarás vistas de la península de San Pedro y el entorno andino.",
+      "Harás una pausa para compartir una merienda a bordo."
     ],
     "includes": [
-      "Valor $90.000.- por persona",
-      "Navegación",
-      "Infusiones"
+      "Navegación en velero por el Lago Nahuel Huapi.",
+      "Tripulación profesional.",
+      "Merienda a bordo."
     ],
     "notIncludes": [
-      "Traslado a Puerto Petunia"
+      "Traslado hasta Puerto Petunia.",
+      "Gastos personales."
     ],
-    "additionalInfo": "*Valor $90.000.- por persona\n*Ropa y Calzado Cómodo\n*Llevar: Traje de baño, Protector Solar, Campera ò Rompeviento",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Encuentro en Puerto Petunia.\n• Embarque.\n• Navegación por Brazo Campanario.\n• Merienda a bordo.\n• Regreso a Puerto Petunia.\n• Navegación en Velero por el Lago Nahuel Huapi El Orgulloso\n\nRECOMENDACIONES:\n• Llevar ropa cómoda y abrigo o cortaviento.\n• Se recomienda protector solar, lentes de sol y gorro.\n• La navegación está sujeta a condiciones climáticas y de seguridad.\n\nDATOS DE LA EXPERIENCIA:\n• Modalidad: navegación a vela.\n• Duración: 2 horas.\n• Punto de salida: Puerto Petunia, Av. Bustillo km 13.500.\n• Ubicación: Lago Nahuel Huapi, Bariloche.\n• Traslado: no incluido.\n• Temporada: todo el año, sujeto a condiciones climáticas.",
     "faq": [
       {
         "question": "Que debo llevar a la excursión?",
@@ -1947,70 +1251,41 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/velero-el-orgulloso.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 10,
-    "shifts": [
-      {
-        "id": "velero-el-orgulloso-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "velero-el-orgulloso-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 6
   },
   {
     "id": "villa-la-angostura-y-cerro-bayo",
-    "title": "Villa La Angostura y Cerro bayo",
+    "title": "Villa La Angostura y Cerro Bayo",
     "category": "Invierno",
-    "season": "Invierno",
-    "duration": "Día Completo (8h)",
+    "season": "Todo el Año",
+    "duration": "día completo.",
     "difficulty": "Fácil",
     "image": "/images/excursiones/villa-la-angostura-y-cerro-bayo.webp",
-    "description": "Hermosa Villa de Montaña, un lugar de ensueño ...",
-    "fullDetails": "Se inicia saliendo de Bariloche por ruta nacional 237 cruzando el río Limay , hasta encontrarnos con la Ruta Nacional 231, que nos une en 80 kmts. con la ciudad de Villa la Angostura , Esta Hermosa Villa, conocida como el JARDIN DE LA PATAGONIA  se encuentra ubicada al sur de la Provincia del Neuquén, a solo 35 kmts. De la frontera con el vecino país chileno, está a 870 Mts sobre el nivel del mar, en la margen noreste del Lago Nahuel Huapi. Rodeada de tupidos bosques autóctonos y enmarcados por imponentes cumbres, es uno de esos lugares ideales en cualquiera de las cuatro estaciones. Recibe su nombre por el itsmo o Angostura de la Península de Quetrihue, sobre los faldeos de los cerros Bayo (1782 Mts), Inacayal (1849 Mts) y Belvedere (1992 Mts) fue oficialmente fundada en 1932. Durante el recorrido veremos Puerto Manzano, y los accesos a Bahía Las Balsas, Cerro Bayo y Cumelén, lugares que tienen cada uno su particular atractivo.\nEn este paseo recorreremos, Por el boulevard Nahuel Huapi, los puntos más sobresalientes de la ciudad, Comenzaremos por El Cruce, y desde allí tomaremos rumbo  sur, hacia el  puerto, por  este camino  se encuentra la capilla Nuestra Señora de la Asunción ( 1936 ) ,cien metros más adelante, está la entrada a la famosa residencia El Messidor, obras del Arquitecto Alejandro Bustillo y el Museo Histórico Regional. Frente a éste podemos ver la entrada del Hotel Angostura (1938).\nSiguiendo el recorrido al edificio de Parques Nacionales y a unos metros, el muelle de Puerto Angostura, sobre bahía Mansa , desde el cual parten excursiones lacustres al Bosque de Arrayanes, y otros paseos por el lago  y apenas unos metros más adelante, llegaremos al acceso del Parque Nacional Los Arrayanes. Sobre  el final de esta calle se encuentra el muelle de Bahía Brava. luego visitaremos la zona norte de la Villa  para conocer la otra cara del lago Nahuel Huapi , la unión con el  Lago Correntoso y el hermoso río que los une, que lleva el mismo nombre. Aquí se encuentra el famoso Hotel Correntoso. Esta zona es especialmente elegida por los pescadores ya que  la pesca de truchas y salmónidos tiene en este lugar posibilidades incomparables. En uno de los puntos más preciados para la pesca con mosca. \nEn el invierno, visitamos también el Cerro Bayo, centro de esqui de Villa la Angostura, cuya base se encuentra a 1.050 m.s.n.m. y dista a 9 km de la zona comercial de la Villa. La dotación de medios de elevación nos permite visitar  la cumbre y apreciar su espectacular paisaje como jugar con trineos ò disfrutar del esqui\nAl Atardecer regresamos a San Carlos de Bariloche",
+    "description": "Conocé Villa La Angostura, uno de los pueblos de montaña más encantadores de la Patagonia, y descubrí los paisajes del Cerro Bayo. Una excursión de día completo entre lagos, bosques, arquitectura andina y vistas inolvidables de la Cordillera.",
+    "fullDetails": "Villa La Angostura y Cerro Bayo es una excursión de día completo que combina paisajes patagónicos, pueblos de montaña y vistas de la Cordillera de los Andes. El recorrido parte desde Bariloche por la Ruta Nacional 40, bordeando el lago Nahuel Huapi y atravesando entornos de bosque nativo y montaña.\n\nAl llegar a Villa La Angostura, tendrás tiempo para conocer su centro, reconocido por su arquitectura, sus comercios, su gastronomía y su ambiente tranquilo. La localidad se encuentra rodeada de lagos, bosques y montañas, lo que la convierte en uno de los destinos más atractivos de la región.\n\nEl paseo continúa hacia Cerro Bayo, el centro de ski de Villa La Angostura. Allí podrás disfrutar del entorno, contemplar las vistas hacia el lago Nahuel Huapi y la Cordillera, y optar por ascender en los medios de elevación habilitados.\n\nEs una propuesta ideal para quienes desean descubrir la belleza de Villa La Angostura y vivir una experiencia de montaña durante su estadía en Bariloche.",
     "highlights": [
-      "Salida de Bariloche por costa norte de Lago Nahuel Huapi",
-      "Costa Norte del Lago Nahuel Huapi",
-      "Bahía Manzano",
-      "Ciudad de Villa La Angostura",
-      "Bahia Mansa y Bahia Brava",
-      "Residencia El Messidor",
-      "Lago Correntoso",
-      "Visita al Cerro Bayo"
+      "Recorrerás la Ruta Nacional 40 junto al lago Nahuel Huapi.",
+      "Conocerás Villa La Angostura y su arquitectura de montaña.",
+      "Tendrás tiempo libre para caminar por el centro y disfrutar de sus comercios o gastronomía.",
+      "Visitarás Cerro Bayo, uno de los centros de ski  más reconocidos de la región.",
+      "Disfrutarás paisajes de lagos, bosques y Cordillera.",
+      "Podrás realizar opcionalmente un ascenso en medios de elevación habilitados."
     ],
     "includes": [
-      "Recorrido de la excursión y Guía"
+      "Traslado ida y vuelta desde Bariloche.",
+      "Guía de turismo.",
+      "Visita a Villa La Angostura.",
+      "Tiempo libre en el centro de la localidad.",
+      "Visita al área de Cerro Bayo."
     ],
     "notIncludes": [
-      "Comidas",
-      "Ascenso a Cerro Bayo"
+      "Ascenso en medios de elevación en Cerro Bayo.",
+      "Comidas y bebidas.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
     ],
-    "additionalInfo": "*Valor del paseo $-\n*Llevar ropa y calzado cómodo para caminar \n*Durante el invierno llevar ropa de nieve \n*Política de menores: \n*Menores  entre 0 y 3 años no abonan el paseo, sin derecho a asiento",
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Salida desde Bariloche por la mañana.\n• Recorrido por la Ruta Nacional 40, con vistas del lago Nahuel Huapi y paisajes de montaña.\n• Llegada a Villa La Angostura.\n• Tiempo libre para recorrer el centro de la localidad, disfrutar de la gastronomía y conocer su arquitectura característica.\n• Traslado hacia Cerro Bayo.\n• Tiempo libre para disfrutar del paisaje de montaña y posibilidad de realizar el ascenso opcional en medios de elevación, sujeto a disponibilidad y condiciones operativas.\n• Regreso a Bariloche por la tarde.\n• El orden de las paradas y los tiempos puede variar por razones climáticas, de tránsito u operativas.\n• Villa La Angostura y Cerro Bayo\n\nRECOMENDACIONES:\n• Usar calzado cómodo y ropa adecuada al clima.\n• Llevar abrigo; las temperaturas pueden variar en la montaña.\n• Llevar agua, protector solar, anteojos de sol y cámara fotográfica.\n• Llevar dinero o un medio de pago para almuerzo y consumos personales.\n• Consultar previamente la disponibilidad de los medios de elevación en Cerro Bayo.\n• El ascenso es opcional y se abona por separado.\n\nDATOS DE LA EXPERIENCIA:\n• Duración aproximada: día completo.\n• Modalidad: servicio regular o privado.\n• Temporada: de Junio a Septiembre\n• Dificultad: baja.\n• Actividad física: baja, con caminatas cortas y opcionales.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.",
     "faq": [
       {
         "question": "Cuales son los horarios de la excursión?",
@@ -2045,43 +1320,9 @@
         "answer": "Se puede visitar la cumbre como visitante peatón , jugar en el aérea de los trineos y si bien el tiempo que visitamos el cerro Bayo, es acotado, se puede esquiar o practicar Snowboard"
       }
     ],
-    "recommendedFor": "Parejas, Familias y Grupos",
+    "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 10,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/villa-la-angostura-y-cerro-bayo.webp"
-    ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "blockedDates": [],
-    "priceEnglish": 15,
-    "shifts": [
-      {
-        "id": "villa-la-angostura-y-cerro-bayo-shift-1",
-        "name": "Turno Mañana",
-        "time": "08:30 hs / 14:00 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
-        "enabled": true
-      },
-      {
-        "id": "villa-la-angostura-y-cerro-bayo-shift-2",
-        "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
-        "enabled": true
-      }
-    ],
-    "translations": {}
+    "priceNum": 10
   },
   {
     "id": "winter-park",
@@ -2130,40 +1371,177 @@
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "12:30 hs",
-    "priceNum": 15,
-    "isPublished": true,
-    "gallery": [
-      "/images/excursiones/winter-park.webp"
+    "priceNum": 15
+  },
+  {
+    "id": "circuito-chico-y-colonia-suiza",
+    "title": "Circuito Chico y Colonia Suiza",
+    "category": "Tradicional",
+    "season": "Todo el Año",
+    "duration": "día completo.",
+    "difficulty": "Fácil",
+    "image": "/images/excursiones/circuito-chico.webp",
+    "description": "Descubrí los paisajes más emblemáticos de Bariloche y el encanto de Colonia Suiza en una excursión de día completo. Recorré lagos, bosques y miradores, realizá una parada en el Cerro Campanario y conocé la histórica Capilla San Eduardo, con vistas hacia el Hotel Llao Llao.",
+    "fullDetails": "Circuito Chico y Colonia Suiza reúne en una sola jornada dos de las experiencias más representativas de Bariloche: sus paisajes clásicos de montaña y el encanto de su primer asentamiento europeo.\n\nLa excursión comienza por la Avenida Bustillo, bordeando el lago Nahuel Huapi y atravesando un entorno de bosques, bahías y montañas. Se realiza una parada en el Cerro Campanario, donde quienes lo deseen podrán ascender opcionalmente en aerosilla para disfrutar de una de las vistas panorámicas más reconocidas de la ciudad.\n\nEl recorrido continúa hacia la zona de Llao Llao, Puerto Pañuelo y la Capilla San Eduardo. Allí se realiza una parada para contemplar el Hotel Llao Llao, el lago Nahuel Huapi y el entorno natural que caracteriza a esta región. Más adelante, el Punto Panorámico ofrece una de las postales más buscadas de Bariloche, con vistas al lago Moreno, la península Llao Llao y las montañas andinas.\n\nLuego, la excursión se dirige a Colonia Suiza, un pintoresco pueblo de montaña fundado por inmigrantes europeos a fines del siglo XIX. Tendrás tiempo libre para caminar por sus calles, conocer sus construcciones tradicionales, visitar ferias de artesanos y disfrutar de la gastronomía regional. Según el día de visita, también podrás encontrar la tradicional preparación del curanto.\n\nEs una propuesta ideal para quienes desean combinar naturaleza, historia, cultura y tiempo libre en uno de los rincones más auténticos de Bariloche.",
+    "highlights": [
+      "Recorrerás la Avenida Bustillo junto al lago Nahuel Huapi.",
+      "Harás una parada en el Cerro Campanario, con posibilidad de ascenso opcional en aerosilla.",
+      "Conocerás la zona de Llao Llao, Puerto Pañuelo y la Capilla San Eduardo.",
+      "Disfrutarás una parada con vista al Hotel Llao Llao y su entorno.",
+      "Visitarás el Punto Panorámico, con vistas al lago Moreno y la península Llao Llao.",
+      "Tendrás tiempo libre para recorrer Colonia Suiza, sus ferias y propuestas gastronómicas."
     ],
-    "operatingDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
+    "includes": [
+      "Traslado durante todo el recorrido.",
+      "Guía de turismo.",
+      "Paradas panorámicas previstas en el itinerario.",
+      "Tiempo libre en Colonia Suiza."
     ],
-    "blockedDates": [],
-    "priceEnglish": 20,
+    "notIncludes": [
+      "Ascenso en aerosilla al Cerro Campanario.",
+      "Comidas y bebidas.",
+      "Consumos en Colonia Suiza.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
+    ],
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Salida desde Bariloche e inicio del recorrido por la Avenida Bustillo, bordeando el lago Nahuel Huapi.\n• Paso por Playa Bonita y parada en el Cerro Campanario. Tiempo disponible para realizar, de manera opcional, el ascenso en aerosilla.\n• Continuación hacia la zona de Llao Llao, rodeada de bosques, lagos y montañas.\n• Parada en la Capilla San Eduardo, con vistas al Hotel Llao Llao, Puerto Pañuelo y el lago Nahuel Huapi.\n• Parada en el Punto Panorámico para contemplar el lago Moreno, la península Llao Llao y el paisaje andino.\n• Traslado hacia Colonia Suiza.\n• Tiempo libre para recorrer el pueblo, visitar ferias artesanales, almorzar o probar productos regionales.\n• Regreso a Bariloche.\n• El orden de las paradas y los tiempos puede variar por razones climáticas u operativas.\n• Circuito Chico y Colonia Suiza\n\nRECOMENDACIONES:\n• Usar calzado cómodo, apto para caminar por calles de montaña.\n• Llevar abrigo y ropa adecuada al clima durante todo el año.\n• Llevar agua, protector solar, anteojos de sol y cámara fotográfica.\n• Llevar dinero o un medio de pago para consumos personales en Colonia Suiza.\n• Consultar previamente horarios, días de salida y punto de encuentro.\n• La disponibilidad de ferias, restaurantes y curanto depende del día de visita y de la operación de cada establecimiento.\n\nDATOS DE LA EXPERIENCIA:\n• Duración aproximada: día completo.\n• Modalidad: servicio regular o privado.\n• Temporada: todo el año.\n• Dificultad: baja.\n• Actividad física: baja, con caminatas cortas y opcionales.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.\n• Ascenso al Cerro Campanario: opcional y abonado por separado.",
+    "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
+    "departureTime": "09:00 hs",
+    "priceNum": 45,
     "shifts": [
       {
-        "id": "winter-park-shift-1",
+        "id": "circuito-chico-y-colonia-suiza-shift-1",
         "name": "Turno Mañana",
-        "time": "12:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 6,
+        "time": "09:00 hs",
+        "totalCapacity": 18,
+        "availableSpots": 18,
         "enabled": true
       },
       {
-        "id": "winter-park-shift-2",
+        "id": "circuito-chico-y-colonia-suiza-shift-2",
         "name": "Turno Tarde",
-        "time": "14:30 hs",
-        "totalCapacity": 16,
-        "availableSpots": 11,
+        "time": "14:00 hs",
+        "totalCapacity": 18,
+        "availableSpots": 18,
         "enabled": true
       }
     ],
-    "translations": {}
+    "gallery": [],
+    "isPublished": true
+  },
+  {
+    "id": "colonia-suiza",
+    "title": "Colonia Suiza",
+    "category": "Tradicional",
+    "season": "Todo el Año",
+    "duration": "4 horas.",
+    "difficulty": "Fácil",
+    "image": "/images/excursiones/circuito-chico.webp",
+    "description": "Descubrí uno de los rincones más auténticos de Bariloche en una excursión de medio día a Colonia Suiza, el primer asentamiento europeo de la Patagonia. Recorré sus calles de montaña, conocé su historia, visitá ferias, disfrutá propuestas gastronómicas locales y admir á los paisajes de bosque que rodean este tradicional pueblo.",
+    "fullDetails": "A pocos kilómetros de Bariloche se encuentra Colonia Suiza, un pintoresco pueblo de montaña fundado por inmigrantes europeos a fines del siglo XIX. Esta excursión de medio día propone descubrir una faceta diferente de la ciudad, donde la historia de sus primeros pobladores se combina con paisajes de bosque, arquitectura tradicional y una atmósfera relajada.\n\nAl llegar, tendrás tiempo libre para recorrer sus calles, observar las construcciones típicas, visitar ferias de artesanos y conocer productos regionales. También podrás disfrutar de las propuestas gastronómicas del lugar en restaurantes, cervecerías o puestos tradicionales. Según el día de visita y la operación de cada establecimiento, es posible encontrar el curanto, una preparación típica de la región cocida bajo tierra.\n\nColonia Suiza es una experiencia ideal para quienes buscan un paseo tranquilo, con identidad local, naturaleza y tiempo para disfrutar a su propio ritmo.",
+    "highlights": [
+      "Visitarás Colonia Suiza, el primer asentamiento europeo de la Patagonia.",
+      "Conocerás la historia y las tradiciones de este pueblo de montaña.",
+      "Recorrerás sus calles y construcciones típicas.",
+      "Visitarás ferias de artesanos y comercios locales.",
+      "Disfrutarás propuestas gastronómicas regionales.",
+      "Admirarás los paisajes de bosque que rodean al pueblo."
+    ],
+    "includes": [
+      "Traslado ida y vuelta desde Bariloche.",
+      "Guía de turismo.",
+      "Tiempo libre en Colonia Suiza."
+    ],
+    "notIncludes": [
+      "Comidas y bebidas.",
+      "Curanto u otros consumos gastronómicos.",
+      "Compras en ferias, comercios o puestos de artesanos.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
+    ],
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Salida desde Bariloche a las 11:00 hs.\n• Traslado hacia Colonia Suiza.\n• Llegada al pueblo e introducción sobre su historia y sus primeros pobladores.\n• Tiempo libre para recorrer las calles, visitar ferias, conocer comercios locales y disfrutar de la gastronomía regional.\n• Regreso hacia Bariloche.\n• Llegada estimada a las 15:00 hs.\n• Los tiempos y el orden del recorrido pueden variar por razones climáticas u operativas.\n• Colonia Suiza\n\nRECOMENDACIONES:\n• Usar calzado cómodo para caminar.\n• Llevar abrigo y ropa adecuada al clima.\n• Llevar agua, protector solar, anteojos de sol y cámara fotográfica.\n• Llevar dinero o un medio de pago para consumos personales.\n• Consultar previamente la disponibilidad de curanto, ferias y restaurantes para el día de la excursión.\n\nDATOS DE LA EXPERIENCIA:\n• Duración: 4 horas.\n• Horario: de 11:00 a 15:00 hs.\n• Modalidad: servicio regular o privado.\n• Temporada: todo el año.\n• Dificultad: baja.\n• Actividad física: baja, con caminatas cortas y opcionales.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.",
+    "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
+    "departureTime": "09:00 hs",
+    "priceNum": 30,
+    "shifts": [
+      {
+        "id": "colonia-suiza-shift-1",
+        "name": "Turno Mañana",
+        "time": "09:00 hs",
+        "totalCapacity": 18,
+        "availableSpots": 18,
+        "enabled": true
+      },
+      {
+        "id": "colonia-suiza-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:00 hs",
+        "totalCapacity": 18,
+        "availableSpots": 18,
+        "enabled": true
+      }
+    ],
+    "gallery": [],
+    "isPublished": true
+  },
+  {
+    "id": "noche-nordica",
+    "title": "Noche Nórdica — Aventura y Cena en Refugio",
+    "category": "Invierno",
+    "season": "Invierno",
+    "duration": "Medio Día (4h)",
+    "difficulty": "Fácil",
+    "image": "/images/excursiones/ski-nordico.webp",
+    "description": "Viví una noche diferente en el Centro de Ski Nórdico con una travesía guiada por bosques nevados y una cena en refugio. Según las condiciones de nieve, la aventura se realiza en moto de nieve o cuatriciclo, siempre acompañada por guías especializados.",
+    "fullDetails": "Noche Nórdica es una experiencia invernal que combina aventura, paisajes nocturnos y gastronomía en el Centro de Ski Nórdico de Bariloche. La propuesta comienza con el traslado desde la ciudad hacia el complejo, ubicado en un entorno de bosque y Cordillera.\n\nAl llegar, recibirás las indicaciones de seguridad antes de iniciar una travesía guiada por caminos de nieve y bosques de lengas. Según las condiciones del terreno y la nieve, el recorrido se realiza en moto de nieve o cuatriciclo. Cada vehículo es compartido por dos pasajeros y el grupo está acompañado en todo momento por guías especializados.\n\nLuego de la travesía, llegarás al refugio para disfrutar de una cena en un ambiente cálido y acogedor. La combinación de aventura, nieve, bosque nocturno y gastronomía convierte a Noche Nórdica en una propuesta ideal para vivir Bariloche de una manera diferente.",
+    "highlights": [
+      "Te trasladarás desde Bariloche al Centro de Ski Nórdico.",
+      "Recibirás indicaciones de seguridad y conducción.",
+      "Realizarás una travesía guiada en moto de nieve o cuatriciclo.",
+      "Recorrerás senderos de nieve y bosques de lengas.",
+      "Compartirás un vehículo con otro pasajero.",
+      "Disfrutarás una cena en refugio."
+    ],
+    "includes": [
+      "Traslado ida y vuelta desde Bariloche.",
+      "Travesía guiada en moto de nieve o cuatriciclo, según las condiciones operativas.",
+      "Un vehículo doble cada dos pasajeros.",
+      "Instrucciones de seguridad y conducción.",
+      "Guías especializados durante la actividad.",
+      "Cena en refugio."
+    ],
+    "notIncludes": [
+      "Bebidas no especificadas dentro de la cena.",
+      "Indumentaria de nieve, salvo que se indique expresamente al momento de reservar.",
+      "Gastos personales.",
+      "Propinas.",
+      "Servicios no mencionados como incluidos."
+    ],
+    "additionalInfo": "ITINERARIO DETALLADO:\n• Traslado desde Bariloche hacia el Centro de Ski Nórdico.\n• Recepción en el complejo e indicaciones de seguridad.\n• Asignación de vehículos e inicio de la travesía guiada.\n• Recorrido por senderos de nieve o caminos habilitados, según las condiciones operativas.\n• Llegada al refugio.\n• Cena y tiempo para disfrutar del entorno.\n• Traslado de regreso a Bariloche.\n• El orden de las actividades puede variar por condiciones de nieve, clima y operación del complejo.\n• Noche Nórdica Aventura y Cena en Refugio\n\nRECOMENDACIONES:\n• Usar ropa de abrigo, campera impermeable, guantes, gorro y calzado apto para nieve.\n• Informar con anticipación alergias, restricciones alimentarias o dietas especiales.\n• Seguir siempre las indicaciones de los guías.\n• La elección entre moto de nieve y cuatriciclo depende de las condiciones de nieve y del terreno.\n• La actividad está sujeta a condiciones climáticas y operativas.\n• La conducción se realiza bajo las condiciones y requisitos establecidos por el prestador.\n\nDATOS DE LA EXPERIENCIA:\n• Temporada: invierno, sujeta a condiciones de nieve.\n• Ubicación: Centro de Ski Nórdico, Bariloche.\n• Actividad física: baja a moderada.\n• Dificultad: baja; no se requiere experiencia previa.\n• Vehículo: moto de nieve o cuatriciclo doble, compartido por dos pasajeros.\n• Público recomendado: parejas, grupos de amigos, familias y viajeros que buscan una experiencia nocturna de nieve.",
+    "recommendedFor": "parejas, grupos de amigos, familias y viajeros que buscan una experiencia nocturna de nieve.",
+    "departureTime": "09:00 hs",
+    "priceNum": 170,
+    "shifts": [
+      {
+        "id": "noche-nordica-shift-1",
+        "name": "Turno Mañana",
+        "time": "09:00 hs",
+        "totalCapacity": 18,
+        "availableSpots": 18,
+        "enabled": true
+      },
+      {
+        "id": "noche-nordica-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:00 hs",
+        "totalCapacity": 18,
+        "availableSpots": 18,
+        "enabled": true
+      }
+    ],
+    "gallery": [],
+    "isPublished": true
   }
 ]
