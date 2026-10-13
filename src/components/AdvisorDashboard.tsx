@@ -96,7 +96,7 @@ export const AdvisorDashboard: React.FC<AdvisorDashboardProps> = ({
       date: ticketForm.date,
       guests: ticketForm.guests,
       totalPriceUSD: finalTotal,
-      pickupLocation: ticketForm.pickupLocation || 'Oficina Urquiza 276',
+      pickupLocation: ticketForm.pickupLocation || 'Oficina San Martín 398',
       status: 'COTIZACION',
       ticketType: ticketForm.ticketType,
       priority: ticketForm.priority,

@@ -89,6 +89,7 @@ import { loadSiteContent, saveSiteContent, resetSiteContentToDefault, fetchSiteC
 import { PublicExcursionCalendar } from './components/PublicExcursionCalendar';
 import { ManualPassengerModal } from './components/ManualPassengerModal';
 import { AdminCalendarOperations } from './components/AdminCalendarOperations';
+import { PickupMapSection } from './components/PickupMapSection';
 
 interface SystemActivityLog {
   id: string;
@@ -122,7 +123,7 @@ const INITIAL_STAFF: StaffMember[] = [
     id: 'st-1',
     name: 'Luis Morales',
     role: 'Administrador General',
-    branch: 'Urquiza 276 (Centro Cívico)',
+    branch: 'San Martín 398 (Casa Central)',
     email: 'luis@grupovision.tur.ar',
     canCreateBookings: true,
     canAssignFleet: false,
@@ -831,7 +832,7 @@ export default function App() {
       date: newBookingData.date || new Date().toISOString().split('T')[0],
       guests: Number(newBookingData.guests),
       totalPriceUSD: Number(newBookingData.guests) * unitPrice,
-      pickupLocation: newBookingData.pickupLocation || 'Oficina Centro Cívico (Urquiza 276)',
+      pickupLocation: newBookingData.pickupLocation || 'Oficina Central (San Martín 398)',
       status: 'BACKLOG',
       ticketType: newBookingData.ticketType,
       priority: newBookingData.priority,
@@ -957,6 +958,13 @@ export default function App() {
               className="hover:text-[#00A896] transition-colors"
             >
               {t.nav.about}
+            </a>
+            <a 
+              href="#mapa-pickups" 
+              onClick={() => setCurrentView('landing')}
+              className="hover:text-[#00A896] transition-colors"
+            >
+              Puntos de Pickup
             </a>
             <button 
               onClick={() => setIsOfficeModalOpen(true)} 
@@ -1111,6 +1119,14 @@ export default function App() {
               className="py-2.5 border-b border-slate-100 flex items-center justify-between text-slate-800 hover:text-[#00A896]"
             >
               <span>{t.nav.about}</span>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </a>
+            <a 
+              href="#mapa-pickups" 
+              onClick={() => { setCurrentView('landing'); setIsMobileMenuOpen(false); }} 
+              className="py-2.5 border-b border-slate-100 flex items-center justify-between text-slate-800 hover:text-[#00A896]"
+            >
+              <span>Puntos de Pickup</span>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </a>
             <button 
@@ -1364,6 +1380,19 @@ export default function App() {
           </section>
 
           {/* ========================================================================= */}
+          {/* MAPA DE PICKUPS Y PUNTOS DE ENCUENTRO EN BARILOCHE */}
+          {/* ========================================================================= */}
+          {siteContent.pickupMap && (
+            <PickupMapSection
+              data={siteContent.pickupMap}
+              onOpenWhatsApp={(msg) => {
+                const phone = '5492944235278';
+                window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg || '')}`, '_blank');
+              }}
+            />
+          )}
+
+          {/* ========================================================================= */}
           {/* NEW BLOCK 1: QUIÉNES SOMOS & BENTO GRID DE TRAYECTORIA RECEPTIVA */}
           {/* ========================================================================= */}
           <section id="nosotros" className="py-24 text-white border-t border-b border-slate-800 relative overflow-hidden">
@@ -1480,7 +1509,7 @@ export default function App() {
                       onClick={() => setIsOfficeModalOpen(true)}
                       className="px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-2xl text-xs transition-all border border-white/20"
                     >
-                      Visitar Sucursal Urquiza 276
+                      Visitar Sede San Martín 398
                     </button>
                   </div>
                 </div>
@@ -1493,7 +1522,7 @@ export default function App() {
                   <p className="text-xs text-slate-300 leading-relaxed">
                     Nuestra oficina en{' '}
                     <a 
-                      href="https://maps.google.com/?q=Urquiza+276,+San+Carlos+de+Bariloche" 
+                      href="https://maps.google.com/?q=San+Martin+398,+San+Carlos+de+Bariloche" 
                       target="_blank" 
                       rel="noreferrer"
                       className="underline text-cyan-300 hover:text-cyan-200 font-bold inline-flex items-center gap-1 group"
@@ -1506,7 +1535,7 @@ export default function App() {
                   </p>
                   <div className="pt-2">
                     <a 
-                      href="https://maps.google.com/?q=Urquiza+276,+San+Carlos+de+Bariloche" 
+                      href="https://maps.google.com/?q=San+Martin+398,+San+Carlos+de+Bariloche" 
                       target="_blank" 
                       rel="noreferrer"
                       className="text-[11px] font-mono text-cyan-400 font-bold hover:underline inline-flex items-center gap-1.5 bg-cyan-500/10 px-3 py-1.5 rounded-full border border-cyan-400/30"

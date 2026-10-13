@@ -23,7 +23,7 @@
     "buttonText": "Cotizar por WhatsApp con Mostrador",
     "whatsappMessage": "Hola! Me interesa cotizar un paquete a medida con Grupo Vision",
     "officeTitle": "Atención Presencial en el Centro",
-    "officeAddress": "Urquiza 276, San Carlos de Bariloche",
+    "officeAddress": "San Martín 398, San Carlos de Bariloche",
     "officeSchedule": "Abierta todos los días de 08:30 a 20:30 hs"
   },
   "topSuggestions": {
@@ -95,6 +95,48 @@
         "image": "/images/excursiones/puerto-blest-y-cascada-de-los-cantaros.webp",
         "excursionId": "puerto-blest-y-cascada-de-los-cantaros",
         "whatsappMessage": "Hola Grupo Visión! Quisiera reservar Puerto Blest con descuento promocional."
+      }
+    ]
+  },
+  "pickupMap": {
+    "badge": "MAPA DE PICKUPS · PUNTOS DE ENCUENTRO EN BARILOCHE",
+    "title": "¿Dónde te Buscamos? Puntos de Salida y Recorrido",
+    "subtitle": "Nuestras combis y minibuses realizan paradas estratégicas en el centro y a lo largo de los principales corredores hoteleros de San Carlos de Bariloche.",
+    "enabled": true,
+    "centerLat": -41.1342,
+    "centerLng": -71.3088,
+    "zoom": 14,
+    "infoNote": "Para hoteles sobre Av. Bustillo (hasta Km 8) y Av. Pioneros, consultá con tu asesor si tu alojamiento cuenta con pick-up directo en puerta.",
+    "points": [
+      {
+        "id": "pk-1",
+        "name": "Sede Central Grupo Visión & Centro Cívico",
+        "address": "San Martín 398, San Carlos de Bariloche",
+        "description": "Punto neurálgico en pleno centro comercial y a metros de la plaza del Centro Cívico. Salida puntual de flota, combis y asesoramiento presencial.",
+        "lat": -41.1342,
+        "lng": -71.3088,
+        "estimatedTimeNote": "Horario oficial de salida",
+        "isPopular": true
+      },
+      {
+        "id": "pk-2",
+        "name": "Punto de Encuentro Monolito (Bustillo Km 1)",
+        "address": "Av. Exequiel Bustillo Km 1 / San Martín Oeste",
+        "description": "Parada estratégica de fácil acceso para pasajeros alojados en hoteles sobre la costa oeste y el inicio de Av. Bustillo.",
+        "lat": -41.1318,
+        "lng": -71.3245,
+        "estimatedTimeNote": "+15 min tras horario de salida",
+        "isPopular": false
+      },
+      {
+        "id": "pk-3",
+        "name": "Punto Costanera & 12 de Octubre",
+        "address": "Av. 12 de Octubre y Diagonal Capraro",
+        "description": "Punto de pick-up conveniente para hoteles frente al lago Nahuel Huapi, el sector este y la zona de ingreso a la ciudad.",
+        "lat": -41.1310,
+        "lng": -71.2980,
+        "estimatedTimeNote": "+20 min tras horario de salida",
+        "isPopular": false
       }
     ]
   }

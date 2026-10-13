@@ -61,11 +61,11 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
 
   const [selectedShiftId, setSelectedShiftId] = useState<string>('');
   const [passengersCount, setPassengersCount] = useState<number>(2);
-  const [branch, setBranch] = useState<'Urquiza 276 (Centro Cívico)' | 'San Martín 398 (Casa Central)'>('Urquiza 276 (Centro Cívico)');
+  const [branch, setBranch] = useState<'San Martín 398 (Casa Central)' | 'Urquiza 276 (Centro Cívico)'>('San Martín 398 (Casa Central)');
   const [customerName, setCustomerName] = useState<string>('');
   const [customerPhone, setCustomerPhone] = useState<string>('');
   const [customerEmail, setCustomerEmail] = useState<string>('');
-  const [pickupLocation, setPickupLocation] = useState<string>('Pasan por local Urquiza 276');
+  const [pickupLocation, setPickupLocation] = useState<string>('Pasan por local San Martín 398');
   const [paymentMethod, setPaymentMethod] = useState<string>('Efectivo en Mostrador (ARS)');
   const [notes, setNotes] = useState<string>('');
   const [priority, setPriority] = useState<'NORMAL' | 'ALTA' | 'VIP'>('NORMAL');
@@ -240,8 +240,8 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
                 onChange={e => setBranch(e.target.value as any)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium focus:outline-none focus:border-[#00A896] text-xs"
               >
-                <option value="Urquiza 276 (Centro Cívico)">Urquiza 276 (Centro Cívico)</option>
                 <option value="San Martín 398 (Casa Central)">San Martín 398 (Casa Central)</option>
+                <option value="Urquiza 276 (Centro Cívico)">Urquiza 276 (Centro Cívico)</option>
               </select>
             </div>
 

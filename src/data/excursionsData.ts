@@ -42,6 +42,7 @@ export interface Excursion {
   gallery?: string[];      // Galería de fotos adicionales de la excursión
   operatingDays?: number[];// Días de la semana que opera (0=Dom, 1=Lun, ..., 6=Sáb). Default: [0,1,2,3,4,5,6]
   blockedDates?: string[]; // Fechas específicas bloqueadas o cerradas (formato YYYY-MM-DD)
+  minBookingAdvanceHours?: number; // Horas mínimas de anticipación requeridas para contratar online (default: 24)
   shifts?: ExcursionShift[]; // Turnos y cupos configurables por el Admin
   translations?: {
     en?: ExcursionTranslations;
@@ -1634,6 +1635,7 @@ export function normalizeExcursion(e: Excursion): Excursion {
     ? e.operatingDays
     : [0, 1, 2, 3, 4, 5, 6];
   const blockedDates = Array.isArray(e.blockedDates) ? e.blockedDates : [];
+  const minBookingAdvanceHours = typeof e.minBookingAdvanceHours === 'number' ? e.minBookingAdvanceHours : 24;
 
   return {
     ...e,
@@ -1641,6 +1643,7 @@ export function normalizeExcursion(e: Excursion): Excursion {
     gallery,
     operatingDays,
     blockedDates,
+    minBookingAdvanceHours,
     priceEnglish,
     shifts: (Array.isArray(e.shifts) && e.shifts.length > 0) ? e.shifts : defaultShifts,
     translations: e.translations || {}

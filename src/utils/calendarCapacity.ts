@@ -69,6 +69,41 @@ export function getBookedPaxForShift(
 }
 
 /**
+ * Determina si un turno en una fecha está bloqueado debido al límite de horas de anticipación mínima.
+ * Por ejemplo: si la excursión requiere 24 hs de anticipación y faltan menos de 24 hs para la salida.
+ */
+export function isShiftBlockedByAdvance(
+  dateStr: string,
+  shiftTimeStr?: string,
+  minAdvanceHours: number = 24
+): boolean {
+  if (!minAdvanceHours || minAdvanceHours <= 0) return false;
+
+  let hours = 9;
+  let minutes = 0;
+  if (shiftTimeStr) {
+    const match = shiftTimeStr.match(/(\d{1,2}):(\d{2})/);
+    if (match) {
+      hours = parseInt(match[1], 10);
+      minutes = parseInt(match[2], 10);
+    }
+  }
+
+  const [y, m, d] = dateStr.split('-').map(Number);
+  if (!y || !m || !d) return false;
+
+  const departureDate = new Date(y, m - 1, d, hours, minutes, 0, 0);
+  const now = new Date();
+
+  if (departureDate.getTime() <= now.getTime()) {
+    return true;
+  }
+
+  const diffHours = (departureDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+  return diffHours < minAdvanceHours;
+}
+
+/**
  * Obtiene la capacidad en vivo para un turno específico en una fecha.
  */
 export function getShiftLiveCapacity(
@@ -81,16 +116,20 @@ export function getShiftLiveCapacity(
   bookedPax: number;
   availableSpots: number;
   isSoldOut: boolean;
+  isAdvanceBlocked: boolean;
 } {
   const totalCapacity = shift.totalCapacity > 0 ? shift.totalCapacity : 16;
   const bookedPax = getBookedPaxForShift(excursion.title, shift, dateStr, bookings);
   const availableSpots = Math.max(0, totalCapacity - bookedPax);
+  const minAdvanceHours = typeof excursion.minBookingAdvanceHours === 'number' ? excursion.minBookingAdvanceHours : 24;
+  const isAdvanceBlocked = isShiftBlockedByAdvance(dateStr, shift.time || excursion.departureTime, minAdvanceHours);
 
   return {
     totalCapacity,
     bookedPax,
     availableSpots,
-    isSoldOut: availableSpots <= 0
+    isSoldOut: availableSpots <= 0,
+    isAdvanceBlocked
   };
 }
 
@@ -105,6 +144,8 @@ export function getDayLiveCapacity(
   isOperational: boolean;
   isBlocked: boolean;
   isPast: boolean;
+  isAdvanceBlocked: boolean;
+  minAdvanceHours: number;
   totalCapacity: number;
   bookedPax: number;
   availableSpots: number;
@@ -115,6 +156,7 @@ export function getDayLiveCapacity(
     bookedPax: number;
     availableSpots: number;
     isSoldOut: boolean;
+    isAdvanceBlocked: boolean;
   }[];
 } {
   // Comprobar si es fecha pasada
@@ -133,6 +175,8 @@ export function getDayLiveCapacity(
   const blockedDates = excursion.blockedDates || [];
   const isBlocked = blockedDates.includes(dateStr);
 
+  const minAdvanceHours = typeof excursion.minBookingAdvanceHours === 'number' ? excursion.minBookingAdvanceHours : 24;
+
   const shifts = getExcursionEffectiveShifts(excursion);
   const shiftsSummary = shifts.map(shift => {
     const cap = getShiftLiveCapacity(excursion, shift, dateStr, bookings);
@@ -146,11 +190,15 @@ export function getDayLiveCapacity(
   const bookedPax = shiftsSummary.reduce((acc, s) => acc + s.bookedPax, 0);
   const availableSpots = Math.max(0, totalCapacity - bookedPax);
   const isSoldOut = shiftsSummary.every(s => s.isSoldOut);
+  // Un día está bloqueado por anticipación si todos sus turnos habilitados están bloqueados por anticipación
+  const isAdvanceBlocked = shiftsSummary.length > 0 ? shiftsSummary.every(s => s.isAdvanceBlocked) : false;
 
   return {
     isOperational,
     isBlocked,
     isPast,
+    isAdvanceBlocked,
+    minAdvanceHours,
     totalCapacity,
     bookedPax,
     availableSpots,

@@ -26,7 +26,7 @@ export const SYSTEM_AUTH_USERS: AuthUser[] = [
     roleLabel: 'Administrador General',
     password: 'VisionAdmin2026!',
     defaultView: 'admin-board',
-    branch: 'Urquiza 276 (Centro Cívico)',
+    branch: 'San Martín 398 (Casa Central)',
     avatar: 'LM',
     description: 'Acceso total: tarifas, descuentos globales, CMS, analítica, auditoría y control de retroceso en tickets.'
   },

@@ -20,10 +20,22 @@ import {
   Plus,
   Trash2,
   ArrowUp,
-  ArrowDown
+  ArrowDown,
+  MapPin,
+  Navigation,
+  Compass
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { SiteContentData, AboutSectionData, ExclusiveSectionData, TopSuggestionsSectionData, SuggestionBannerItem, DEFAULT_SITE_CONTENT } from '../data/siteContentData';
+import { 
+  SiteContentData, 
+  AboutSectionData, 
+  ExclusiveSectionData, 
+  TopSuggestionsSectionData, 
+  SuggestionBannerItem, 
+  PickupMapSectionData,
+  PickupPoint,
+  DEFAULT_SITE_CONTENT 
+} from '../data/siteContentData';
 import { Excursion } from '../data/excursionsData';
 import { MediaLibraryModal } from './MediaLibraryModal';
 
@@ -42,7 +54,7 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
   onResetContent,
   onViewPublicSite
 }) => {
-  const [activeTab, setActiveTab] = useState<'about' | 'exclusive' | 'suggestions'>('about');
+  const [activeTab, setActiveTab] = useState<'about' | 'exclusive' | 'suggestions' | 'pickup'>('about');
   const [formData, setFormData] = useState<SiteContentData>(content);
   const [isSavedAlert, setIsSavedAlert] = useState(false);
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
@@ -160,6 +172,60 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
     });
   };
 
+  // Pickup Map helpers
+  const updatePickupMap = (updates: Partial<PickupMapSectionData>) => {
+    setFormData(prev => ({
+      ...prev,
+      pickupMap: {
+        ...(prev.pickupMap || DEFAULT_SITE_CONTENT.pickupMap!),
+        ...updates
+      }
+    }));
+  };
+
+  const updatePickupPoint = (index: number, updates: Partial<PickupPoint>) => {
+    setFormData(prev => {
+      const current = prev.pickupMap || DEFAULT_SITE_CONTENT.pickupMap!;
+      const points = [...current.points];
+      points[index] = { ...points[index], ...updates };
+      return {
+        ...prev,
+        pickupMap: { ...current, points }
+      };
+    });
+  };
+
+  const addPickupPoint = () => {
+    setFormData(prev => {
+      const current = prev.pickupMap || DEFAULT_SITE_CONTENT.pickupMap!;
+      const newPoint: PickupPoint = {
+        id: `pk-${Date.now()}`,
+        name: 'Nuevo Punto de Pick-up',
+        address: 'Dirección o intersección en Bariloche',
+        description: 'Punto de encuentro y ascenso para pasajeros.',
+        lat: -41.1342,
+        lng: -71.3088,
+        estimatedTimeNote: '+10 min',
+        isPopular: false
+      };
+      return {
+        ...prev,
+        pickupMap: { ...current, points: [...current.points, newPoint] }
+      };
+    });
+  };
+
+  const removePickupPoint = (index: number) => {
+    setFormData(prev => {
+      const current = prev.pickupMap || DEFAULT_SITE_CONTENT.pickupMap!;
+      const points = current.points.filter((_, i) => i !== index);
+      return {
+        ...prev,
+        pickupMap: { ...current, points }
+      };
+    });
+  };
+
   return (
     <div className="space-y-6">
       
@@ -261,6 +327,18 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
         >
           <Tag className="w-4 h-4 text-orange-500" />
           <span>3. Top Sugerencias con Descuento (Carrusel)</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('pickup')}
+          className={`py-4 px-5 font-bold text-xs sm:text-sm border-b-2 transition-all flex items-center gap-2 ${
+            activeTab === 'pickup'
+              ? 'border-[#00A896] text-[#00A896]'
+              : 'border-transparent text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <MapPin className="w-4 h-4 text-[#00A896]" />
+          <span>4. Mapa de Pickups (Puntos de Encuentro)</span>
         </button>
       </div>
 
@@ -943,6 +1021,317 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
 
         </div>
       )}
+
+      {/* TAB 4: MAPA DE PICKUPS */}
+      {activeTab === 'pickup' && (() => {
+        const currentPickup = formData.pickupMap || DEFAULT_SITE_CONTENT.pickupMap!;
+        const points = currentPickup.points || [];
+
+        return (
+          <div className="bg-white rounded-b-3xl border border-t-0 border-slate-200 p-6 sm:p-8 space-y-8 shadow-sm">
+            
+            {/* Header & Toggle */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-200">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-5 h-5 text-[#00A896]" />
+                  <h3 className="font-extrabold text-base text-slate-900">
+                    Configuración del Mapa de Pickups (Home)
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-500">
+                  Permite a los turistas visualizar los puntos céntricos y de ascenso de combis en Bariloche, con coordenadas y mapa interactivo.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-bold text-slate-700">Estado de la sección:</span>
+                <button
+                  type="button"
+                  onClick={() => updatePickupMap({ enabled: !currentPickup.enabled })}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    currentPickup.enabled
+                      ? 'bg-emerald-600 text-white shadow-xs'
+                      : 'bg-slate-200 text-slate-600'
+                  }`}
+                >
+                  <span>{currentPickup.enabled ? '✓ Sección Activa en Home' : '✕ Pausada / Oculta'}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Textos de la Sección */}
+            <div className="space-y-4">
+              <h4 className="font-bold text-sm text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
+                <FileText className="w-4 h-4 text-[#00A896]" />
+                <span>Textos Principales de la Sección</span>
+              </h4>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Badge Superior</label>
+                  <input
+                    type="text"
+                    value={currentPickup.badge}
+                    onChange={(e) => updatePickupMap({ badge: e.target.value })}
+                    className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Título Principal</label>
+                  <input
+                    type="text"
+                    value={currentPickup.title}
+                    onChange={(e) => updatePickupMap({ title: e.target.value })}
+                    className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Bajada / Subtítulo</label>
+                  <textarea
+                    rows={2}
+                    value={currentPickup.subtitle}
+                    onChange={(e) => updatePickupMap({ subtitle: e.target.value })}
+                    className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Nota Informativa de Corredor Hotelero (Caja de Aviso)</label>
+                  <input
+                    type="text"
+                    value={currentPickup.infoNote}
+                    onChange={(e) => updatePickupMap({ infoNote: e.target.value })}
+                    className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Viewport del Mapa (Centro & Zoom) */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                <h4 className="font-bold text-sm text-slate-900 flex items-center gap-2">
+                  <Compass className="w-4 h-4 text-[#00A896]" />
+                  <span>Viewport y Coordenadas del Mapa</span>
+                </h4>
+                <button
+                  type="button"
+                  onClick={() => updatePickupMap({ centerLat: -41.1342, centerLng: -71.3088, zoom: 14 })}
+                  className="text-xs font-mono font-bold text-[#00A896] hover:underline cursor-pointer"
+                >
+                  Recentrar en San Martín 398
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Latitud Central</label>
+                  <input
+                    type="number"
+                    step="0.0001"
+                    value={currentPickup.centerLat}
+                    onChange={(e) => updatePickupMap({ centerLat: parseFloat(e.target.value) || -41.1342 })}
+                    className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-medium focus:outline-none focus:border-[#00A896]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Longitud Central</label>
+                  <input
+                    type="number"
+                    step="0.0001"
+                    value={currentPickup.centerLng}
+                    onChange={(e) => updatePickupMap({ centerLng: parseFloat(e.target.value) || -71.3088 })}
+                    className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-medium focus:outline-none focus:border-[#00A896]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Zoom (12 a 18)</label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="range"
+                      min="11"
+                      max="18"
+                      value={currentPickup.zoom || 14}
+                      onChange={(e) => updatePickupMap({ zoom: parseInt(e.target.value, 10) || 14 })}
+                      className="flex-1"
+                    />
+                    <span className="font-mono font-bold text-xs w-8 text-right text-slate-800">
+                      {currentPickup.zoom || 14}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Listado de Puntos de Pick-up */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                <div>
+                  <h4 className="font-bold text-sm text-slate-900 flex items-center gap-2">
+                    <Navigation className="w-4 h-4 text-[#00A896]" />
+                    <span>Puntos de Encuentro y Salida ({points.length})</span>
+                  </h4>
+                  <p className="text-[11px] text-slate-500">
+                    Editá o agregá nuevos puntos de referencia en Bariloche donde la flota recoge a los pasajeros.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={addPickupPoint}
+                  className="px-3.5 py-2 bg-[#00A896] hover:bg-[#028090] text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-sm cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Agregar Punto</span>
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {points.map((pt, pIdx) => (
+                  <div
+                    key={pt.id}
+                    className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4 relative"
+                  >
+                    <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="w-6 h-6 rounded-lg bg-slate-800 text-white font-mono font-bold text-xs flex items-center justify-center">
+                          {pIdx + 1}
+                        </span>
+                        <span className="font-bold text-xs text-slate-800">{pt.name}</span>
+                        {pt.isPopular && (
+                          <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-mono font-bold">
+                            Sede Principal
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <label className="flex items-center gap-1.5 text-xs text-slate-600 font-medium cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={pt.isPopular || false}
+                            onChange={(e) => updatePickupPoint(pIdx, { isPopular: e.target.checked })}
+                            className="rounded text-[#00A896] focus:ring-[#00A896]"
+                          />
+                          <span>Marcar Sede Principal</span>
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => removePickupPoint(pIdx)}
+                          className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                          title="Eliminar punto"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Nombre del Punto</label>
+                        <input
+                          type="text"
+                          value={pt.name}
+                          onChange={(e) => updatePickupPoint(pIdx, { name: e.target.value })}
+                          className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Dirección / Referencia</label>
+                        <input
+                          type="text"
+                          value={pt.address}
+                          onChange={(e) => updatePickupPoint(pIdx, { address: e.target.value })}
+                          className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Horario Estimado / Nota</label>
+                        <input
+                          type="text"
+                          value={pt.estimatedTimeNote || ''}
+                          onChange={(e) => updatePickupPoint(pIdx, { estimatedTimeNote: e.target.value })}
+                          placeholder="Ej: Salida puntual o +15 min"
+                          className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                        />
+                      </div>
+
+                      <div className="sm:col-span-3">
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Descripción para el Turista</label>
+                        <input
+                          type="text"
+                          value={pt.description}
+                          onChange={(e) => updatePickupPoint(pIdx, { description: e.target.value })}
+                          className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Latitud</label>
+                        <input
+                          type="number"
+                          step="0.0001"
+                          value={pt.lat}
+                          onChange={(e) => updatePickupPoint(pIdx, { lat: parseFloat(e.target.value) || -41.1342 })}
+                          className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-mono font-medium focus:outline-none focus:border-[#00A896]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Longitud</label>
+                        <input
+                          type="number"
+                          step="0.0001"
+                          value={pt.lng}
+                          onChange={(e) => updatePickupPoint(pIdx, { lng: parseFloat(e.target.value) || -71.3088 })}
+                          className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-mono font-medium focus:outline-none focus:border-[#00A896]"
+                        />
+                      </div>
+
+                      <div className="flex items-end">
+                        <a
+                          href={`https://maps.google.com/?q=${pt.lat},${pt.lng}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="w-full py-2 px-3 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                          <span>Verificar en Google Maps</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Live Preview in Admin */}
+            <div className="space-y-3 pt-4 border-t border-slate-200">
+              <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider block">
+                Vista Previa del Mapa Incrustado (Centro: {currentPickup.centerLat || -41.1342}, {currentPickup.centerLng || -71.3088})
+              </span>
+              <div className="rounded-2xl overflow-hidden border border-slate-300 h-72">
+                <iframe
+                  title="Preview Mapa Pickups"
+                  src={`https://maps.google.com/maps?q=${currentPickup.centerLat || -41.1342},${currentPickup.centerLng || -71.3088}&z=${currentPickup.zoom || 14}&output=embed`}
+                  width="100%"
+                  height="100%"
+                  className="border-0 w-full h-full"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+
+          </div>
+        );
+      })()}
 
       {/* MODAL MEDIA LIBRARY FOR BACKGROUND IMAGE & BANNER SLIDES */}
       <MediaLibraryModal

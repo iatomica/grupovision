@@ -68,14 +68,14 @@ Pasajero Principal: ${booking.customerName}
 Excursión         : ${booking.excursionTitle}
 Fecha de Salida   : ${booking.date}
 Cantidad Pasajeros: ${booking.guests}
-Punto de Encuentro: ${booking.pickupLocation || 'Oficina Urquiza 276'}
+Punto de Encuentro: ${booking.pickupLocation || 'Oficina San Martín 398'}
 Guía Asignado     : ${booking.assignedGuide || 'Guía AAGM Oficial'}
 Vehículo Flota    : ${booking.assignedVehicle || 'Unidad Habilitada'}
 Total USD         : $${booking.totalPriceUSD} USD
 Estado            : ${booking.status}
 
 Instrucciones: Presentar este voucher digital o impreso al momento de abordar la unidad.
-Consultas 24/7: +54 9 294 442-8800 | Urquiza 276 (Centro Cívico)
+Consultas 24/7: +54 9 294 442-8800 | San Martín 398, San Carlos de Bariloche
 =====================================================
     `.trim();
 
@@ -327,7 +327,7 @@ Consultas 24/7: +54 9 294 442-8800 | Urquiza 276 (Centro Cívico)
                         <div>
                           <div className="text-xs text-slate-400 font-medium">Pickup / Punto de Encuentro</div>
                           <div className="font-semibold text-slate-800 truncate max-w-[200px]">
-                            {booking.pickupLocation || 'Oficina Centro (Urquiza 276)'}
+                            {booking.pickupLocation || 'Oficina Central (San Martín 398)'}
                           </div>
                         </div>
                       </div>
@@ -447,7 +447,7 @@ Consultas 24/7: +54 9 294 442-8800 | Urquiza 276 (Centro Cívico)
               <div>
                 <h3 className="font-bold text-slate-900 text-lg">Thomas Benítez</h3>
                 <p className="text-xs text-cyan-700 font-medium">Asesor Comercial de Viajes</p>
-                <p className="text-xs text-slate-500">Urquiza 276 (Centro Cívico)</p>
+                <p className="text-xs text-slate-500">San Martín 398 (Casa Central)</p>
               </div>
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
                 <CheckCircle className="w-3.5 h-3.5" /> En línea ahora

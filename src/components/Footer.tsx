@@ -44,7 +44,7 @@ export const Footer: React.FC<FooterProps> = ({
     { 
       icon: Building2, 
       label: 'OFICINAS', 
-      title: 'Centro Cívico & Urquiza 276',
+      title: 'San Martín 398 (Casa Central)',
       desc: 'Atención personalizada todos los días de 08:30 a 20:30 hs'
     }
   ];
@@ -154,12 +154,12 @@ export const Footer: React.FC<FooterProps> = ({
                 <div>
                   <span className="text-white font-bold block">Oficina Central Bariloche</span>
                   <a 
-                    href="https://maps.google.com/?q=Urquiza+276,+San+Carlos+de+Bariloche" 
+                    href="https://maps.google.com/?q=San+Martin+398,+San+Carlos+de+Bariloche" 
                     target="_blank" 
                     rel="noreferrer"
                     className="hover:text-cyan-300 underline inline-flex items-center gap-1"
                   >
-                    <span>Urquiza 276, Centro</span>
+                    <span>San Martín 398, San Carlos de Bariloche</span>
                     <ArrowUpRight className="w-3 h-3" />
                   </a>
                 </div>

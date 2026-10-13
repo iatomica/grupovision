@@ -240,9 +240,9 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
         <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
           {calendarDays.map((item, idx) => {
             const isSelected = item.dateStr === selectedDate;
-            const { isOperational, isBlocked, isPast, isSoldOut, availableSpots } = item.status;
+            const { isOperational, isBlocked, isPast, isSoldOut, isAdvanceBlocked, availableSpots, minAdvanceHours } = item.status;
             
-            const isClickable = !isPast && isOperational && !isBlocked;
+            const isClickable = !isPast && isOperational && !isBlocked && !isAdvanceBlocked;
 
             return (
               <button
@@ -252,8 +252,8 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
                 onClick={() => {
                   if (isClickable) {
                     onSelectDate(item.dateStr);
-                    // auto seleccionar primer turno con cupo
-                    const firstWithSpots = item.status.shiftsSummary.find(s => s.availableSpots > 0);
+                    // auto seleccionar primer turno con cupo y sin corte de anticipación
+                    const firstWithSpots = item.status.shiftsSummary.find(s => s.availableSpots > 0 && !s.isAdvanceBlocked);
                     if (firstWithSpots) {
                       onSelectShiftId(firstWithSpots.shift.id);
                     }
@@ -268,6 +268,8 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
                     ? 'opacity-40 bg-slate-50 border-slate-200 cursor-not-allowed'
                     : !isOperational || isBlocked
                     ? 'bg-slate-50/80 border-slate-200 text-slate-400 cursor-not-allowed'
+                    : isAdvanceBlocked
+                    ? 'bg-amber-50/70 border-amber-200/80 text-amber-800 cursor-not-allowed'
                     : isSoldOut
                     ? 'bg-rose-50/50 border-rose-200 text-slate-600'
                     : 'bg-white border-slate-200/90 hover:border-[#00A896] hover:bg-emerald-50/20 text-slate-800'
@@ -316,6 +318,10 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
                     <span className="text-slate-400 text-[8px] font-mono">Sin salida</span>
                   ) : isBlocked ? (
                     <span className="text-rose-400 text-[8px] font-mono">Cerrado</span>
+                  ) : isAdvanceBlocked ? (
+                    <span className="text-amber-700 text-[8px] font-mono font-bold leading-none block">
+                      &lt; {minAdvanceHours}h ant.
+                    </span>
                   ) : null}
                 </div>
               </button>
@@ -333,6 +339,10 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
             <span className="flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-amber-400" />
               <span>Últimos Lugares (≤ 4)</span>
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-amber-500" />
+              <span>Cierre Anticipado (&lt; 24h)</span>
             </span>
             <span className="flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-rose-500" />
@@ -368,6 +378,21 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
           </div>
         </div>
 
+        {/* Alerta de bloqueo por anticipación mínima si aplica */}
+        {selectedDateStatus.isAdvanceBlocked && (
+          <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2.5 text-amber-800 text-xs">
+            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <p className="font-bold">
+                Reserva Online Cerrada por Anticipación Mínima ({selectedDateStatus.minAdvanceHours} hs)
+              </p>
+              <p className="text-[11px] text-amber-700 leading-relaxed">
+                Por logística y asignación de flota, esta excursión requiere contratarse con al menos {selectedDateStatus.minAdvanceHours} horas de anticipación previa a la salida. Para consultar salidas inmediatas de hoy o mañana, escribinos directamente por WhatsApp.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Turnos disponibles */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
@@ -381,20 +406,21 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            {effectiveShifts.map(({ shift, availableSpots, totalCapacity, isSoldOut }) => {
+            {effectiveShifts.map(({ shift, availableSpots, totalCapacity, isSoldOut, isAdvanceBlocked }) => {
               const isSelected = activeShiftItem?.shift.id === shift.id;
               const isLow = availableSpots > 0 && availableSpots <= 4;
+              const isDisabled = isSoldOut || isAdvanceBlocked;
 
               return (
                 <div
                   key={shift.id}
                   onClick={() => {
-                    if (!isSoldOut) {
+                    if (!isDisabled) {
                       onSelectShiftId(shift.id);
                     }
                   }}
                   className={`p-3 rounded-xl border text-xs transition-all relative flex flex-col justify-between gap-2 ${
-                    isSoldOut
+                    isDisabled
                       ? 'bg-slate-100/70 border-slate-200 opacity-60 cursor-not-allowed'
                       : isSelected
                       ? 'bg-white border-[#00A896] ring-2 ring-[#00A896]/20 shadow-sm cursor-pointer'
@@ -405,7 +431,7 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
                     <div>
                       <div className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
                         <span>{shift.name}</span>
-                        {isSelected && !isSoldOut && (
+                        {isSelected && !isDisabled && (
                           <span className="w-2 h-2 rounded-full bg-[#00A896]" />
                         )}
                       </div>
@@ -416,7 +442,11 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
                     </div>
 
                     {/* Status Badge */}
-                    {isSoldOut ? (
+                    {isAdvanceBlocked ? (
+                      <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-mono font-bold shrink-0">
+                        Corte &lt; {selectedDateStatus.minAdvanceHours}h
+                      </span>
+                    ) : isSoldOut ? (
                       <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[10px] font-mono font-bold shrink-0">
                         Agotado
                       </span>
@@ -433,8 +463,8 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
 
                   <div className="flex items-center justify-between text-[11px] pt-1.5 border-t border-slate-100 font-mono">
                     <span className="text-slate-400">Capacidad: {totalCapacity} pax</span>
-                    <span className={`font-bold ${isSelected && !isSoldOut ? 'text-[#00A896]' : 'text-slate-600'}`}>
-                      {isSoldOut ? 'Sin disponibilidad' : isSelected ? '✓ Seleccionado' : 'Elegir turno'}
+                    <span className={`font-bold ${isSelected && !isDisabled ? 'text-[#00A896]' : 'text-slate-600'}`}>
+                      {isAdvanceBlocked ? 'Cerrado por anticipación' : isSoldOut ? 'Sin disponibilidad' : isSelected ? '✓ Seleccionado' : 'Elegir turno'}
                     </span>
                   </div>
                 </div>

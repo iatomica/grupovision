@@ -182,6 +182,11 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   const [formOperatingDays, setFormOperatingDays] = useState<number[]>([0, 1, 2, 3, 4, 5, 6]);
   const [formBlockedDates, setFormBlockedDates] = useState<string[]>([]);
   const [newBlockedDate, setNewBlockedDate] = useState<string>('');
+  const [blockedDateMode, setBlockedDateMode] = useState<'single' | 'range'>('range');
+  const [newBlockedStartDate, setNewBlockedStartDate] = useState<string>('');
+  const [newBlockedEndDate, setNewBlockedEndDate] = useState<string>('');
+  const [rangeFeedbackMessage, setRangeFeedbackMessage] = useState<string | null>(null);
+  const [formMinBookingAdvanceHours, setFormMinBookingAdvanceHours] = useState<number>(24);
   const [newGalleryUrl, setNewGalleryUrl] = useState<string>('');
   const [mediaModalMode, setMediaModalMode] = useState<'cover' | 'gallery'>('cover');
   const [formShifts, setFormShifts] = useState<ExcursionShift[]>([]);
@@ -298,6 +303,10 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     setFormOperatingDays([0, 1, 2, 3, 4, 5, 6]);
     setFormBlockedDates([]);
     setNewBlockedDate('');
+    setNewBlockedStartDate('');
+    setNewBlockedEndDate('');
+    setRangeFeedbackMessage(null);
+    setFormMinBookingAdvanceHours(24);
     setNewGalleryUrl('');
     setFormCustomNote('');
     setFormShifts([
@@ -347,6 +356,10 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     );
     setFormBlockedDates(Array.isArray(exc.blockedDates) ? [...exc.blockedDates] : []);
     setNewBlockedDate('');
+    setNewBlockedStartDate('');
+    setNewBlockedEndDate('');
+    setRangeFeedbackMessage(null);
+    setFormMinBookingAdvanceHours(typeof exc.minBookingAdvanceHours === 'number' ? exc.minBookingAdvanceHours : 24);
     setNewGalleryUrl('');
     setFormCustomNote(exc.customNote || '');
     setFormShifts(
@@ -418,6 +431,50 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     setNewBlockedDate('');
   };
 
+  const handleAddBlockedRange = () => {
+    if (!newBlockedStartDate || !newBlockedEndDate) {
+      setRangeFeedbackMessage('Por favor seleccioná tanto la fecha de inicio como la de fin.');
+      setTimeout(() => setRangeFeedbackMessage(null), 3500);
+      return;
+    }
+
+    if (newBlockedStartDate > newBlockedEndDate) {
+      setRangeFeedbackMessage('La fecha de inicio debe ser anterior o igual a la de fin.');
+      setTimeout(() => setRangeFeedbackMessage(null), 3500);
+      return;
+    }
+
+    const start = new Date(newBlockedStartDate + 'T12:00:00');
+    const end = new Date(newBlockedEndDate + 'T12:00:00');
+    const diffDays = Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (diffDays > 180) {
+      setRangeFeedbackMessage('El rango seleccionado no puede superar los 180 días corridos.');
+      setTimeout(() => setRangeFeedbackMessage(null), 3500);
+      return;
+    }
+
+    const generatedDates: string[] = [];
+    const current = new Date(start);
+    while (current <= end) {
+      generatedDates.push(current.toISOString().split('T')[0]);
+      current.setDate(current.getDate() + 1);
+    }
+
+    const updated = Array.from(new Set([...formBlockedDates, ...generatedDates])).sort();
+    setFormBlockedDates(updated);
+    setRangeFeedbackMessage(`Se bloquearon exitosamente ${generatedDates.length} fechas en el rango.`);
+    setTimeout(() => setRangeFeedbackMessage(null), 4000);
+  };
+
+  const handleClearAllBlockedDates = () => {
+    if (window.confirm('¿Seguro que deseas desbloquear todas las fechas de esta excursión?')) {
+      setFormBlockedDates([]);
+      setRangeFeedbackMessage('Se desbloquearon todas las fechas.');
+      setTimeout(() => setRangeFeedbackMessage(null), 3500);
+    }
+  };
+
   const handleRemoveBlockedDate = (dateStr: string) => {
     setFormBlockedDates(prev => prev.filter(d => d !== dateStr));
   };
@@ -481,6 +538,7 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
       gallery: formGallery.filter(url => Boolean(url && url.trim())),
       operatingDays: formOperatingDays,
       blockedDates: formBlockedDates,
+      minBookingAdvanceHours: Number(formMinBookingAdvanceHours) || 24,
       customNote: formCustomNote.trim() || undefined
     };
 
@@ -1387,47 +1445,234 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                       </div>
 
                       {/* Blocked Dates Sub-section */}
-                      <div className="pt-3 border-t border-slate-200/60 space-y-2">
-                        <label className="block text-xs font-bold text-slate-700">
-                          2. Fechas Específicas Bloqueadas (Feriados, Mantenimiento o Cupos Agotados)
-                        </label>
-                        <div className="flex gap-2">
-                          <input
-                            type="date"
-                            value={newBlockedDate}
-                            onChange={(e) => setNewBlockedDate(e.target.value)}
-                            className="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
-                          />
-                          <button
-                            type="button"
-                            onClick={handleAddBlockedDate}
-                            className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
-                          >
-                            <Plus className="w-3.5 h-3.5" />
-                            <span>Bloquear Fecha</span>
-                          </button>
+                      <div className="pt-3 border-t border-slate-200/60 space-y-3">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                          <label className="block text-xs font-bold text-slate-700">
+                            2. Fechas Específicas Bloqueadas (Cierre de Salidas / Mantenimiento)
+                          </label>
+                          <div className="flex items-center gap-1.5 self-start sm:self-auto">
+                            <button
+                              type="button"
+                              onClick={() => setBlockedDateMode('range')}
+                              className={`px-2.5 py-1 text-xs font-medium rounded-lg transition-all cursor-pointer ${
+                                blockedDateMode === 'range'
+                                  ? 'bg-[#00A896] text-white font-bold shadow-xs'
+                                  : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                              }`}
+                            >
+                              🗓️ Rango de Fechas
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setBlockedDateMode('single')}
+                              className={`px-2.5 py-1 text-xs font-medium rounded-lg transition-all cursor-pointer ${
+                                blockedDateMode === 'single'
+                                  ? 'bg-[#00A896] text-white font-bold shadow-xs'
+                                  : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                              }`}
+                            >
+                              📅 Fecha Única
+                            </button>
+                          </div>
                         </div>
 
-                        {/* List of blocked dates */}
-                        {formBlockedDates.length > 0 && (
-                          <div className="flex flex-wrap gap-2 pt-1">
-                            {formBlockedDates.map((dateStr) => (
-                              <span
-                                key={dateStr}
-                                className="px-3 py-1 bg-rose-50 text-rose-800 border border-rose-200 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5"
+                        {/* Modo Rango de Fechas */}
+                        {blockedDateMode === 'range' ? (
+                          <div className="p-3 bg-slate-50/80 border border-slate-200 rounded-xl space-y-2">
+                            <div className="flex flex-col sm:flex-row sm:items-end gap-2.5">
+                              <div className="flex-1">
+                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                                  Fecha Desde
+                                </label>
+                                <input
+                                  type="date"
+                                  value={newBlockedStartDate}
+                                  onChange={(e) => setNewBlockedStartDate(e.target.value)}
+                                  className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                                />
+                              </div>
+                              <div className="flex-1">
+                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                                  Fecha Hasta (Inclusive)
+                                </label>
+                                <input
+                                  type="date"
+                                  value={newBlockedEndDate}
+                                  onChange={(e) => setNewBlockedEndDate(e.target.value)}
+                                  className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                                />
+                              </div>
+                              <button
+                                type="button"
+                                onClick={handleAddBlockedRange}
+                                className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
                               >
-                                <span>⛔ {dateStr}</span>
-                                <button
-                                  type="button"
-                                  onClick={() => handleRemoveBlockedDate(dateStr)}
-                                  className="text-rose-400 hover:text-rose-700 ml-1 cursor-pointer font-sans"
-                                >
-                                  ✕
-                                </button>
-                              </span>
-                            ))}
+                                <CalendarDays className="w-3.5 h-3.5 text-emerald-400" />
+                                <span>Bloquear Rango Completo</span>
+                              </button>
+                            </div>
+                            <p className="text-[11px] text-slate-500">
+                              Permite cerrar varios días continuados de una sola vez (ej: período de mantenimiento, temporada baja o veda de senderos).
+                            </p>
+                          </div>
+                        ) : (
+                          /* Modo Fecha Única */
+                          <div className="flex gap-2">
+                            <input
+                              type="date"
+                              value={newBlockedDate}
+                              onChange={(e) => setNewBlockedDate(e.target.value)}
+                              className="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                            />
+                            <button
+                              type="button"
+                              onClick={handleAddBlockedDate}
+                              className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
+                            >
+                              <Plus className="w-3.5 h-3.5" />
+                              <span>Bloquear Fecha</span>
+                            </button>
                           </div>
                         )}
+
+                        {/* Mensaje de feedback de rango */}
+                        {rangeFeedbackMessage && (
+                          <div className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-medium flex items-center justify-between">
+                            <span>{rangeFeedbackMessage}</span>
+                            <button
+                              type="button"
+                              onClick={() => setRangeFeedbackMessage(null)}
+                              className="text-emerald-500 hover:text-emerald-800 ml-2"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        )}
+
+                        {/* List of blocked dates */}
+                        {formBlockedDates.length > 0 ? (
+                          <div className="space-y-1.5 pt-1">
+                            <div className="flex items-center justify-between text-[11px] text-slate-500 font-mono">
+                              <span>Total: {formBlockedDates.length} fechas bloqueadas</span>
+                              <button
+                                type="button"
+                                onClick={handleClearAllBlockedDates}
+                                className="text-rose-600 hover:text-rose-800 underline cursor-pointer"
+                              >
+                                Desbloquear todas
+                              </button>
+                            </div>
+                            <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-2 bg-slate-50/50 border border-slate-200/70 rounded-xl">
+                              {formBlockedDates.map((dateStr) => (
+                                <span
+                                  key={dateStr}
+                                  className="px-2.5 py-0.5 bg-rose-50 text-rose-800 border border-rose-200 rounded-lg text-[11px] font-mono font-bold flex items-center gap-1"
+                                >
+                                  <span>⛔ {dateStr}</span>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveBlockedDate(dateStr)}
+                                    className="text-rose-400 hover:text-rose-700 ml-1 cursor-pointer font-sans"
+                                    title="Desbloquear fecha"
+                                  >
+                                    ✕
+                                  </button>
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-[11px] text-slate-400 italic">
+                            No hay fechas específicas bloqueadas para esta excursión. Opera todos los días habilitados.
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Minimum Booking Advance Cutoff Setting */}
+                      <div className="pt-3 border-t border-slate-200/60 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <label className="block text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5 text-amber-600" />
+                            <span>3. Anticipación Mínima para Reserva Online (Corte de Venta)</span>
+                          </label>
+                          <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[11px] font-mono font-bold">
+                            {formMinBookingAdvanceHours} horas antes
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-500">
+                          Bloquea automáticamente la contratación online en la web cuando falten menos horas que las configuradas aquí para el turno/salida. Evita ventas sin tiempo operativo de despacho.
+                        </p>
+                        <div className="flex flex-wrap items-center gap-2 pt-1">
+                          <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-xl px-3 py-1.5">
+                            <input
+                              type="number"
+                              min="0"
+                              max="168"
+                              value={formMinBookingAdvanceHours}
+                              onChange={(e) => setFormMinBookingAdvanceHours(Math.max(0, parseInt(e.target.value, 10) || 0))}
+                              className="w-16 text-xs font-mono font-bold text-slate-800 focus:outline-none"
+                            />
+                            <span className="text-xs text-slate-400 font-mono">horas</span>
+                          </div>
+
+                          <div className="flex flex-wrap items-center gap-1 text-[11px]">
+                            <button
+                              type="button"
+                              onClick={() => setFormMinBookingAdvanceHours(6)}
+                              className={`px-2 py-1 rounded-lg border transition-all cursor-pointer ${
+                                formMinBookingAdvanceHours === 6
+                                  ? 'bg-amber-600 text-white border-amber-600 font-bold'
+                                  : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                              }`}
+                            >
+                              6 hs
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setFormMinBookingAdvanceHours(12)}
+                              className={`px-2 py-1 rounded-lg border transition-all cursor-pointer ${
+                                formMinBookingAdvanceHours === 12
+                                  ? 'bg-amber-600 text-white border-amber-600 font-bold'
+                                  : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                              }`}
+                            >
+                              12 hs
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setFormMinBookingAdvanceHours(24)}
+                              className={`px-2 py-1 rounded-lg border transition-all cursor-pointer ${
+                                formMinBookingAdvanceHours === 24
+                                  ? 'bg-[#00A896] text-white border-[#00A896] font-bold shadow-xs'
+                                  : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                              }`}
+                            >
+                              24 hs (Recomendado)
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setFormMinBookingAdvanceHours(48)}
+                              className={`px-2 py-1 rounded-lg border transition-all cursor-pointer ${
+                                formMinBookingAdvanceHours === 48
+                                  ? 'bg-amber-600 text-white border-amber-600 font-bold'
+                                  : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                              }`}
+                            >
+                              48 hs
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setFormMinBookingAdvanceHours(72)}
+                              className={`px-2 py-1 rounded-lg border transition-all cursor-pointer ${
+                                formMinBookingAdvanceHours === 72
+                                  ? 'bg-amber-600 text-white border-amber-600 font-bold'
+                                  : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                              }`}
+                            >
+                              72 hs (Expediciones)
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -1435,7 +1680,7 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                       <div>
                         <h4 className="text-xs font-bold text-cyan-900 uppercase tracking-wider flex items-center gap-1.5">
                           <Clock className="w-4 h-4 text-cyan-600" />
-                          3. Configuración de Turnos y Cupos Operativos
+                          4. Configuración de Turnos y Cupos Operativos
                         </h4>
                         <p className="text-[11px] text-cyan-800 mt-0.5">
                           Define los horarios de salida y el cupo de pasajeros para que los visitantes puedan ver la disponibilidad y elegir turno desde la web.
