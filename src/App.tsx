@@ -164,7 +164,7 @@ const INITIAL_BOOKINGS: Booking[] = [
     excursionTitle: 'Camino de los 7 Lagos - San Martín de los Andes',
     date: '2026-08-25',
     guests: 2,
-    totalPriceUSD: 280,
+    totalPriceUSD: 150000,
     pickupLocation: 'Hotel Llao Llao Resort & Spa',
     status: 'CONFIRMADA',
     ticketType: 'Reserva',
@@ -197,7 +197,7 @@ const INITIAL_BOOKINGS: Booking[] = [
     excursionTitle: 'Refugio Roca Negra',
     date: '2026-08-24',
     guests: 4,
-    totalPriceUSD: 720,
+    totalPriceUSD: 960000,
     pickupLocation: 'Alma del Lago Suites (Av. Bustillo 1.150)',
     status: 'CONFIRMADA',
     ticketType: 'VIP',
@@ -230,7 +230,7 @@ const INITIAL_BOOKINGS: Booking[] = [
     excursionTitle: 'Cerro Tronador y Glaciares',
     date: '2026-08-26',
     guests: 3,
-    totalPriceUSD: 360,
+    totalPriceUSD: 180000,
     pickupLocation: 'Hotel Panamericano Bariloche',
     status: 'COTIZACION',
     ticketType: 'Consulta',
@@ -251,7 +251,7 @@ const INITIAL_BOOKINGS: Booking[] = [
     excursionTitle: 'Cabalgata " La Fragua "',
     date: '2026-08-27',
     guests: 2,
-    totalPriceUSD: 320,
+    totalPriceUSD: 170000,
     pickupLocation: 'Design Suites Bariloche',
     status: 'BACKLOG',
     ticketType: 'Logística',
@@ -627,7 +627,7 @@ export default function App() {
         {
           id: `log-${Date.now().toString().slice(-4)}`,
           user: userName || 'Administrador',
-          action: `Actualizó tarifa/promo de "${target.title}" (USD $${updates.priceNum ?? target.priceNum}, ${updates.discountPercent ?? target.discountPercent ?? 0}% OFF)`,
+          action: `Actualizó tarifa/promo de "${target.title}" ($${(updates.priceNum ?? target.priceNum)?.toLocaleString('es-AR')} ARS, ${updates.discountPercent ?? target.discountPercent ?? 0}% OFF)`,
           timestamp: 'Justo ahora',
           type: 'discount'
         },
@@ -655,7 +655,7 @@ export default function App() {
         user: userName || 'Administrador',
         action: isNew 
           ? `Creó la nueva excursión "${excursion.title}" en la categoría ${excursion.category}` 
-          : `Editó ficha completa de "${excursion.title}" (USD $${excursion.priceNum})`,
+          : `Editó ficha completa de "${excursion.title}" ($${(excursion.priceNum)?.toLocaleString('es-AR')} ARS)`,
         timestamp: 'Justo ahora',
         type: 'system'
       },
@@ -1317,7 +1317,7 @@ export default function App() {
                           <div className="flex items-baseline gap-1.5">
                             <span className="text-[11px] font-mono text-slate-400">{t.catalog.rate}</span>
                             <span className="text-base font-extrabold text-[#00A896]">
-                              USD ${displayPrice}
+                              ${displayPrice.toLocaleString('es-AR')} ARS
                             </span>
                             {item.discountPercent && item.discountPercent > 0 ? (
                               <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">
@@ -1685,7 +1685,7 @@ export default function App() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-1 rounded-md bg-[#00A896]/10 text-[#00A896] font-mono text-xs font-bold">SISTEMA DE TICKETS RECEPTIVO</span>
-                <span className="text-xs font-mono text-slate-500">Oficinas Urquiza 276 & San Martín 398</span>
+                <span className="text-xs font-mono text-slate-500">Oficina San Martín 398</span>
               </div>
               <h1 className="text-3xl font-black text-slate-900 mt-1">Control de Pasajeros & Logística Receptiva</h1>
             </div>
@@ -1848,7 +1848,7 @@ export default function App() {
 
                 <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-1">
                   <span className="text-slate-500 text-[11px] font-mono flex items-center gap-1"><DollarSign className="w-4 h-4 text-[#00A896]" /> Total Cotizado</span>
-                  <div className="text-2xl font-black text-[#00A896]">USD {bookings.reduce((s, b) => s + b.totalPriceUSD, 0)}</div>
+                  <div className="text-2xl font-black text-[#00A896]">ARS ${bookings.reduce((s, b) => s + b.totalPriceUSD, 0).toLocaleString('es-AR')}</div>
                 </div>
               </div>
 
@@ -1981,7 +1981,7 @@ export default function App() {
               <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
                 <div>
                   <h2 className="text-xl font-bold text-slate-900">Control de Permisos & Personal Receptivo</h2>
-                  <p className="text-slate-500 text-xs font-mono">Gestión de accesos para las sucursales Urquiza 276 y San Martín 398</p>
+                  <p className="text-slate-500 text-xs font-mono">Gestión de accesos para la sucursal San Martín 398</p>
                 </div>
 
                 <div className="overflow-x-auto">
@@ -2188,7 +2188,7 @@ export default function App() {
             : ' [Guía Español / Portugués]';
           const totalEstimate = activePrice * modalPassengers;
           const waBookingMessage = isSelectedDateAvailable
-            ? `Hola Grupo Visión! Deseo consultar y reservar la excursión "${activeContent.title}"${dateInfo}${shiftInfo}${langGuideInfo} | Pasajeros: ${modalPassengers} | Tarifa est.: USD $${totalEstimate}. ¿Tienen disponibilidad confirmada?`
+            ? `Hola Grupo Visión! Deseo consultar y reservar la excursión "${activeContent.title}"${dateInfo}${shiftInfo}${langGuideInfo} | Pasajeros: ${modalPassengers} | Tarifa est.: $${totalEstimate.toLocaleString('es-AR')} ARS. ¿Tienen disponibilidad confirmada?`
             : `Hola Grupo Visión! Deseo consultar si es posible programar una salida especial para la excursión "${activeContent.title}" en la fecha ${modalSelectedDate} (${formattedSelectedDate})${langGuideInfo} | Pasajeros: ${modalPassengers}. ¿Tienen opciones disponibles?`;
           const waUrl = `https://wa.me/5492944235278?text=${encodeURIComponent(waBookingMessage)}`;
 
@@ -2329,10 +2329,10 @@ export default function App() {
                     </div>
                     <div>
                       <span className="text-slate-400 block text-[10px] uppercase">
-                        {currentLang === 'en' ? 'USD RATE (EN GUIDE)' : 'TARIFA USD (ES/PT)'}
+                        {currentLang === 'en' ? 'RATE (EN GUIDE)' : 'TARIFA (ES/PT)'}
                       </span>
                       <span className="font-bold text-[#00A896] text-sm">
-                        USD ${activePrice} / pax
+                        ${activePrice.toLocaleString('es-AR')} ARS / pax
                       </span>
                     </div>
                   </div>
@@ -2489,7 +2489,7 @@ export default function App() {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-slate-900">Ingresar Nuevo Ticket Receptivo</h3>
-                    <span className="text-xs font-mono text-slate-500">Oficina Urquiza 276</span>
+                    <span className="text-xs font-mono text-slate-500">Oficina San Martín 398</span>
                   </div>
                 </div>
 
@@ -2637,31 +2637,12 @@ export default function App() {
                   <Building2 className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">Sucursales Céntricas</h3>
+                  <h3 className="text-xl font-bold text-slate-900">Casa Central</h3>
                   <span className="text-xs font-mono text-slate-500">San Carlos de Bariloche, Argentina</span>
                 </div>
               </div>
 
               <div className="space-y-4 text-xs">
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                  <div className="font-bold text-slate-900 text-sm flex items-center justify-between">
-                    <span>Sucursal Centro</span>
-                    <a 
-                      href="https://maps.google.com/?q=Urquiza+276,+San+Carlos+de+Bariloche" 
-                      target="_blank" 
-                      rel="noreferrer"
-                      className="text-[#00A896] hover:underline text-[10px] font-mono font-bold flex items-center gap-1 bg-[#00A896]/10 px-2.5 py-1 rounded-full border border-[#00A896]/20 transition-all hover:bg-[#00A896]/20"
-                      title="Ver en Google Maps"
-                    >
-                      <MapPin className="w-3 h-3" />
-                      <span>Urquiza 276</span>
-                      <ArrowUpRight className="w-3 h-3" />
-                    </a>
-                  </div>
-                  <p className="text-slate-600">A metros del Centro Cívico. Venta presencial de excursiones, traslados e información turística.</p>
-                  <div className="text-[11px] font-mono text-slate-800 font-semibold pt-1">Horario: Lunes a Domingos 08:30 a 20:30 hs</div>
-                </div>
-
                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                   <div className="font-bold text-slate-900 text-sm flex items-center justify-between">
                     <span>Casa Central</span>

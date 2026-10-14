@@ -71,7 +71,7 @@ Cantidad Pasajeros: ${booking.guests}
 Punto de Encuentro: ${booking.pickupLocation || 'Oficina San Martín 398'}
 Guía Asignado     : ${booking.assignedGuide || 'Guía AAGM Oficial'}
 Vehículo Flota    : ${booking.assignedVehicle || 'Unidad Habilitada'}
-Total USD         : $${booking.totalPriceUSD} USD
+Total ARS         : $${booking.totalPriceUSD.toLocaleString('es-AR')} ARS
 Estado            : ${booking.status}
 
 Instrucciones: Presentar este voucher digital o impreso al momento de abordar la unidad.
@@ -411,9 +411,9 @@ Consultas 24/7: +54 9 294 442-8800 | San Martín 398, San Carlos de Bariloche
 
                     <div className="pt-4 border-t border-slate-100 flex items-end justify-between">
                       <div>
-                        <div className="text-xs text-slate-400 line-through">${originalPrice} USD</div>
+                        <div className="text-xs text-slate-400 line-through">${originalPrice.toLocaleString('es-AR')} ARS</div>
                         <div className="text-2xl font-black text-slate-900 flex items-center gap-1">
-                          ${finalPrice} <span className="text-xs text-emerald-600 font-semibold">USD</span>
+                          ${finalPrice.toLocaleString('es-AR')} <span className="text-xs text-emerald-600 font-semibold">ARS</span>
                         </div>
                       </div>
 
@@ -557,7 +557,7 @@ Consultas 24/7: +54 9 294 442-8800 | San Martín 398, San Carlos de Bariloche
               <div>
                 <h3 className="text-xl font-bold text-slate-900">{selectedExcursionForRequest.title}</h3>
                 <p className="text-xs text-slate-500 mt-1">
-                  Se aplicará tu descuento asignado del <strong className="text-emerald-600">{currentUser.customDiscountPercent}% OFF</strong> sobre la tarifa base de ${selectedExcursionForRequest.priceNum} USD.
+                  Se aplicará tu descuento asignado del <strong className="text-emerald-600">{currentUser.customDiscountPercent}% OFF</strong> sobre la tarifa base de ${(selectedExcursionForRequest.priceNum || 0).toLocaleString('es-AR')} ARS.
                 </p>
               </div>
 

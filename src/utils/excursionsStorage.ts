@@ -1,6 +1,6 @@
 import { Excursion, EXCURSIONS_DATA, normalizeExcursion } from '../data/excursionsData';
 
-const STORAGE_KEY = 'grupovision_excursions_catalog_v1';
+const STORAGE_KEY = 'grupovision_excursions_catalog_v2';
 
 export interface MediaItem {
   id: string;

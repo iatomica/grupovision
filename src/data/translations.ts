@@ -73,8 +73,8 @@ export const UI_TRANSLATIONS = {
     },
     langSelector: {
       label: 'Idioma & Tarifa',
-      rateNoticeEn: 'Tarifa en USD con guía bilingüe en inglés',
-      rateNoticeEsPt: 'Tarifa estándar en USD para Español y Portugués'
+      rateNoticeEn: 'Tarifa en ARS con guía bilingüe en inglés',
+      rateNoticeEsPt: 'Tarifa estándar en ARS para Español y Portugués'
     }
   },
   en: {
@@ -134,8 +134,8 @@ export const UI_TRANSLATIONS = {
     },
     langSelector: {
       label: 'Language & Rates',
-      rateNoticeEn: 'USD Rate with English bilingual guide',
-      rateNoticeEsPt: 'Standard USD rate for Spanish & Portuguese'
+      rateNoticeEn: 'ARS Rate with English bilingual guide',
+      rateNoticeEsPt: 'Standard ARS rate for Spanish & Portuguese'
     }
   },
   pt: {
@@ -195,8 +195,8 @@ export const UI_TRANSLATIONS = {
     },
     langSelector: {
       label: 'Idioma & Tarifa',
-      rateNoticeEn: 'Tarifa em USD com guia bilíngue em inglês',
-      rateNoticeEsPt: 'Mesma tarifa padrão em USD para Espanhol e Português'
+      rateNoticeEn: 'Tarifa em ARS com guia bilíngue em inglês',
+      rateNoticeEsPt: 'Mesma tarifa padrão em ARS para Espanhol e Português'
     }
   }
 };

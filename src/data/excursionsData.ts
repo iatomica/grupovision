@@ -36,8 +36,8 @@ export interface Excursion {
   faq?: { question: string; answer: string }[];
   recommendedFor: string;
   departureTime: string;
-  priceNum: number;        // Tarifa base en USD para Español y Portugués
-  priceEnglish?: number;   // Tarifa diferenciada en USD para Inglés (guía bilingüe)
+  priceNum: number;        // Tarifa base en ARS para Español y Portugués
+  priceEnglish?: number;   // Tarifa diferenciada en ARS para Inglés (guía bilingüe)
   isPublished?: boolean;   // Toggle ON/OFF para publicar en la web o dejar en borrador (default: true)
   gallery?: string[];      // Galería de fotos adicionales de la excursión
   operatingDays?: number[];// Días de la semana que opera (0=Dom, 1=Lun, ..., 6=Sáb). Default: [0,1,2,3,4,5,6]
@@ -106,7 +106,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y viajeros que buscan una experiencia de nieve durante el día.",
     "departureTime": "14:00 hs",
-    "priceNum": 25
+    "priceNum": 250000
   },
   {
     "id": "cabalgata-la-fragua",
@@ -169,7 +169,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 9
+    "priceNum": 90000
   },
   {
     "id": "camino-de-los-7-lagos-san-martin-de-los-andes",
@@ -218,7 +218,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 7
+    "priceNum": 70000
   },
   {
     "id": "cerro-catedral",
@@ -272,7 +272,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 2
+    "priceNum": 20000
   },
   {
     "id": "cerro-tronador-y-glaciares",
@@ -322,7 +322,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6
+    "priceNum": 60000
   },
   {
     "id": "circuito-chico",
@@ -374,7 +374,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs",
-    "priceNum": 2
+    "priceNum": 20000
   },
   {
     "id": "circuito-grande-villa-traful-villa-la-angostura",
@@ -437,7 +437,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6
+    "priceNum": 60000
   },
   {
     "id": "el-bolson-chacras-lago-puelo",
@@ -505,7 +505,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6
+    "priceNum": 60000
   },
   {
     "id": "el-refugio",
@@ -554,7 +554,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "parejas, grupos de amigos, familias y viajeros que buscan una experiencia de nieve completa.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 52
+    "priceNum": 520000
   },
   {
     "id": "free-walking-tour",
@@ -598,7 +598,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
       },
       {
         "question": "de donde sale el paseo ?",
-        "answer": "El paseo comienza en los locales de nuestra empresa en San Martin 398 y Urquiza 276"
+        "answer": "El paseo comienza en el local de nuestra empresa en San Martín 398"
       },
       {
         "question": "¿Que debo llevar a la excursión?",
@@ -716,7 +716,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6
+    "priceNum": 60000
   },
   {
     "id": "kayac-lago-gutierrez",
@@ -773,7 +773,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 4
+    "priceNum": 40000
   },
   {
     "id": "motos-de-nieve",
@@ -827,7 +827,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "parejas, grupos de amigos, familias y viajeros que buscan una experiencia invernal diferente.",
     "departureTime": "10:00 hs",
-    "priceNum": 22
+    "priceNum": 220000
   },
   {
     "id": "navegacion-en-brazo-tristeza",
@@ -882,7 +882,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 7
+    "priceNum": 70000
   },
   {
     "id": "piedras-blancas",
@@ -931,7 +931,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 9
+    "priceNum": 90000
   },
   {
     "id": "puerto-blest-y-cascada-de-los-cantaros",
@@ -1025,7 +1025,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "personas con movilidad suficiente para caminar por senderos y subir escaleras.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 7
+    "priceNum": 70000
   },
   {
     "id": "rafting-rio-manso-al-limite",
@@ -1086,7 +1086,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 14
+    "priceNum": 140000
   },
   {
     "id": "rafting-rio-manso-desde-villegas",
@@ -1139,7 +1139,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 12
+    "priceNum": 120000
   },
   {
     "id": "ski-nordico",
@@ -1199,7 +1199,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 16
+    "priceNum": 160000
   },
   {
     "id": "teleferico-cerro-otto",
@@ -1251,7 +1251,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "10:00 hs",
-    "priceNum": 2
+    "priceNum": 20000
   },
   {
     "id": "velero-el-orgulloso",
@@ -1307,7 +1307,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 6
+    "priceNum": 60000
   },
   {
     "id": "villa-la-angostura-y-cerro-bayo",
@@ -1378,7 +1378,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 10
+    "priceNum": 100000
   },
   {
     "id": "winter-park",
@@ -1427,7 +1427,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "12:30 hs",
-    "priceNum": 15
+    "priceNum": 150000
   },
   {
     "id": "circuito-chico-y-colonia-suiza",
@@ -1464,7 +1464,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     "additionalInfo": "ITINERARIO DETALLADO:\n• Salida desde Bariloche e inicio del recorrido por la Avenida Bustillo, bordeando el lago Nahuel Huapi.\n• Paso por Playa Bonita y parada en el Cerro Campanario. Tiempo disponible para realizar, de manera opcional, el ascenso en aerosilla.\n• Continuación hacia la zona de Llao Llao, rodeada de bosques, lagos y montañas.\n• Parada en la Capilla San Eduardo, con vistas al Hotel Llao Llao, Puerto Pañuelo y el lago Nahuel Huapi.\n• Parada en el Punto Panorámico para contemplar el lago Moreno, la península Llao Llao y el paisaje andino.\n• Traslado hacia Colonia Suiza.\n• Tiempo libre para recorrer el pueblo, visitar ferias artesanales, almorzar o probar productos regionales.\n• Regreso a Bariloche.\n• El orden de las paradas y los tiempos puede variar por razones climáticas u operativas.\n• Circuito Chico y Colonia Suiza\n\nRECOMENDACIONES:\n• Usar calzado cómodo, apto para caminar por calles de montaña.\n• Llevar abrigo y ropa adecuada al clima durante todo el año.\n• Llevar agua, protector solar, anteojos de sol y cámara fotográfica.\n• Llevar dinero o un medio de pago para consumos personales en Colonia Suiza.\n• Consultar previamente horarios, días de salida y punto de encuentro.\n• La disponibilidad de ferias, restaurantes y curanto depende del día de visita y de la operación de cada establecimiento.\n\nDATOS DE LA EXPERIENCIA:\n• Duración aproximada: día completo.\n• Modalidad: servicio regular o privado.\n• Temporada: todo el año.\n• Dificultad: baja.\n• Actividad física: baja, con caminatas cortas y opcionales.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.\n• Ascenso al Cerro Campanario: opcional y abonado por separado.",
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "09:00 hs",
-    "priceNum": 45,
+    "priceNum": 45000,
     "shifts": [
       {
         "id": "circuito-chico-y-colonia-suiza-shift-1",
@@ -1520,7 +1520,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     "additionalInfo": "ITINERARIO DETALLADO:\n• Salida desde Bariloche a las 11:00 hs.\n• Traslado hacia Colonia Suiza.\n• Llegada al pueblo e introducción sobre su historia y sus primeros pobladores.\n• Tiempo libre para recorrer las calles, visitar ferias, conocer comercios locales y disfrutar de la gastronomía regional.\n• Regreso hacia Bariloche.\n• Llegada estimada a las 15:00 hs.\n• Los tiempos y el orden del recorrido pueden variar por razones climáticas u operativas.\n• Colonia Suiza\n\nRECOMENDACIONES:\n• Usar calzado cómodo para caminar.\n• Llevar abrigo y ropa adecuada al clima.\n• Llevar agua, protector solar, anteojos de sol y cámara fotográfica.\n• Llevar dinero o un medio de pago para consumos personales.\n• Consultar previamente la disponibilidad de curanto, ferias y restaurantes para el día de la excursión.\n\nDATOS DE LA EXPERIENCIA:\n• Duración: 4 horas.\n• Horario: de 11:00 a 15:00 hs.\n• Modalidad: servicio regular o privado.\n• Temporada: todo el año.\n• Dificultad: baja.\n• Actividad física: baja, con caminatas cortas y opcionales.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.",
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "09:00 hs",
-    "priceNum": 30,
+    "priceNum": 30000,
     "shifts": [
       {
         "id": "colonia-suiza-shift-1",
@@ -1578,7 +1578,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     "additionalInfo": "ITINERARIO DETALLADO:\n• Traslado desde Bariloche hacia el Centro de Ski Nórdico.\n• Recepción en el complejo e indicaciones de seguridad.\n• Asignación de vehículos e inicio de la travesía guiada.\n• Recorrido por senderos de nieve o caminos habilitados, según las condiciones operativas.\n• Llegada al refugio.\n• Cena y tiempo para disfrutar del entorno.\n• Traslado de regreso a Bariloche.\n• El orden de las actividades puede variar por condiciones de nieve, clima y operación del complejo.\n• Noche Nórdica Aventura y Cena en Refugio\n\nRECOMENDACIONES:\n• Usar ropa de abrigo, campera impermeable, guantes, gorro y calzado apto para nieve.\n• Informar con anticipación alergias, restricciones alimentarias o dietas especiales.\n• Seguir siempre las indicaciones de los guías.\n• La elección entre moto de nieve y cuatriciclo depende de las condiciones de nieve y del terreno.\n• La actividad está sujeta a condiciones climáticas y operativas.\n• La conducción se realiza bajo las condiciones y requisitos establecidos por el prestador.\n\nDATOS DE LA EXPERIENCIA:\n• Temporada: invierno, sujeta a condiciones de nieve.\n• Ubicación: Centro de Ski Nórdico, Bariloche.\n• Actividad física: baja a moderada.\n• Dificultad: baja; no se requiere experiencia previa.\n• Vehículo: moto de nieve o cuatriciclo doble, compartido por dos pasajeros.\n• Público recomendado: parejas, grupos de amigos, familias y viajeros que buscan una experiencia nocturna de nieve.",
     "recommendedFor": "parejas, grupos de amigos, familias y viajeros que buscan una experiencia nocturna de nieve.",
     "departureTime": "09:00 hs",
-    "priceNum": 170,
+    "priceNum": 170000,
     "shifts": [
       {
         "id": "noche-nordica-shift-1",
@@ -1603,10 +1603,19 @@ export const EXCURSIONS_DATA: Excursion[] = [
 ];
 
 export function normalizeExcursion(e: Excursion): Excursion {
-  const priceNum = e.priceNum || 30;
+  let priceNum = e.priceNum !== undefined ? e.priceNum : 35000;
+  if (priceNum > 0 && priceNum < 1000) {
+    if (priceNum === 10 || priceNum === 12 || priceNum === 14 || priceNum === 15 || priceNum === 16 || priceNum === 22 || priceNum === 25 || priceNum === 52) {
+      priceNum = priceNum * 10000;
+    } else if (priceNum < 10) {
+      priceNum = priceNum * 10000;
+    } else {
+      priceNum = priceNum * 1000;
+    }
+  }
   const priceEnglish = (typeof e.priceEnglish === 'number' && e.priceEnglish > 0)
-    ? e.priceEnglish
-    : Math.max(priceNum, Math.round((priceNum * 1.25) / 5) * 5);
+    ? (e.priceEnglish < 1000 ? (e.priceEnglish < 10 ? e.priceEnglish * 10000 : e.priceEnglish * 1000) : e.priceEnglish)
+    : Math.max(priceNum, Math.round((priceNum * 1.25) / 1000) * 1000);
 
   const defaultShifts: ExcursionShift[] = [
     {

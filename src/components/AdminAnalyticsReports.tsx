@@ -49,7 +49,7 @@ export const AdminAnalyticsReports: React.FC<AdminAnalyticsReportsProps> = ({
 
   const handleExportCSVReport = () => {
     // Generate Executive CSV Content
-    let csvContent = 'ID,Codigo,Pasajero,Email,Excursion,Fecha,Pasajeros,Total_USD,Estado,Prioridad\n';
+    let csvContent = 'ID,Codigo,Pasajero,Email,Excursion,Fecha,Pasajeros,Total_ARS,Estado,Prioridad\n';
     bookings.forEach(b => {
       csvContent += `"${b.id}","${b.code}","${b.customerName}","${b.customerEmail}","${b.excursionTitle}","${b.date}",${b.guests},${b.totalPriceUSD},"${b.status}","${b.priority}"\n`;
     });
@@ -113,7 +113,7 @@ export const AdminAnalyticsReports: React.FC<AdminAnalyticsReportsProps> = ({
             <span className="text-xs font-bold uppercase tracking-wider">Facturación Total</span>
             <DollarSign className="w-5 h-5 text-emerald-600" />
           </div>
-          <div className="text-3xl font-black text-slate-900">${totalRevenueUSD.toLocaleString()} USD</div>
+          <div className="text-3xl font-black text-slate-900">${totalRevenueUSD.toLocaleString('es-AR')} ARS</div>
           <div className="text-xs text-emerald-600 font-semibold flex items-center gap-1">
             <ArrowUpRight className="w-3.5 h-3.5" /> +18.4% vs mes anterior
           </div>

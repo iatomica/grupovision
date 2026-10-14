@@ -578,7 +578,7 @@ export const AdminCalendarOperations: React.FC<AdminCalendarOperationsProps> = (
                           {b.code}
                         </span>
                         <div className="text-[9px] font-mono text-[#00A896] font-bold mt-1">
-                          USD ${b.totalPriceUSD}
+                          ${b.totalPriceUSD.toLocaleString('es-AR')} ARS
                         </div>
                       </div>
                     </div>

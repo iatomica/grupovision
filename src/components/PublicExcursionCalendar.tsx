@@ -174,8 +174,7 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
   }, [selectedDate, currentLang]);
 
   // Cotización estimada
-  const totalUSD = activePrice * passengers;
-  const estimatedARS = totalUSD * 1400; // Tipo de cambio estimado
+  const totalARS = activePrice * passengers;
 
   return (
     <div className="space-y-4">
@@ -355,7 +354,7 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
           </div>
 
           <span className="text-[#00A896] font-bold">
-            Tarifa Base: USD ${activePrice} / pax
+            Tarifa Base: ${activePrice.toLocaleString('es-AR')} ARS / pax
           </span>
         </div>
       </div>
@@ -373,7 +372,7 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono font-bold text-slate-500">Tarifa para esta fecha:</span>
             <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono font-black text-xs">
-              USD ${activePrice} / pax
+              ${activePrice.toLocaleString('es-AR')} ARS / pax
             </span>
           </div>
         </div>
@@ -525,10 +524,7 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
                 Tarifa total ({passengers} pax):
               </div>
               <div className="text-lg font-black text-[#00A896] font-mono leading-tight">
-                USD ${totalUSD}
-              </div>
-              <div className="text-[10px] font-mono text-slate-400">
-                ~ ARS ${estimatedARS.toLocaleString('es-AR')}
+                ${totalARS.toLocaleString('es-AR')} ARS
               </div>
             </div>
           </div>

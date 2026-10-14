@@ -349,7 +349,7 @@ export const AdvisorDashboard: React.FC<AdvisorDashboardProps> = ({
                 >
                   {excursions.map(ex => (
                     <option key={ex.id} value={ex.title}>
-                      {ex.title} (${ex.priceNum} USD)
+                      {ex.title} (${(ex.priceNum || 0).toLocaleString('es-AR')} ARS)
                     </option>
                   ))}
                 </select>

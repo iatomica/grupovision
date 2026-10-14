@@ -53,7 +53,7 @@ export interface Booking {
   shiftId?: string;
   shiftTime?: string;
   shiftName?: string;
-  source?: 'mostrador-urquiza' | 'mostrador-san-martin' | 'web' | 'whatsapp' | 'telefono';
+  source?: 'mostrador-san-martin' | 'web' | 'whatsapp' | 'telefono';
   paymentMethod?: string;
   assignedGuide: string;
   assignedVehicle: string;
@@ -281,7 +281,7 @@ export const JiraTicketModal: React.FC<JiraTicketModalProps> = ({
                 <span>•</span>
                 <span className="flex items-center gap-1"><User className="w-3.5 h-3.5 text-[#00A896]" /> {ticket.guests} Pax</span>
                 <span>•</span>
-                <span className="flex items-center gap-1 text-slate-900 font-bold"><DollarSign className="w-3.5 h-3.5 text-emerald-600" /> USD {ticket.totalPriceUSD}</span>
+                <span className="flex items-center gap-1 text-slate-900 font-bold"><DollarSign className="w-3.5 h-3.5 text-emerald-600" /> ${ticket.totalPriceUSD.toLocaleString('es-AR')} ARS</span>
               </div>
             </div>
 

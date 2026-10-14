@@ -864,7 +864,7 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
                             <option value="">-- Sin vincular (Personalizada) --</option>
                             {excursions.map(exc => (
                               <option key={exc.id} value={exc.id}>
-                                {exc.title} ({exc.category} - ${exc.priceNum} USD)
+                                {exc.title} ({exc.category} - ${(exc.priceNum || 0).toLocaleString('es-AR')} ARS)
                               </option>
                             ))}
                           </select>
@@ -1402,7 +1402,7 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
                         const exc = excursions.find(x => x.id === targetId);
                         if (exc) {
                           setNewPromoCustomTitle(exc.title);
-                          setNewPromoOriginalPrice(exc.priceNum ? exc.priceNum * 1200 : 75000);
+                          setNewPromoOriginalPrice(exc.priceNum || 75000);
                           setNewPromoTagline(exc.description ? exc.description.slice(0, 110) + '...' : '');
                         }
                       }}
@@ -1410,7 +1410,7 @@ export const AdminSiteContent: React.FC<AdminSiteContentProps> = ({
                     >
                       {excursions.map(exc => (
                         <option key={exc.id} value={exc.id}>
-                          {exc.title} ({exc.category} - ${exc.priceNum} USD)
+                          {exc.title} ({exc.category} - ${(exc.priceNum || 0).toLocaleString('es-AR')} ARS)
                         </option>
                       ))}
                     </select>

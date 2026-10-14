@@ -61,7 +61,7 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
 
   const [selectedShiftId, setSelectedShiftId] = useState<string>('');
   const [passengersCount, setPassengersCount] = useState<number>(2);
-  const [branch, setBranch] = useState<'San Martín 398 (Casa Central)' | 'Urquiza 276 (Centro Cívico)'>('San Martín 398 (Casa Central)');
+  const [branch, setBranch] = useState<'San Martín 398 (Casa Central)'>('San Martín 398 (Casa Central)');
   const [customerName, setCustomerName] = useState<string>('');
   const [customerPhone, setCustomerPhone] = useState<string>('');
   const [customerEmail, setCustomerEmail] = useState<string>('');
@@ -117,9 +117,8 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
   const isOverbookingRisk = passengersCount > maxSpotsAvailable;
 
   // Cálculo de tarifas
-  const rateUSD = currentExcursion ? currentExcursion.priceNum : 60;
-  const totalUSD = rateUSD * passengersCount;
-  const estimatedARS = totalUSD * 1400;
+  const rateARS = currentExcursion ? currentExcursion.priceNum : 60000;
+  const totalARS = rateARS * passengersCount;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -146,7 +145,7 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
       excursionTitle: currentExcursion.title,
       date: selectedDate,
       guests: Number(passengersCount),
-      totalPriceUSD: totalUSD,
+      totalPriceUSD: totalARS,
       pickupLocation: pickupLocation.trim() || 'Sucursal Mostrador',
       status: 'CONFIRMADA',
       ticketType: 'Reserva',
@@ -154,7 +153,7 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
       shiftId: activeShiftInfo?.shift.id,
       shiftTime: activeShiftInfo?.shift.time,
       shiftName: activeShiftInfo?.shift.name,
-      source: branch.includes('Urquiza') ? 'mostrador-urquiza' : 'mostrador-san-martin',
+      source: 'mostrador-san-martin',
       paymentMethod,
       assignedGuide: 'Asignación Logística Mostrador',
       assignedVehicle: 'Flota Receptiva Grupo Visión',
@@ -241,7 +240,6 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium focus:outline-none focus:border-[#00A896] text-xs"
               >
                 <option value="San Martín 398 (Casa Central)">San Martín 398 (Casa Central)</option>
-                <option value="Urquiza 276 (Centro Cívico)">Urquiza 276 (Centro Cívico)</option>
               </select>
             </div>
 
@@ -275,7 +273,7 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
               >
                 {publishedExcursions.map(exc => (
                   <option key={exc.id} value={exc.id}>
-                    {exc.title} (USD ${exc.priceNum})
+                    {exc.title} (${(exc.priceNum || 0).toLocaleString('es-AR')} ARS)
                   </option>
                 ))}
               </select>
@@ -460,7 +458,7 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
               </label>
               <input
                 type="text"
-                placeholder="Ej: Hotel Cristal o Local Urquiza"
+                placeholder="Ej: Hotel Cristal o Local San Martín 398"
                 value={pickupLocation}
                 onChange={e => setPickupLocation(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium focus:outline-none focus:border-[#00A896] text-xs"
@@ -478,7 +476,7 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium focus:outline-none focus:border-[#00A896] text-xs"
               >
                 <option value="Efectivo en Mostrador (ARS)">Efectivo en Mostrador (ARS)</option>
-                <option value="Efectivo en Dólares (USD)">Efectivo en Dólares (USD)</option>
+                <option value="Efectivo en Dólares">Efectivo en Dólares</option>
                 <option value="Tarjeta de Débito / Crédito">Tarjeta de Débito / Crédito</option>
                 <option value="Transferencia Bancaria / MP">Transferencia Bancaria / Mercado Pago</option>
                 <option value="Seña 50% en Local">Seña 50% en Local (Saldo al subir)</option>
@@ -503,10 +501,10 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
           <div className="shrink-0 p-4 sm:p-5 bg-slate-900 text-white border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-[0_-8px_20px_rgba(0,0,0,0.15)]">
             <div className="space-y-0.5">
               <span className="text-[10px] font-mono text-slate-400 block uppercase">
-                Importe Total ({passengersCount} pax x USD ${rateUSD}):
+                Importe Total ({passengersCount} pax x ${(rateARS).toLocaleString('es-AR')} ARS):
               </span>
               <div className="text-xl font-black text-emerald-400 font-mono">
-                USD ${totalUSD} <span className="text-xs text-slate-300 font-normal">~ ARS ${estimatedARS.toLocaleString('es-AR')}</span>
+                ${totalARS.toLocaleString('es-AR')} ARS
               </div>
             </div>
 
