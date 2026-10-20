@@ -191,6 +191,8 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   const [newBlockedStartDate, setNewBlockedStartDate] = useState<string>('');
   const [newBlockedEndDate, setNewBlockedEndDate] = useState<string>('');
   const [rangeFeedbackMessage, setRangeFeedbackMessage] = useState<string | null>(null);
+  const [editingRangeGroup, setEditingRangeGroup] = useState<BlockedDateGroup | null>(null);
+  const [expandedGroupIds, setExpandedGroupIds] = useState<Record<string, boolean>>({});
   const [formMinBookingAdvanceHours, setFormMinBookingAdvanceHours] = useState<number>(24);
   const [newGalleryUrl, setNewGalleryUrl] = useState<string>('');
   const [mediaModalMode, setMediaModalMode] = useState<'cover' | 'gallery'>('cover');
@@ -381,6 +383,8 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     setNewBlockedDate('');
     setNewBlockedStartDate('');
     setNewBlockedEndDate('');
+    setEditingRangeGroup(null);
+    setExpandedGroupIds({});
     setRangeFeedbackMessage(null);
     setFormMinBookingAdvanceHours(typeof exc.minBookingAdvanceHours === 'number' ? exc.minBookingAdvanceHours : 24);
     setNewGalleryUrl('');
@@ -468,12 +472,52 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   };
 
   // Blocked dates helpers
+  const handleStartEditGroup = (group: BlockedDateGroup) => {
+    setEditingRangeGroup(group);
+    if (group.isRange) {
+      setBlockedDateMode('range');
+      setNewBlockedStartDate(group.startDate);
+      setNewBlockedEndDate(group.endDate);
+    } else {
+      setBlockedDateMode('single');
+      setNewBlockedDate(group.startDate);
+    }
+    setRangeFeedbackMessage(`Editando bloqueo: ${group.label}. Modificá las fechas arriba y presioná Guardar.`);
+  };
+
+  const handleCancelEditGroup = () => {
+    setEditingRangeGroup(null);
+    setNewBlockedStartDate('');
+    setNewBlockedEndDate('');
+    setNewBlockedDate('');
+    setRangeFeedbackMessage(null);
+  };
+
+  const handleToggleExpandGroup = (groupId: string) => {
+    setExpandedGroupIds(prev => ({
+      ...prev,
+      [groupId]: !prev[groupId]
+    }));
+  };
+
   const handleAddBlockedDate = () => {
     if (!newBlockedDate) return;
-    if (!formBlockedDates.includes(newBlockedDate)) {
-      setFormBlockedDates(prev => [...prev, newBlockedDate].sort());
+    if (editingRangeGroup) {
+      const oldDatesSet = new Set(editingRangeGroup.dates);
+      const filtered = formBlockedDates.filter(d => !oldDatesSet.has(d));
+      const updated = Array.from(new Set([...filtered, newBlockedDate])).sort();
+      setFormBlockedDates(updated);
+      setEditingRangeGroup(null);
+      setNewBlockedDate('');
+      setRangeFeedbackMessage(`Se actualizó la fecha bloqueada a ${newBlockedDate}.`);
+    } else {
+      if (!formBlockedDates.includes(newBlockedDate)) {
+        setFormBlockedDates(prev => [...prev, newBlockedDate].sort());
+      }
+      setNewBlockedDate('');
+      setRangeFeedbackMessage(`Se bloqueó la fecha ${newBlockedDate}.`);
     }
-    setNewBlockedDate('');
+    setTimeout(() => setRangeFeedbackMessage(null), 3500);
   };
 
   const handleAddBlockedRange = () => {
@@ -506,18 +550,36 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
       current.setDate(current.getDate() + 1);
     }
 
-    const updated = Array.from(new Set([...formBlockedDates, ...generatedDates])).sort();
     const formatD = (dStr: string) => {
       const [y, m, d] = dStr.split('-');
       return `${d}/${m}/${y}`;
     };
-    setRangeFeedbackMessage(`Se bloqueó exitosamente el rango del ${formatD(newBlockedStartDate)} al ${formatD(newBlockedEndDate)} (${generatedDates.length} días corridos).`);
+
+    if (editingRangeGroup) {
+      const oldDatesSet = new Set(editingRangeGroup.dates);
+      const filtered = formBlockedDates.filter(d => !oldDatesSet.has(d));
+      const updated = Array.from(new Set([...filtered, ...generatedDates])).sort();
+      setFormBlockedDates(updated);
+      setEditingRangeGroup(null);
+      setNewBlockedStartDate('');
+      setNewBlockedEndDate('');
+      setRangeFeedbackMessage(`Se actualizó el rango exitosamente: del ${formatD(newBlockedStartDate)} al ${formatD(newBlockedEndDate)} (${generatedDates.length} días corridos).`);
+    } else {
+      const updated = Array.from(new Set([...formBlockedDates, ...generatedDates])).sort();
+      setFormBlockedDates(updated);
+      setNewBlockedStartDate('');
+      setNewBlockedEndDate('');
+      setRangeFeedbackMessage(`Se bloqueó exitosamente el rango del ${formatD(newBlockedStartDate)} al ${formatD(newBlockedEndDate)} (${generatedDates.length} días corridos).`);
+    }
+
     setTimeout(() => setRangeFeedbackMessage(null), 4000);
   };
 
   const handleClearAllBlockedDates = () => {
     if (window.confirm('¿Seguro que deseas desbloquear todas las fechas de esta excursión?')) {
       setFormBlockedDates([]);
+      setEditingRangeGroup(null);
+      setExpandedGroupIds({});
       setRangeFeedbackMessage('Se desbloquearon todas las fechas.');
       setTimeout(() => setRangeFeedbackMessage(null), 3500);
     }
@@ -534,9 +596,12 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   const handleRemoveBlockedGroup = (group: BlockedDateGroup) => {
     const toRemoveSet = new Set(group.dates);
     setFormBlockedDates(prev => prev.filter(d => !toRemoveSet.has(d)));
+    if (editingRangeGroup?.id === group.id) {
+      handleCancelEditGroup();
+    }
     setRangeFeedbackMessage(
       group.isRange 
-        ? `Se desbloqueó el rango (${group.count} fechas).` 
+        ? `Se canceló y desbloqueó el rango (${group.count} fechas liberadas).` 
         : `Se desbloqueó la fecha ${group.startDate}.`
     );
     setTimeout(() => setRangeFeedbackMessage(null), 3000);
@@ -930,6 +995,47 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                     Salida: {exc.departureTime}
                   </span>
                 </div>
+
+                {/* Blocked dates info on card */}
+                {Array.isArray(exc.blockedDates) && exc.blockedDates.length > 0 && (() => {
+                  const groups = groupBlockedDates(exc.blockedDates);
+                  return (
+                    <div className="p-2.5 rounded-2xl bg-rose-50/90 border border-rose-200/90 text-rose-900 text-xs space-y-1.5">
+                      <div className="flex items-center justify-between text-[11px] font-mono font-bold">
+                        <span className="flex items-center gap-1.5 text-rose-800">
+                          <span>⛔</span>
+                          <span>Bloqueos: {groups.length} {groups.length === 1 ? 'rango' : 'rangos'} ({exc.blockedDates.length} d)</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenEditModal(exc);
+                            setEditorTab('shifts');
+                          }}
+                          className="text-[#00A896] hover:text-[#028090] hover:underline font-bold text-[10px] flex items-center gap-0.5 cursor-pointer bg-white px-2 py-0.5 rounded-md border border-rose-200 shadow-2xs"
+                          title="Gestionar, editar o cancelar bloqueos de esta excursión"
+                        >
+                          <Edit3 className="w-2.5 h-2.5" />
+                          <span>Ver / Editar</span>
+                        </button>
+                      </div>
+                      <div className="space-y-1">
+                        {groups.map((grp) => (
+                          <div
+                            key={grp.id}
+                            className="flex items-center justify-between text-[10px] font-mono bg-white px-2 py-1 rounded-lg border border-rose-100 shadow-2xs"
+                          >
+                            <span className="truncate max-w-[210px] font-semibold" title={grp.label}>
+                              {grp.label}
+                            </span>
+                            <span className="text-slate-500 font-bold shrink-0">{grp.isRange ? `${grp.count} días` : '1 día'}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* Price & Actions Footer */}
@@ -1547,7 +1653,26 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
 
                         {/* Modo Rango de Fechas */}
                         {blockedDateMode === 'range' ? (
-                          <div className="p-3 bg-slate-50/80 border border-slate-200 rounded-xl space-y-2">
+                          <div className={`p-3 rounded-xl border space-y-2 transition-all ${
+                            editingRangeGroup 
+                              ? 'bg-amber-50/70 border-amber-300 ring-2 ring-amber-200' 
+                              : 'bg-slate-50/80 border-slate-200'
+                          }`}>
+                            {editingRangeGroup && (
+                              <div className="flex items-center justify-between pb-1 border-b border-amber-200 text-xs text-amber-900">
+                                <span className="font-bold flex items-center gap-1.5">
+                                  <span>✏️ Editando Rango:</span>
+                                  <span className="font-mono text-[11px]">{editingRangeGroup.label}</span>
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={handleCancelEditGroup}
+                                  className="text-xs text-amber-800 hover:text-amber-950 font-bold underline cursor-pointer"
+                                >
+                                  ✕ Cancelar Edición
+                                </button>
+                              </div>
+                            )}
                             <div className="flex flex-col sm:flex-row sm:items-end gap-2.5">
                               <div className="flex-1">
                                 <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
@@ -1574,39 +1699,54 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                               <button
                                 type="button"
                                 onClick={handleAddBlockedRange}
-                                className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+                                className="px-4 py-2 bg-[#00A896] hover:bg-[#028090] text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0 shadow-xs"
                               >
-                                <CalendarDays className="w-3.5 h-3.5 text-emerald-400" />
-                                <span>Bloquear Rango Completo</span>
+                                <CalendarDays className="w-3.5 h-3.5 text-white" />
+                                <span>{editingRangeGroup ? 'Guardar Cambios del Rango' : 'Bloquear Rango Completo'}</span>
                               </button>
                             </div>
                             <p className="text-[11px] text-slate-500">
-                              Permite cerrar varios días continuados de una sola vez (ej: período de mantenimiento, temporada baja o veda de senderos).
+                              {editingRangeGroup 
+                                ? 'Ajustá las fechas de inicio y fin para reconfigurar el período de cierre.' 
+                                : 'Permite cerrar varios días continuados de una sola vez (ej: período de mantenimiento, temporada baja o veda de senderos).'}
                             </p>
                           </div>
                         ) : (
                           /* Modo Fecha Única */
-                          <div className="flex gap-2">
-                            <input
-                              type="date"
-                              value={newBlockedDate}
-                              onChange={(e) => setNewBlockedDate(e.target.value)}
-                              className="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
-                            />
-                            <button
-                              type="button"
-                              onClick={handleAddBlockedDate}
-                              className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
-                            >
-                              <Plus className="w-3.5 h-3.5" />
-                              <span>Bloquear Fecha</span>
-                            </button>
+                          <div className={`p-3 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 ${
+                            editingRangeGroup ? 'bg-amber-50/70 border-amber-300' : 'bg-slate-50/80 border-slate-200'
+                          }`}>
+                            <div className="flex items-center gap-2 flex-1">
+                              <input
+                                type="date"
+                                value={newBlockedDate}
+                                onChange={(e) => setNewBlockedDate(e.target.value)}
+                                className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#00A896]"
+                              />
+                              <button
+                                type="button"
+                                onClick={handleAddBlockedDate}
+                                className="px-4 py-2 bg-[#00A896] hover:bg-[#028090] text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
+                              >
+                                <Plus className="w-3.5 h-3.5" />
+                                <span>{editingRangeGroup ? 'Guardar Fecha' : 'Bloquear Fecha'}</span>
+                              </button>
+                            </div>
+                            {editingRangeGroup && (
+                              <button
+                                type="button"
+                                onClick={handleCancelEditGroup}
+                                className="text-xs text-amber-800 hover:text-amber-950 font-bold underline cursor-pointer self-end sm:self-auto"
+                              >
+                                ✕ Cancelar Edición
+                              </button>
+                            )}
                           </div>
                         )}
 
                         {/* Mensaje de feedback de rango */}
                         {rangeFeedbackMessage && (
-                          <div className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-medium flex items-center justify-between">
+                          <div className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-medium flex items-center justify-between shadow-2xs">
                             <span>{rangeFeedbackMessage}</span>
                             <button
                               type="button"
@@ -1634,29 +1774,98 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                               </button>
                             </div>
 
-                            <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-2.5 bg-slate-50/80 border border-slate-200/80 rounded-2xl">
+                            <div className="space-y-2 max-h-56 overflow-y-auto p-2 bg-slate-50/80 border border-slate-200/80 rounded-2xl">
                               {groupedBlockedDates.map((group) => (
                                 <div
                                   key={group.id}
-                                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold flex items-center justify-between gap-3 shadow-xs border transition-all ${
-                                    group.isRange
-                                      ? 'bg-rose-50/90 text-rose-900 border-rose-300 ring-1 ring-rose-200'
-                                      : 'bg-white text-slate-800 border-slate-200'
+                                  className={`rounded-2xl p-3 text-xs transition-all border shadow-xs ${
+                                    editingRangeGroup?.id === group.id
+                                      ? 'bg-amber-50/90 border-amber-400 ring-2 ring-amber-300'
+                                      : group.isRange
+                                        ? 'bg-rose-50/70 border-rose-300 ring-1 ring-rose-200/60'
+                                        : 'bg-white border-slate-200'
                                   }`}
                                 >
-                                  <div className="flex items-center gap-1.5">
-                                    <span className="text-xs">{group.isRange ? '⛔' : '📅'}</span>
-                                    <span>{group.label}</span>
+                                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                                    <div className="flex items-center gap-2.5">
+                                      <span className="text-base p-1.5 rounded-xl bg-white border border-rose-200 shadow-2xs shrink-0">
+                                        {group.isRange ? '⛔' : '📅'}
+                                      </span>
+                                      <div>
+                                        <div className="font-bold text-slate-900 font-mono flex items-center gap-2 flex-wrap">
+                                          <span>{group.label}</span>
+                                          {group.isRange && (
+                                            <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[10px] font-bold">
+                                              {group.count} días corridos
+                                            </span>
+                                          )}
+                                        </div>
+                                        <span className="text-[11px] text-slate-500 font-mono">
+                                          Rango: <strong>{group.startDate}</strong> al <strong>{group.endDate}</strong>
+                                        </span>
+                                      </div>
+                                    </div>
+
+                                    {/* Botones de acción del rango */}
+                                    <div className="flex items-center gap-1.5 self-end sm:self-auto shrink-0 font-sans">
+                                      {group.isRange && (
+                                        <button
+                                          type="button"
+                                          onClick={() => handleToggleExpandGroup(group.id)}
+                                          className="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-slate-900 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1"
+                                          title="Ver o consultar los días individuales incluidos en este rango"
+                                        >
+                                          <span>{expandedGroupIds[group.id] ? '▲ Ocultar días' : '▼ Ver días'}</span>
+                                        </button>
+                                      )}
+
+                                      <button
+                                        type="button"
+                                        onClick={() => handleStartEditGroup(group)}
+                                        className="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold transition-all cursor-pointer flex items-center gap-1 shadow-2xs"
+                                        title="Editar las fechas de este rango"
+                                      >
+                                        <span>✏️ Editar</span>
+                                      </button>
+
+                                      <button
+                                        type="button"
+                                        onClick={() => handleRemoveBlockedGroup(group)}
+                                        className="px-2.5 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 border border-rose-300 text-rose-900 text-xs font-bold transition-all cursor-pointer flex items-center gap-1 shadow-2xs"
+                                        title={group.isRange ? 'Cancelar y desbloquear este rango completo' : 'Desbloquear esta fecha'}
+                                      >
+                                        <span>✕ Desbloquear</span>
+                                      </button>
+                                    </div>
                                   </div>
-                                  <button
-                                    type="button"
-                                    onClick={() => handleRemoveBlockedGroup(group)}
-                                    className="p-1 rounded-lg hover:bg-rose-200/70 text-rose-600 hover:text-rose-900 transition-colors cursor-pointer text-xs flex items-center gap-1 font-sans font-semibold"
-                                    title={group.isRange ? 'Desbloquear este rango completo' : 'Desbloquear fecha'}
-                                  >
-                                    <span>✕</span>
-                                    {group.isRange && <span className="text-[10px] hidden sm:inline">Quitar rango</span>}
-                                  </button>
+
+                                  {/* Lista expandible de días puntuales del rango */}
+                                  {group.isRange && expandedGroupIds[group.id] && (
+                                    <div className="mt-2.5 pt-2.5 border-t border-rose-200/80 space-y-1.5 font-sans">
+                                      <div className="text-[11px] text-slate-600 font-medium flex items-center justify-between">
+                                        <span>Días individuales incluidos en este rango (podés desmarcar una fecha puntual con ✕):</span>
+                                        <span className="font-mono text-slate-400 font-bold">{group.count} días</span>
+                                      </div>
+                                      <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-2 bg-white rounded-xl border border-rose-100">
+                                        {group.dates.map((dStr) => (
+                                          <span
+                                            key={dStr}
+                                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10px] font-mono border border-slate-200"
+                                          >
+                                            <span>{dStr}</span>
+                                            <button
+                                              type="button"
+                                              onClick={() => handleRemoveBlockedDate(dStr)}
+                                              className="text-rose-500 hover:text-rose-800 font-bold ml-0.5 cursor-pointer"
+                                              title={`Habilitar exclusivamente el día ${dStr}`}
+                                            >
+                                              ✕
+                                            </button>
+                                          </span>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
                               ))}
                             </div>
