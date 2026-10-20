@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import type { SuggestionBannerItem, TopSuggestionsSectionData } from '../data/siteContentData';
 import type { Excursion } from '../data/excursionsData';
+import type { Booking } from './JiraTicketModal';
+import { getNextAvailableDeparture } from '../utils/calendarCapacity';
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -11,18 +13,21 @@ import {
   ArrowRight,
   ShieldCheck,
   Pause,
-  Play
+  Play,
+  Calendar
 } from 'lucide-react';
 
 interface TopSuggestionsBannerProps {
   data?: TopSuggestionsSectionData;
   excursions?: Excursion[];
+  bookings?: Booking[];
   onSelectExcursion: (excursionId: string) => void;
 }
 
 export const TopSuggestionsBanner: React.FC<TopSuggestionsBannerProps> = ({
   data,
   excursions = [],
+  bookings = [],
   onSelectExcursion
 }) => {
   const items: SuggestionBannerItem[] = data?.items || [];
@@ -59,6 +64,8 @@ export const TopSuggestionsBanner: React.FC<TopSuggestionsBannerProps> = ({
   const displayImage = currentItem.image || matchedExcursion?.image;
   const displayTitle = currentItem.title || matchedExcursion?.title || 'Excursión Bariloche';
   const displayDuration = currentItem.duration || matchedExcursion?.duration || 'Día Completo';
+
+  const nextDep = matchedExcursion ? getNextAvailableDeparture(matchedExcursion, bookings) : null;
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
@@ -164,6 +171,17 @@ export const TopSuggestionsBanner: React.FC<TopSuggestionsBannerProps> = ({
               <ShieldCheck size={12} className="sm:w-[13px] sm:h-[13px]" />
               <span>Cupos Limitados</span>
             </span>
+
+            {matchedExcursion?.category === 'Fuera de Temporada' ? (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-amber-500/30 backdrop-blur-md text-amber-200 border border-amber-400/40 text-[11px] sm:text-xs font-bold font-mono shadow-xs">
+                <span>❄️ Fuera de Temporada (Planificá)</span>
+              </span>
+            ) : nextDep && nextDep.formattedDate ? (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#00A896]/35 backdrop-blur-md text-white border border-[#00A896]/50 text-[11px] sm:text-xs font-bold font-mono shadow-xs">
+                <Calendar size={12} className="text-emerald-300" />
+                <span>Próxima salida: {nextDep.formattedDate}</span>
+              </span>
+            ) : null}
           </div>
 
           {/* Guarantee Tag on Top-Right */}

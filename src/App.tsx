@@ -91,6 +91,7 @@ import { PublicExcursionCalendar } from './components/PublicExcursionCalendar';
 import { ManualPassengerModal } from './components/ManualPassengerModal';
 import { AdminCalendarOperations } from './components/AdminCalendarOperations';
 import { PickupMapSection } from './components/PickupMapSection';
+import { getNextAvailableDeparture } from './utils/calendarCapacity';
 
 interface SystemActivityLog {
   id: string;
@@ -389,11 +390,16 @@ export default function App() {
   const [isOfficeModalOpen, setIsOfficeModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Helper to open modal with preselected shift
+  // Operations & Jira Ticket States
+  const [bookings, setBookings] = useState<Booking[]>(() => loadInitialBookings());
+
+  // Helper to open modal with preselected shift and next available departure
   const handleOpenExcursionModal = (item: Excursion) => {
     setActiveExcursion(item);
     setModalActivePhoto(null);
-    setModalSelectedDate(getTomorrowDateStr());
+    const nextDep = getNextAvailableDeparture(item, bookings);
+    const initialDate = nextDep ? nextDep.dateStr : getTomorrowDateStr();
+    setModalSelectedDate(initialDate);
     const firstEnabledWithSpots = item.shifts?.find(s => s.enabled && s.availableSpots > 0);
     const firstEnabled = item.shifts?.find(s => s.enabled);
     setSelectedShiftId(firstEnabledWithSpots ? firstEnabledWithSpots.id : firstEnabled ? firstEnabled.id : null);
@@ -401,9 +407,6 @@ export default function App() {
     setModalChildPassengers(0);
     setIsExcursionModalOpen(true);
   };
-
-  // Operations & Jira Ticket States
-  const [bookings, setBookings] = useState<Booking[]>(() => loadInitialBookings());
 
   const handleSaveManualBooking = (newB: Booking) => {
     setBookings(prev => {
@@ -454,15 +457,27 @@ export default function App() {
   // Filter Categories Dynamically (Hides Empty Categories with 0 Services)
   const availableCategories = useMemo(() => {
     const presentSet = new Set(excursionsList.map(e => e.category));
-    const categoryOrder = ['Todas', 'Tradicional', 'Aventura', 'Navegación', 'Experiencias', 'Traslados', 'Invierno', 'Verano', 'Alquileres'];
+    const categoryOrder = [
+      'Todas', 
+      'Tradicional', 
+      'Aventura', 
+      'Navegación', 
+      'Experiencias', 
+      'Traslados', 
+      'Invierno', 
+      'Verano', 
+      'Alquileres',
+      'Fuera de Temporada'
+    ];
     return categoryOrder.filter(cat => cat === 'Todas' || presentSet.has(cat as any));
   }, [excursionsList]);
 
-  // Filtered Excursions (Multilingual search support & only published in public catalog)
+  // Filtered Excursions (Multilingual search support & only published in public catalog, unless Fuera de Temporada for advance planning)
   const filteredExcursions = useMemo(() => {
     return excursionsList.filter(item => {
-      // Hide unpublished excursions from public visitors
-      if (item.isPublished === false) return false;
+      // Keep Fuera de Temporada visible even if paused so visitors can plan in advance
+      const isOffSeason = item.category === 'Fuera de Temporada';
+      if (item.isPublished === false && !isOffSeason) return false;
       const matchesCategory = selectedCategory === 'Todas' || item.category === selectedCategory;
       const content = getExcursionContent(item, currentLang);
       const q = searchQuery.toLowerCase().trim();
@@ -1209,6 +1224,7 @@ export default function App() {
           <TopSuggestionsBanner
             data={siteContent.topSuggestions}
             excursions={excursionsList}
+            bookings={bookings}
             onSelectExcursion={(excursionId) => {
               const found = (excursionsList || EXCURSIONS_DATA).find(
                 e => e.id === excursionId || e.id.includes(excursionId) || excursionId.includes(e.id)
@@ -1266,6 +1282,8 @@ export default function App() {
                 const displayPrice = getExcursionPrice(item, currentLang);
                 const enabledShifts = item.shifts?.filter(s => s.enabled) || [];
                 const totalSpots = enabledShifts.reduce((acc, s) => acc + s.availableSpots, 0);
+                const nextDep = getNextAvailableDeparture(item, bookings);
+                const isOffSeason = item.category === 'Fuera de Temporada';
 
                 return (
                   <div
@@ -1283,17 +1301,36 @@ export default function App() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
                       <div className="absolute top-3 left-3 flex gap-2">
-                        <span className="px-3 py-1 rounded-full bg-white/95 text-slate-900 text-[10px] font-mono font-bold shadow-md">{item.category}</span>
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-mono font-bold shadow-md ${
+                          isOffSeason 
+                            ? 'bg-amber-500 text-white' 
+                            : 'bg-white/95 text-slate-900'
+                        }`}>
+                          {isOffSeason ? '❄️ Fuera de Temporada' : item.category}
+                        </span>
                         <span className="px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-white text-[10px] font-mono shadow-md">{item.duration}</span>
                       </div>
 
-                      {/* Shifts indicator badge overlay */}
-                      {enabledShifts.length > 0 && (
-                        <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/85 backdrop-blur-md text-emerald-300 text-[10px] font-mono font-bold border border-slate-700 shadow-md">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          <span>{enabledShifts.length} {t.catalog.shiftsAvailable} ({totalSpots} cupos)</span>
-                        </div>
-                      )}
+                      {/* Shifts / Next departure indicator badge overlay */}
+                      <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-1.5">
+                        {nextDep ? (
+                          <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-md text-[10px] font-mono font-bold border shadow-md ${
+                            nextDep.isOffSeasonNotice || isOffSeason
+                              ? 'bg-amber-950/90 text-amber-300 border-amber-600/70'
+                              : 'bg-slate-950/85 text-emerald-300 border-slate-700'
+                          }`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${nextDep.isOffSeasonNotice || isOffSeason ? 'bg-amber-400' : 'bg-emerald-400 animate-pulse'}`} />
+                            <span>
+                              {nextDep.isOffSeasonNotice || isOffSeason ? 'Reapertura' : 'Próxima salida'}: {nextDep.formattedDate} ({nextDep.availableSpots} cupos)
+                            </span>
+                          </div>
+                        ) : enabledShifts.length > 0 ? (
+                          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/85 backdrop-blur-md text-emerald-300 text-[10px] font-mono font-bold border border-slate-700 shadow-md">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                            <span>{enabledShifts.length} {t.catalog.shiftsAvailable} ({totalSpots} cupos)</span>
+                          </div>
+                        ) : null}
+                      </div>
                     </div>
 
                     <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
@@ -2202,6 +2239,8 @@ export default function App() {
             ? 'Actividad Gratuita ($0 ARS)' 
             : `$${totalEstimate.toLocaleString('es-AR')} ARS`;
 
+          const modalNextDep = getNextAvailableDeparture(activeExcursion, bookings);
+
           const waBookingMessage = isSelectedDateAvailable
             ? `Hola Grupo Visión! Deseo consultar y reservar la excursión "${activeContent.title}"${dateInfo}${shiftInfo}${langGuideInfo} | Pasajeros: ${paxBreakdown} | Tarifa est.: ${rateText}. ¿Tienen disponibilidad confirmada?`
             : `Hola Grupo Visión! Deseo consultar si es posible programar una salida especial para la excursión "${activeContent.title}" en la fecha ${modalSelectedDate} (${formattedSelectedDate})${langGuideInfo} | Pasajeros: ${paxBreakdown}. ¿Tienen opciones disponibles?`;
@@ -2333,7 +2372,7 @@ export default function App() {
                   </div>
 
                   {/* Quick Info Grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-mono">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-mono">
                     <div>
                       <span className="text-slate-400 block text-[10px] uppercase">TEMPORADA</span>
                       <span className="font-bold text-slate-900">{activeExcursion.season}</span>
@@ -2341,6 +2380,17 @@ export default function App() {
                     <div>
                       <span className="text-slate-400 block text-[10px] uppercase">{t.modal.departure.toUpperCase()}</span>
                       <span className="font-bold text-slate-900">{activeContent.departureTime || activeExcursion.departureTime}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 block text-[10px] uppercase">PRÓXIMA SALIDA</span>
+                      <span className="font-bold text-[#00A896] block">
+                        {modalNextDep?.formattedDate || 'Consultar'}
+                      </span>
+                      {modalNextDep && modalNextDep.availableSpots > 0 && (
+                        <span className="text-[10px] text-slate-500 font-mono block">
+                          {modalNextDep.availableSpots} cupos libres
+                        </span>
+                      )}
                     </div>
                     <div>
                       <span className="text-slate-400 block text-[10px] uppercase">
@@ -2358,6 +2408,29 @@ export default function App() {
                       )}
                     </div>
                   </div>
+
+                  {/* Banner si está fuera de temporada */}
+                  {activeExcursion.category === 'Fuera de Temporada' && (
+                    <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
+                      <span className="text-2xl shrink-0">❄️</span>
+                      <div>
+                        <h5 className="text-xs font-black uppercase tracking-wider text-amber-800 flex items-center gap-2">
+                          <span>Excursión Fuera de Temporada</span>
+                          <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold">
+                            Planificación Anticipada
+                          </span>
+                        </h5>
+                        <p className="text-xs text-amber-900 mt-1 leading-relaxed">
+                          Esta excursión no opera en las fechas inmediatas pero permanece visible en el catálogo para que puedas consultar sus características y planificar con tiempo tus próximas vacaciones.
+                          {modalNextDep && modalNextDep.dateStr && (
+                            <span className="block mt-1.5 font-bold text-amber-950">
+                              🗓️ Próxima salida disponible: <span className="text-[#00A896]">{modalNextDep.formattedDate}</span> ({modalNextDep.availableSpots} cupos)
+                            </span>
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                  )}
 
                   {/* 1 & 2. INTERACTIVE MONTHLY CALENDAR, SHIFTS & LIVE CAPACITY */}
                   <PublicExcursionCalendar

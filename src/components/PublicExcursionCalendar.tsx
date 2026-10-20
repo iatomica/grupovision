@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { Excursion, ExcursionShift } from '../data/excursionsData';
 import { Booking } from './JiraTicketModal';
-import { getDayLiveCapacity, getShiftLiveCapacity, getExcursionEffectiveShifts } from '../utils/calendarCapacity';
+import { getDayLiveCapacity, getShiftLiveCapacity, getExcursionEffectiveShifts, getNextAvailableDeparture } from '../utils/calendarCapacity';
 import { getExcursionChildPrice } from '../data/translations';
 
 interface PublicExcursionCalendarProps {
@@ -184,8 +184,65 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
   const totalPax = passengers + (hasChildRate ? childPassengers : 0);
   const totalARS = (activePrice * passengers) + (hasChildRate ? (childPrice * childPassengers) : 0);
 
+  // Próxima salida disponible calculada automáticamente
+  const nextDeparture = useMemo(() => {
+    return getNextAvailableDeparture(excursion, bookings);
+  }, [excursion, bookings]);
+
   return (
     <div className="space-y-4">
+      {/* 0. Banner de Próxima Salida / Fuera de Temporada */}
+      {nextDeparture && (
+        <div className={`p-3.5 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs transition-all ${
+          excursion.category === 'Fuera de Temporada'
+            ? 'bg-amber-50/90 border-amber-300 text-amber-950 shadow-xs'
+            : 'bg-emerald-50/80 border-emerald-200 text-emerald-950 shadow-xs'
+        }`}>
+          <div className="flex items-center gap-2.5">
+            <span className="text-xl shrink-0">
+              {excursion.category === 'Fuera de Temporada' ? '❄️' : '🗓️'}
+            </span>
+            <div>
+              <div className="font-bold flex items-center gap-1.5 flex-wrap">
+                <span>
+                  {excursion.category === 'Fuera de Temporada' 
+                    ? 'Excursión Fuera de Temporada - Próxima reapertura:' 
+                    : 'Próxima salida con cupos disponibles:'}
+                </span>
+                <span className="text-[#00A896] font-black underline decoration-[#00A896]/30">
+                  {nextDeparture.formattedDate}
+                </span>
+                {nextDeparture.availableSpots > 0 && (
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-mono font-bold">
+                    {nextDeparture.availableSpots} cupos
+                  </span>
+                )}
+              </div>
+              <p className="text-[11px] opacity-80 mt-0.5">
+                {excursion.category === 'Fuera de Temporada'
+                  ? 'Planificá con antelación tu viaje y reservá antes de que se agoten los cupos.'
+                  : 'Si las fechas más cercanas están completas o bloqueadas, podés saltar directo a la próxima salida confirmada.'}
+              </p>
+            </div>
+          </div>
+
+          {selectedDate !== nextDeparture.dateStr && (
+            <button
+              type="button"
+              onClick={() => {
+                if (!nextDeparture) return;
+                onSelectDate(nextDeparture.dateStr);
+                const [y, m] = nextDeparture.dateStr.split('-').map(Number);
+                setCurrentMonthDate(new Date(y, m - 1, 1));
+              }}
+              className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 hover:border-[#00A896] text-slate-800 font-bold hover:text-[#00A896] shadow-xs transition-all cursor-pointer whitespace-nowrap text-xs self-end sm:self-auto shrink-0"
+            >
+              Ver fecha ({nextDeparture.formattedDate}) →
+            </button>
+          )}
+        </div>
+      )}
+
       {/* 1. Header con Navegación de Mes */}
       <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white shadow-md">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">

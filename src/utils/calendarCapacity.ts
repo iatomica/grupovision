@@ -206,3 +206,142 @@ export function getDayLiveCapacity(
     shiftsSummary
   };
 }
+
+/**
+ * Encuentra la próxima fecha con salida y cupos confirmados disponibles para una excursión.
+ * Escanea a partir de hoy/mañana hasta 365 días en adelante.
+ * Si la excursión está fuera de temporada o con fechas bloqueadas, encuentra el primer día hábil futuro.
+ */
+export function getNextAvailableDeparture(
+  excursion: Excursion,
+  bookings: Booking[] = [],
+  startDate?: string
+): {
+  dateStr: string;
+  formattedDate: string;
+  daysFromNow: number;
+  availableSpots: number;
+  isOffSeasonNotice?: boolean;
+} | null {
+  const now = new Date();
+  const base = startDate 
+    ? new Date(startDate + 'T12:00:00') 
+    : new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+  for (let i = 0; i < 365; i++) {
+    const cur = new Date(base.getTime() + i * 24 * 60 * 60 * 1000);
+    const dateStr = cur.toISOString().split('T')[0];
+    const dayCap = getDayLiveCapacity(excursion, dateStr, bookings);
+
+    if (
+      dayCap.isOperational && 
+      !dayCap.isBlocked && 
+      !dayCap.isPast && 
+      !dayCap.isAdvanceBlocked && 
+      !dayCap.isSoldOut && 
+      dayCap.availableSpots > 0
+    ) {
+      const daysFromNow = Math.round((cur.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+      
+      let formattedDate: string;
+      if (daysFromNow === 0) {
+        formattedDate = 'Hoy';
+      } else if (daysFromNow === 1) {
+        formattedDate = 'Mañana';
+      } else {
+        formattedDate = cur.toLocaleDateString('es-AR', {
+          weekday: 'short',
+          day: 'numeric',
+          month: 'short',
+          year: cur.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+        });
+      }
+
+      return {
+        dateStr,
+        formattedDate,
+        daysFromNow,
+        availableSpots: dayCap.availableSpots,
+        isOffSeasonNotice: daysFromNow > 30 || excursion.category === 'Fuera de Temporada'
+      };
+    }
+  }
+
+  return null;
+}
+
+export interface BlockedDateGroup {
+  id: string;
+  isRange: boolean;
+  startDate: string;
+  endDate: string;
+  count: number;
+  label: string;
+  dates: string[];
+}
+
+/**
+ * Agrupa un listado de fechas bloqueadas en rangos continuos para evitar
+ * saturar la interfaz de administración con cientos de etiquetas individuales.
+ */
+export function groupBlockedDates(dates: string[]): BlockedDateGroup[] {
+  if (!dates || dates.length === 0) return [];
+  const sorted = Array.from(new Set(dates)).sort();
+  const groups: BlockedDateGroup[] = [];
+
+  let rangeStart = sorted[0];
+  let prevDate = sorted[0];
+  let currentGroupDates: string[] = [sorted[0]];
+
+  const formatShort = (dateStr: string) => {
+    const [y, m, d] = dateStr.split('-');
+    return `${d}/${m}/${y}`;
+  };
+
+  for (let i = 1; i < sorted.length; i++) {
+    const curDate = sorted[i];
+    const prev = new Date(prevDate + 'T12:00:00');
+    const nextExpected = new Date(prev.getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+    if (curDate === nextExpected) {
+      currentGroupDates.push(curDate);
+      prevDate = curDate;
+    } else {
+      const isRange = currentGroupDates.length > 1;
+      const count = currentGroupDates.length;
+      groups.push({
+        id: `blk-${rangeStart}-${prevDate}`,
+        isRange,
+        startDate: rangeStart,
+        endDate: prevDate,
+        count,
+        label: isRange
+          ? `📅 ${formatShort(rangeStart)} al ${formatShort(prevDate)} (${count} días)`
+          : `📅 ${formatShort(rangeStart)}`,
+        dates: [...currentGroupDates]
+      });
+
+      rangeStart = curDate;
+      prevDate = curDate;
+      currentGroupDates = [curDate];
+    }
+  }
+
+  if (currentGroupDates.length > 0) {
+    const isRange = currentGroupDates.length > 1;
+    const count = currentGroupDates.length;
+    groups.push({
+      id: `blk-${rangeStart}-${prevDate}`,
+      isRange,
+      startDate: rangeStart,
+      endDate: prevDate,
+      count,
+      label: isRange
+        ? `📅 ${formatShort(rangeStart)} al ${formatShort(prevDate)} (${count} días)`
+        : `📅 ${formatShort(rangeStart)}`,
+      dates: [...currentGroupDates]
+    });
+  }
+
+  return groups;
+}

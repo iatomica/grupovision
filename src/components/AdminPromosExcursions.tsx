@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Sliders, 
   Tag, 
@@ -35,6 +35,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Excursion, ExcursionShift, ExcursionTranslations } from '../data/excursionsData';
 import { SuggestionBannerItem } from '../data/siteContentData';
 import { MediaLibraryModal } from './MediaLibraryModal';
+import { groupBlockedDates, BlockedDateGroup } from '../utils/calendarCapacity';
 
 interface AdminPromosExcursionsProps {
   excursions: Excursion[];
@@ -75,7 +76,8 @@ const CATEGORIES: Excursion['category'][] = [
   'Traslados',
   'Invierno',
   'Verano',
-  'Alquileres'
+  'Alquileres',
+  'Fuera de Temporada'
 ];
 
 const SEASONS: Excursion['season'][] = ['Todo el Año', 'Invierno', 'Verano'];
@@ -208,7 +210,7 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   const [editShiftAvailable, setEditShiftAvailable] = useState<number>(6);
 
   // Status Filter for Catalog view
-  const [statusFilter, setStatusFilter] = useState<'Todas' | 'Publicadas' | 'Pausadas'>('Todas');
+  const [statusFilter, setStatusFilter] = useState<'Todas' | 'Publicadas' | 'Pausadas' | 'Fuera de Temporada'>('Todas');
 
   // Translations temp states for Text Tab
   const [textsLang, setTextsLang] = useState<'es' | 'en' | 'pt'>('es');
@@ -234,8 +236,9 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     const matchesCategory = categoryFilter === 'Todas' || exc.category === categoryFilter;
     const matchesStatus = 
       statusFilter === 'Todas' ||
-      (statusFilter === 'Publicadas' && exc.isPublished !== false) ||
-      (statusFilter === 'Pausadas' && exc.isPublished === false);
+      (statusFilter === 'Publicadas' && exc.isPublished !== false && exc.category !== 'Fuera de Temporada') ||
+      (statusFilter === 'Pausadas' && exc.isPublished === false) ||
+      (statusFilter === 'Fuera de Temporada' && exc.category === 'Fuera de Temporada');
     const matchesSearch = exc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           exc.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           (exc.description && exc.description.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -244,8 +247,9 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
 
   // Stats calculation
   const totalServices = excursions.length;
-  const publishedCount = excursions.filter(e => e.isPublished !== false).length;
+  const publishedCount = excursions.filter(e => e.isPublished !== false && e.category !== 'Fuera de Temporada').length;
   const pausedCount = excursions.filter(e => e.isPublished === false).length;
+  const offSeasonCount = excursions.filter(e => e.category === 'Fuera de Temporada').length;
   const withDiscount = excursions.filter(e => (e.discountPercent && e.discountPercent > 0)).length;
   const featuredCount = excursions.filter(e => e.isFeatured).length;
   const avgPrice = totalServices > 0 
@@ -503,8 +507,11 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     }
 
     const updated = Array.from(new Set([...formBlockedDates, ...generatedDates])).sort();
-    setFormBlockedDates(updated);
-    setRangeFeedbackMessage(`Se bloquearon exitosamente ${generatedDates.length} fechas en el rango.`);
+    const formatD = (dStr: string) => {
+      const [y, m, d] = dStr.split('-');
+      return `${d}/${m}/${y}`;
+    };
+    setRangeFeedbackMessage(`Se bloqueó exitosamente el rango del ${formatD(newBlockedStartDate)} al ${formatD(newBlockedEndDate)} (${generatedDates.length} días corridos).`);
     setTimeout(() => setRangeFeedbackMessage(null), 4000);
   };
 
@@ -518,6 +525,21 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
 
   const handleRemoveBlockedDate = (dateStr: string) => {
     setFormBlockedDates(prev => prev.filter(d => d !== dateStr));
+  };
+
+  const groupedBlockedDates = useMemo(() => {
+    return groupBlockedDates(formBlockedDates);
+  }, [formBlockedDates]);
+
+  const handleRemoveBlockedGroup = (group: BlockedDateGroup) => {
+    const toRemoveSet = new Set(group.dates);
+    setFormBlockedDates(prev => prev.filter(d => !toRemoveSet.has(d)));
+    setRangeFeedbackMessage(
+      group.isRange 
+        ? `Se desbloqueó el rango (${group.count} fechas).` 
+        : `Se desbloqueó la fecha ${group.startDate}.`
+    );
+    setTimeout(() => setRangeFeedbackMessage(null), 3000);
   };
 
   // Gallery helpers
@@ -739,13 +761,13 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
           </div>
 
           {/* Quick Status Filter Tabs */}
-          <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs font-semibold self-start md:self-auto">
-            {(['Todas', 'Publicadas', 'Pausadas'] as const).map((st) => (
+          <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs font-semibold self-start md:self-auto overflow-x-auto">
+            {(['Todas', 'Publicadas', 'Pausadas', 'Fuera de Temporada'] as const).map((st) => (
               <button
                 key={st}
                 type="button"
                 onClick={() => setStatusFilter(st)}
-                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 shrink-0 ${
                   statusFilter === st
                     ? 'bg-white text-slate-900 shadow-xs font-bold'
                     : 'text-slate-600 hover:text-slate-900'
@@ -753,9 +775,10 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
               >
                 {st === 'Publicadas' && <span className="w-2 h-2 rounded-full bg-emerald-500" />}
                 {st === 'Pausadas' && <span className="w-2 h-2 rounded-full bg-amber-500" />}
+                {st === 'Fuera de Temporada' && <span className="w-2 h-2 rounded-full bg-cyan-500" />}
                 <span>{st}</span>
                 <span className="text-[10px] opacity-60 font-mono">
-                  ({st === 'Todas' ? totalServices : st === 'Publicadas' ? publishedCount : pausedCount})
+                  ({st === 'Todas' ? totalServices : st === 'Publicadas' ? publishedCount : st === 'Pausadas' ? pausedCount : offSeasonCount})
                 </span>
               </button>
             ))}
@@ -1595,35 +1618,46 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                           </div>
                         )}
 
-                        {/* List of blocked dates */}
+                        {/* List of blocked dates / ranges */}
                         {formBlockedDates.length > 0 ? (
-                          <div className="space-y-1.5 pt-1">
+                          <div className="space-y-2 pt-1">
                             <div className="flex items-center justify-between text-[11px] text-slate-500 font-mono">
-                              <span>Total: {formBlockedDates.length} fechas bloqueadas</span>
+                              <span>
+                                Bloqueos activos: <strong>{groupedBlockedDates.length} {groupedBlockedDates.length === 1 ? 'rango/fecha' : 'rangos/fechas'}</strong> ({formBlockedDates.length} días en total)
+                              </span>
                               <button
                                 type="button"
                                 onClick={handleClearAllBlockedDates}
-                                className="text-rose-600 hover:text-rose-800 underline cursor-pointer"
+                                className="text-rose-600 hover:text-rose-800 underline cursor-pointer font-bold"
                               >
                                 Desbloquear todas
                               </button>
                             </div>
-                            <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-2 bg-slate-50/50 border border-slate-200/70 rounded-xl">
-                              {formBlockedDates.map((dateStr) => (
-                                <span
-                                  key={dateStr}
-                                  className="px-2.5 py-0.5 bg-rose-50 text-rose-800 border border-rose-200 rounded-lg text-[11px] font-mono font-bold flex items-center gap-1"
+
+                            <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-2.5 bg-slate-50/80 border border-slate-200/80 rounded-2xl">
+                              {groupedBlockedDates.map((group) => (
+                                <div
+                                  key={group.id}
+                                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold flex items-center justify-between gap-3 shadow-xs border transition-all ${
+                                    group.isRange
+                                      ? 'bg-rose-50/90 text-rose-900 border-rose-300 ring-1 ring-rose-200'
+                                      : 'bg-white text-slate-800 border-slate-200'
+                                  }`}
                                 >
-                                  <span>⛔ {dateStr}</span>
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="text-xs">{group.isRange ? '⛔' : '📅'}</span>
+                                    <span>{group.label}</span>
+                                  </div>
                                   <button
                                     type="button"
-                                    onClick={() => handleRemoveBlockedDate(dateStr)}
-                                    className="text-rose-400 hover:text-rose-700 ml-1 cursor-pointer font-sans"
-                                    title="Desbloquear fecha"
+                                    onClick={() => handleRemoveBlockedGroup(group)}
+                                    className="p-1 rounded-lg hover:bg-rose-200/70 text-rose-600 hover:text-rose-900 transition-colors cursor-pointer text-xs flex items-center gap-1 font-sans font-semibold"
+                                    title={group.isRange ? 'Desbloquear este rango completo' : 'Desbloquear fecha'}
                                   >
-                                    ✕
+                                    <span>✕</span>
+                                    {group.isRange && <span className="text-[10px] hidden sm:inline">Quitar rango</span>}
                                   </button>
-                                </span>
+                                </div>
                               ))}
                             </div>
                           </div>

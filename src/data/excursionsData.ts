@@ -22,7 +22,7 @@ export interface ExcursionTranslations {
 export interface Excursion {
   id: string;
   title: string;
-  category: 'Tradicional' | 'Aventura' | 'Navegación' | 'Experiencias' | 'Traslados' | 'Invierno' | 'Verano' | 'Alquileres';
+  category: 'Tradicional' | 'Aventura' | 'Navegación' | 'Experiencias' | 'Traslados' | 'Invierno' | 'Verano' | 'Alquileres' | 'Fuera de Temporada';
   season: 'Todo el Año' | 'Invierno' | 'Verano';
   duration: string;
   departureTime?: string;
