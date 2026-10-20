@@ -61,6 +61,7 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
 
   const [selectedShiftId, setSelectedShiftId] = useState<string>('');
   const [passengersCount, setPassengersCount] = useState<number>(2);
+  const [childCount, setChildCount] = useState<number>(0);
   const [branch, setBranch] = useState<'San Martín 398 (Casa Central)'>('San Martín 398 (Casa Central)');
   const [customerName, setCustomerName] = useState<string>('');
   const [customerPhone, setCustomerPhone] = useState<string>('');
@@ -113,12 +114,15 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
     return shiftsCapacity.find(s => s.shift.id === selectedShiftId) || shiftsCapacity[0];
   }, [shiftsCapacity, selectedShiftId]);
 
+  const hasChildRate = currentExcursion?.priceChild !== undefined && currentExcursion?.priceChild !== null;
+  const childRateARS = hasChildRate ? (currentExcursion.priceChild || 0) : 0;
+  const totalPax = passengersCount + (hasChildRate ? childCount : 0);
   const maxSpotsAvailable = activeShiftInfo ? activeShiftInfo.availableSpots : 0;
-  const isOverbookingRisk = passengersCount > maxSpotsAvailable;
+  const isOverbookingRisk = totalPax > maxSpotsAvailable;
 
-  // Cálculo de tarifas
+  // Cálculo de tarifas (respetando tarifa 0 para Walking Tours)
   const rateARS = currentExcursion ? currentExcursion.priceNum : 60000;
-  const totalARS = rateARS * passengersCount;
+  const totalARS = (rateARS * passengersCount) + (hasChildRate ? (childRateARS * childCount) : 0);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,7 +130,7 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
     if (!currentExcursion) return;
 
     if (isOverbookingRisk) {
-      alert(`No es posible confirmar la carga: se intentan registrar ${passengersCount} pasajeros pero solo quedan ${maxSpotsAvailable} cupos disponibles en este turno para evitar sobreventa.`);
+      alert(`No es posible confirmar la carga: se intentan registrar ${totalPax} pasajeros pero solo quedan ${maxSpotsAvailable} cupos disponibles en este turno para evitar sobreventa.`);
       return;
     }
 
@@ -136,6 +140,10 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
     }
 
     const code = `GV-${Math.floor(1000 + Math.random() * 9000)}`;
+    const paxDetails = hasChildRate && childCount > 0 
+      ? `${passengersCount} adultos, ${childCount} menores` 
+      : `${totalPax} pax`;
+
     const newBooking: Booking = {
       id: `b-desk-${Date.now().toString().slice(-5)}`,
       code,
@@ -144,7 +152,7 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
       customerEmail: customerEmail.trim() || 'mostrador@grupovision.tur.ar',
       excursionTitle: currentExcursion.title,
       date: selectedDate,
-      guests: Number(passengersCount),
+      guests: Number(totalPax),
       totalPriceUSD: totalARS,
       pickupLocation: pickupLocation.trim() || 'Sucursal Mostrador',
       status: 'CONFIRMADA',
@@ -157,7 +165,7 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
       paymentMethod,
       assignedGuide: 'Asignación Logística Mostrador',
       assignedVehicle: 'Flota Receptiva Grupo Visión',
-      operatorNotes: `[Carga Mostrador ${branch} por ${currentUser}]: ${paymentMethod}. ${notes}`.trim(),
+      operatorNotes: `[Carga Mostrador ${branch} por ${currentUser}]: ${paxDetails}. Pago: ${paymentMethod}. ${notes}`.trim(),
       createdAt: new Date().toLocaleString('es-AR'),
       comments: [
         {
@@ -165,7 +173,7 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
           authorName: currentUser,
           authorEmail: 'operador@grupovision.tur.ar',
           avatar: 'OP',
-          content: `Pasajeros recibidos presencialmente en ${branch}. Cupo confirmado de ${passengersCount} lugares para el ${selectedDate} en ${activeShiftInfo?.shift.name} (${activeShiftInfo?.shift.time}). Pago: ${paymentMethod}.`,
+          content: `Pasajeros recibidos presencialmente en ${branch}. Cupo confirmado de ${paxDetails} para el ${selectedDate} en ${activeShiftInfo?.shift.name} (${activeShiftInfo?.shift.time}). Pago: ${paymentMethod}.`,
           createdAt: 'Justo ahora'
         }
       ],
@@ -361,61 +369,106 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
             </div>
 
             {/* Selector de Cantidad de Pasajeros */}
-            <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-slate-200/60">
-              <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-slate-600" />
-                <span className="font-mono font-bold text-slate-700">Cantidad de Pasajeros (Pax):</span>
-                <div className="flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white">
-                  <button
-                    type="button"
-                    onClick={() => setPassengersCount(prev => Math.max(1, prev - 1))}
-                    className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 font-bold"
-                  >
-                    -
-                  </button>
-                  <input
-                    type="number"
-                    min="1"
-                    max={maxSpotsAvailable || 20}
-                    value={passengersCount}
-                    onChange={e => setPassengersCount(Math.max(1, Number(e.target.value)))}
-                    className="w-12 text-center py-1 font-mono font-bold text-xs focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setPassengersCount(prev => prev + 1)}
-                    className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 font-bold"
-                  >
-                    +
-                  </button>
+            <div className="pt-2 flex flex-col gap-3 border-t border-slate-200/60">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4 text-slate-600" />
+                    <span className="font-mono font-bold text-slate-700 min-w-[140px]">
+                      {hasChildRate ? 'Adultos (Mayores):' : 'Cantidad de Pasajeros:'}
+                    </span>
+                    <div className="flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white">
+                      <button
+                        type="button"
+                        onClick={() => setPassengersCount(prev => Math.max(1, prev - 1))}
+                        className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 font-bold"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        min="1"
+                        max={maxSpotsAvailable || 20}
+                        value={passengersCount}
+                        onChange={e => setPassengersCount(Math.max(1, Number(e.target.value)))}
+                        className="w-12 text-center py-1 font-mono font-bold text-xs focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setPassengersCount(prev => prev + 1)}
+                        className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 font-bold"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <span className="text-[11px] font-mono text-slate-500">
+                      (${rateARS.toLocaleString('es-AR')} c/u)
+                    </span>
+                  </div>
+
+                  {hasChildRate && (
+                    <div className="flex items-center gap-2">
+                      <Users className="w-4 h-4 text-amber-600" />
+                      <span className="font-mono font-bold text-slate-700 min-w-[140px]">
+                        Menores ({currentExcursion.childAgePolicy || 'Tarifa reducida'}):
+                      </span>
+                      <div className="flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white">
+                        <button
+                          type="button"
+                          onClick={() => setChildCount(prev => Math.max(0, prev - 1))}
+                          className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 font-bold"
+                        >
+                          -
+                        </button>
+                        <input
+                          type="number"
+                          min="0"
+                          max={maxSpotsAvailable || 20}
+                          value={childCount}
+                          onChange={e => setChildCount(Math.max(0, Number(e.target.value)))}
+                          className="w-12 text-center py-1 font-mono font-bold text-xs focus:outline-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setChildCount(prev => prev + 1)}
+                          className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 font-bold"
+                        >
+                          +
+                        </button>
+                      </div>
+                      <span className="text-[11px] font-mono text-slate-500">
+                        (${childRateARS.toLocaleString('es-AR')} c/u)
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Indicador de Cupo Restante tras la carga */}
+                <div className="text-right font-mono text-[11px]">
+                  {!isOverbookingRisk ? (
+                    <span className="text-emerald-700 font-semibold">
+                      Quedarán <strong>{maxSpotsAvailable - totalPax}</strong> cupos libres ({totalPax} asignados)
+                    </span>
+                  ) : (
+                    <span className="text-rose-600 font-bold flex items-center gap-1 justify-end">
+                      <AlertTriangle className="w-3.5 h-3.5" />
+                      ¡Supera el cupo disponible de {maxSpotsAvailable} lugares!
+                    </span>
+                  )}
                 </div>
               </div>
 
-              {/* Indicador de Cupo Restante tras la carga */}
-              <div className="text-right font-mono text-[11px]">
-                {!isOverbookingRisk ? (
-                  <span className="text-emerald-700 font-semibold">
-                    Quedarán <strong>{maxSpotsAvailable - passengersCount}</strong> cupos libres tras confirmar
-                  </span>
-                ) : (
-                  <span className="text-rose-600 font-bold flex items-center gap-1 justify-end">
-                    <AlertTriangle className="w-3.5 h-3.5" />
-                    ¡Supera el cupo disponible de {maxSpotsAvailable} lugares!
-                  </span>
-                )}
-              </div>
+              {/* Banner de Bloqueo por Sobreventa */}
+              {isOverbookingRisk && (
+                <div className="p-3 rounded-xl bg-rose-50 border border-rose-300 text-rose-900 text-xs flex items-start gap-2.5 mt-2">
+                  <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="block font-bold">Bloqueo de Prevención de Sobreventa:</strong>
+                    Solo quedan <strong>{maxSpotsAvailable} cupos disponibles</strong> en el turno seleccionado. Reduzca la cantidad de pasajeros a {maxSpotsAvailable} o elija otro turno/fecha con cupo suficiente.
+                  </div>
+                </div>
+              )}
             </div>
-
-            {/* Banner de Bloqueo por Sobreventa */}
-            {isOverbookingRisk && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-300 text-rose-900 text-xs flex items-start gap-2.5 mt-2">
-                <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-                <div>
-                  <strong className="block font-bold">Bloqueo de Prevención de Sobreventa:</strong>
-                  Solo quedan <strong>{maxSpotsAvailable} cupos disponibles</strong> en el turno seleccionado. Reduzca la cantidad de pasajeros a {maxSpotsAvailable} o elija otro turno/fecha con cupo suficiente.
-                </div>
-              </div>
-            )}
           </div>
 
           {/* 4. Datos del Pasajero */}
@@ -501,10 +554,12 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
           <div className="shrink-0 p-4 sm:p-5 bg-slate-900 text-white border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-[0_-8px_20px_rgba(0,0,0,0.15)]">
             <div className="space-y-0.5">
               <span className="text-[10px] font-mono text-slate-400 block uppercase">
-                Importe Total ({passengersCount} pax x ${(rateARS).toLocaleString('es-AR')} ARS):
+                {totalARS === 0 
+                  ? `Actividad Gratuita (${totalPax} pax)` 
+                  : `Importe Total (${totalPax} pax${hasChildRate && childCount > 0 ? `: ${passengersCount} ad. + ${childCount} men.` : ''}):`}
               </span>
               <div className="text-xl font-black text-emerald-400 font-mono">
-                ${totalARS.toLocaleString('es-AR')} ARS
+                {totalARS === 0 ? '¡Actividad Gratuita! ($0 ARS)' : `$${totalARS.toLocaleString('es-AR')} ARS`}
               </div>
             </div>
 

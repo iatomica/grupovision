@@ -14,6 +14,7 @@ import {
 import { Excursion, ExcursionShift } from '../data/excursionsData';
 import { Booking } from './JiraTicketModal';
 import { getDayLiveCapacity, getShiftLiveCapacity, getExcursionEffectiveShifts } from '../utils/calendarCapacity';
+import { getExcursionChildPrice } from '../data/translations';
 
 interface PublicExcursionCalendarProps {
   excursion: Excursion;
@@ -26,6 +27,8 @@ interface PublicExcursionCalendarProps {
   onSelectShiftId: (shiftId: string) => void;
   passengers: number;
   onChangePassengers: (pax: number) => void;
+  childPassengers?: number;
+  onChangeChildPassengers?: (pax: number) => void;
   onConfirmWhatsApp: () => void;
 }
 
@@ -52,6 +55,8 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
   onSelectShiftId,
   passengers,
   onChangePassengers,
+  childPassengers = 0,
+  onChangeChildPassengers,
   onConfirmWhatsApp
 }) => {
   // Inicializar en el mes de la fecha seleccionada o fecha actual
@@ -173,8 +178,11 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
     }
   }, [selectedDate, currentLang]);
 
-  // Cotización estimada
-  const totalARS = activePrice * passengers;
+  // Cotización estimada y tarifas diferenciadas
+  const hasChildRate = excursion.priceChild !== undefined && excursion.priceChild !== null;
+  const childPrice = getExcursionChildPrice(excursion, currentLang) ?? 0;
+  const totalPax = passengers + (hasChildRate ? childPassengers : 0);
+  const totalARS = (activePrice * passengers) + (hasChildRate ? (childPrice * childPassengers) : 0);
 
   return (
     <div className="space-y-4">
@@ -353,14 +361,35 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
             </span>
           </div>
 
-          <span className="text-[#00A896] font-bold">
-            Tarifa Base: ${activePrice.toLocaleString('es-AR')} ARS / pax
-          </span>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-right">
+            {activePrice === 0 ? (
+              <span className="text-emerald-600 font-bold">Actividad Gratuita ($0 ARS)</span>
+            ) : (
+              <span className="text-[#00A896] font-bold">
+                Tarifa Adulto: ${activePrice.toLocaleString('es-AR')} ARS
+              </span>
+            )}
+            {hasChildRate && (
+              <span className="text-amber-700 font-medium text-[11px]">
+                • Menores: {childPrice === 0 ? 'Gratis' : `$${childPrice.toLocaleString('es-AR')} ARS`}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
       {/* 3. Panel de Turnos y Cupos para la Fecha Seleccionada */}
       <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-slate-50 via-white to-emerald-50/30 border border-slate-200 shadow-sm space-y-4">
+        {/* English Guide notice if bilingual option is disabled */}
+        {currentLang === 'en' && excursion.hasEnglishGuide === false && (
+          <div className="p-3 bg-sky-50 border border-sky-200 rounded-xl flex items-start gap-2.5 text-sky-900 text-xs">
+            <Info className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+            <div>
+              <span className="font-bold">Guided in Spanish:</span> This excursion is operated exclusively with a Spanish-speaking guide at the standard price (no bilingual surcharge).
+            </div>
+          </div>
+        )}
+
         {/* Banner de Fecha Seleccionada */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
           <div className="flex items-center gap-2">
@@ -369,11 +398,16 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
               {formattedSelectedDate}
             </span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono font-bold text-slate-500">Tarifa para esta fecha:</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-mono font-bold text-slate-500">Tarifa:</span>
             <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono font-black text-xs">
-              ${activePrice.toLocaleString('es-AR')} ARS / pax
+              {activePrice === 0 ? 'Actividad Gratuita ($0)' : `$${activePrice.toLocaleString('es-AR')} ARS`}
             </span>
+            {hasChildRate && (
+              <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-mono font-bold text-xs">
+                Menores ({excursion.childAgePolicy || 'Edad reducida'}): {childPrice === 0 ? 'Gratis' : `$${childPrice.toLocaleString('es-AR')} ARS`}
+              </span>
+            )}
           </div>
         </div>
 
@@ -473,58 +507,108 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
         </div>
 
         {/* 4. Selector de Pasajeros y Resumen de Cotización */}
-        <div className="pt-3 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <span className="text-xs font-mono text-slate-700 font-bold flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-[#00A896]" />
-              <span>Pasajeros:</span>
-            </span>
+        <div className="pt-3 border-t border-slate-200/80 flex flex-col gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="space-y-2">
+              {/* Selector Adultos */}
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-mono text-slate-700 font-bold flex items-center gap-1.5 min-w-[130px]">
+                  <Users className="w-3.5 h-3.5 text-[#00A896]" />
+                  <span>{hasChildRate ? 'Adultos (Mayores):' : 'Pasajeros:'}</span>
+                </span>
 
-            <div className="flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white shadow-xs">
-              <button
-                type="button"
-                onClick={() => onChangePassengers(Math.max(1, passengers - 1))}
-                className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-sm cursor-pointer"
-              >
-                -
-              </button>
-              <span className="px-4 py-1 text-xs font-mono font-bold text-slate-900">
-                {passengers}
-              </span>
-              <button
-                type="button"
-                disabled={passengers >= maxAvailableForShift}
-                onClick={() => {
-                  if (passengers < maxAvailableForShift) {
-                    onChangePassengers(passengers + 1);
-                  }
-                }}
-                className={`px-3 py-1.5 font-bold text-sm ${
-                  passengers >= maxAvailableForShift
-                    ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                    : 'bg-slate-50 hover:bg-slate-100 text-slate-700 cursor-pointer'
-                }`}
-                title={passengers >= maxAvailableForShift ? `Cupo máximo disponible: ${maxAvailableForShift}` : 'Agregar pasajero'}
-              >
-                +
-              </button>
+                <div className="flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white shadow-xs">
+                  <button
+                    type="button"
+                    onClick={() => onChangePassengers(Math.max(1, passengers - 1))}
+                    className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-sm cursor-pointer"
+                  >
+                    -
+                  </button>
+                  <span className="px-4 py-1 text-xs font-mono font-bold text-slate-900">
+                    {passengers}
+                  </span>
+                  <button
+                    type="button"
+                    disabled={totalPax >= maxAvailableForShift}
+                    onClick={() => {
+                      if (totalPax < maxAvailableForShift) {
+                        onChangePassengers(passengers + 1);
+                      }
+                    }}
+                    className={`px-3 py-1.5 font-bold text-sm ${
+                      totalPax >= maxAvailableForShift
+                        ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                        : 'bg-slate-50 hover:bg-slate-100 text-slate-700 cursor-pointer'
+                    }`}
+                    title={totalPax >= maxAvailableForShift ? `Cupo máximo disponible: ${maxAvailableForShift}` : 'Agregar adulto'}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Selector Menores (si la excursión tiene tarifa de menores) */}
+              {hasChildRate && onChangeChildPassengers && (
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-mono text-slate-700 font-bold flex items-center gap-1.5 min-w-[130px]">
+                    <Users className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Menores ({excursion.childAgePolicy || 'Tarifa niños'}):</span>
+                  </span>
+
+                  <div className="flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white shadow-xs">
+                    <button
+                      type="button"
+                      onClick={() => onChangeChildPassengers(Math.max(0, childPassengers - 1))}
+                      className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-sm cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <span className="px-4 py-1 text-xs font-mono font-bold text-slate-900">
+                      {childPassengers}
+                    </span>
+                    <button
+                      type="button"
+                      disabled={totalPax >= maxAvailableForShift}
+                      onClick={() => {
+                        if (totalPax < maxAvailableForShift) {
+                          onChangeChildPassengers(childPassengers + 1);
+                        }
+                      }}
+                      className={`px-3 py-1.5 font-bold text-sm ${
+                        totalPax >= maxAvailableForShift
+                          ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                          : 'bg-slate-50 hover:bg-slate-100 text-slate-700 cursor-pointer'
+                      }`}
+                      title={totalPax >= maxAvailableForShift ? `Cupo máximo disponible: ${maxAvailableForShift}` : 'Agregar menor'}
+                    >
+                      +
+                    </button>
+                  </div>
+                  <span className="text-[10px] font-mono text-slate-500">
+                    (${childPrice.toLocaleString('es-AR')} c/u)
+                  </span>
+                </div>
+              )}
+
+              {maxAvailableForShift > 0 && totalPax >= maxAvailableForShift && (
+                <div className="text-[10px] font-mono text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 inline-block">
+                  Límite de cupo alcanzado ({maxAvailableForShift} máx para este turno)
+                </div>
+              )}
             </div>
 
-            {maxAvailableForShift > 0 && passengers >= maxAvailableForShift && (
-              <span className="text-[10px] font-mono text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
-                Límite de cupo alcanzado ({maxAvailableForShift} máx)
-              </span>
-            )}
-          </div>
-
-          {/* Resumen de Tarifa */}
-          <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-            <div className="text-right">
-              <div className="text-[10px] font-mono text-slate-500">
-                Tarifa total ({passengers} pax):
-              </div>
-              <div className="text-lg font-black text-[#00A896] font-mono leading-tight">
-                ${totalARS.toLocaleString('es-AR')} ARS
+            {/* Resumen de Tarifa */}
+            <div className="flex items-center gap-3 justify-end sm:self-end">
+              <div className="text-right">
+                <div className="text-[10px] font-mono text-slate-500">
+                  {totalARS === 0 
+                    ? `Actividad Gratuita (${totalPax} pax)` 
+                    : `Tarifa total (${totalPax} pax${hasChildRate && childPassengers > 0 ? `: ${passengers} ad. + ${childPassengers} men.` : ''}):`}
+                </div>
+                <div className="text-lg font-black text-[#00A896] font-mono leading-tight">
+                  {totalARS === 0 ? '¡GRATUITA! ($0 ARS)' : `$${totalARS.toLocaleString('es-AR')} ARS`}
+                </div>
               </div>
             </div>
           </div>
@@ -540,7 +624,7 @@ export const PublicExcursionCalendar: React.FC<PublicExcursionCalendarProps> = (
           <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Salida y cupos confirmados para <strong>{passengers} pasajeros</strong> el <strong>{formattedSelectedDate}</strong> en <strong>{activeShiftItem?.shift.name} ({activeShiftItem?.shift.time})</strong>.</span>
+              <span>Salida y cupos confirmados para <strong>{totalPax} {totalPax === 1 ? 'pasajero' : 'pasajeros'}</strong> {hasChildRate && childPassengers > 0 ? `(${passengers} adultos, ${childPassengers} menores)` : ''} el <strong>{formattedSelectedDate}</strong> en <strong>{activeShiftItem?.shift.name} ({activeShiftItem?.shift.time})</strong>.</span>
             </div>
           </div>
         )}

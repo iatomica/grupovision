@@ -70,6 +70,7 @@ import {
   LANGUAGES, 
   UI_TRANSLATIONS, 
   getExcursionPrice, 
+  getExcursionChildPrice,
   getExcursionContent 
 } from './data/translations';
 import { loadExcursions, saveExcursions, resetExcursionsToDefault, fetchExcursionsAsync } from './utils/excursionsStorage';
@@ -380,6 +381,7 @@ export default function App() {
   const [activeExcursion, setActiveExcursion] = useState<Excursion | null>(null);
   const [selectedShiftId, setSelectedShiftId] = useState<string | null>(null);
   const [modalPassengers, setModalPassengers] = useState<number>(2);
+  const [modalChildPassengers, setModalChildPassengers] = useState<number>(0);
   const [modalSelectedDate, setModalSelectedDate] = useState<string>(getTomorrowDateStr);
   const [modalActivePhoto, setModalActivePhoto] = useState<string | null>(null);
   const [isExcursionModalOpen, setIsExcursionModalOpen] = useState(false);
@@ -396,6 +398,7 @@ export default function App() {
     const firstEnabled = item.shifts?.find(s => s.enabled);
     setSelectedShiftId(firstEnabledWithSpots ? firstEnabledWithSpots.id : firstEnabled ? firstEnabled.id : null);
     setModalPassengers(2);
+    setModalChildPassengers(0);
     setIsExcursionModalOpen(true);
   };
 
@@ -2183,13 +2186,25 @@ export default function App() {
             ? ` | Turno: ${selectedShift.name} (${selectedShift.time})`
             : '';
           const dateInfo = ` | Fecha: ${modalSelectedDate} (${formattedSelectedDate})`;
-          const langGuideInfo = currentLang === 'en' 
-            ? ' [English Bilingual Guide]' 
+          const isEnglish = currentLang === 'en';
+          const hasEnglishService = activeExcursion.hasEnglishGuide !== false;
+          const langGuideInfo = isEnglish 
+            ? (hasEnglishService ? ' [English Bilingual Guide]' : ' [Guía en Español - Tarifa Estándar]') 
             : ' [Guía Español / Portugués]';
-          const totalEstimate = activePrice * modalPassengers;
+          const childPrice = getExcursionChildPrice(activeExcursion, currentLang) ?? 0;
+          const hasChildPrice = activeExcursion.priceChild !== undefined && activeExcursion.priceChild !== null;
+          const totalPax = modalPassengers + (hasChildPrice ? modalChildPassengers : 0);
+          const totalEstimate = (activePrice * modalPassengers) + (hasChildPrice ? (childPrice * modalChildPassengers) : 0);
+          const paxBreakdown = hasChildPrice && modalChildPassengers > 0
+            ? `Adultos: ${modalPassengers}, Menores: ${modalChildPassengers} (${totalPax} pax total)`
+            : `${modalPassengers} pax`;
+          const rateText = totalEstimate === 0 
+            ? 'Actividad Gratuita ($0 ARS)' 
+            : `$${totalEstimate.toLocaleString('es-AR')} ARS`;
+
           const waBookingMessage = isSelectedDateAvailable
-            ? `Hola Grupo Visión! Deseo consultar y reservar la excursión "${activeContent.title}"${dateInfo}${shiftInfo}${langGuideInfo} | Pasajeros: ${modalPassengers} | Tarifa est.: $${totalEstimate.toLocaleString('es-AR')} ARS. ¿Tienen disponibilidad confirmada?`
-            : `Hola Grupo Visión! Deseo consultar si es posible programar una salida especial para la excursión "${activeContent.title}" en la fecha ${modalSelectedDate} (${formattedSelectedDate})${langGuideInfo} | Pasajeros: ${modalPassengers}. ¿Tienen opciones disponibles?`;
+            ? `Hola Grupo Visión! Deseo consultar y reservar la excursión "${activeContent.title}"${dateInfo}${shiftInfo}${langGuideInfo} | Pasajeros: ${paxBreakdown} | Tarifa est.: ${rateText}. ¿Tienen disponibilidad confirmada?`
+            : `Hola Grupo Visión! Deseo consultar si es posible programar una salida especial para la excursión "${activeContent.title}" en la fecha ${modalSelectedDate} (${formattedSelectedDate})${langGuideInfo} | Pasajeros: ${paxBreakdown}. ¿Tienen opciones disponibles?`;
           const waUrl = `https://wa.me/5492944235278?text=${encodeURIComponent(waBookingMessage)}`;
 
           return (
@@ -2329,11 +2344,18 @@ export default function App() {
                     </div>
                     <div>
                       <span className="text-slate-400 block text-[10px] uppercase">
-                        {currentLang === 'en' ? 'RATE (EN GUIDE)' : 'TARIFA (ES/PT)'}
+                        {currentLang === 'en' 
+                          ? (activeExcursion.hasEnglishGuide === false ? 'RATE (SPANISH GUIDE)' : 'RATE (EN GUIDE)') 
+                          : 'TARIFA (ES/PT)'}
                       </span>
-                      <span className="font-bold text-[#00A896] text-sm">
-                        ${activePrice.toLocaleString('es-AR')} ARS / pax
+                      <span className="font-bold text-[#00A896] text-sm block">
+                        {activePrice === 0 ? 'GRATUITA ($0 ARS)' : `$${activePrice.toLocaleString('es-AR')} ARS / pax`}
                       </span>
+                      {hasChildPrice && (
+                        <span className="text-[10px] text-amber-700 font-mono block">
+                          Menores ({activeExcursion.childAgePolicy || 'Tarifa niños'}): {childPrice === 0 ? 'Gratis' : `$${childPrice.toLocaleString('es-AR')} ARS`}
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -2349,6 +2371,8 @@ export default function App() {
                     onSelectShiftId={(newShiftId) => setSelectedShiftId(newShiftId)}
                     passengers={modalPassengers}
                     onChangePassengers={(newPax) => setModalPassengers(newPax)}
+                    childPassengers={modalChildPassengers}
+                    onChangeChildPassengers={(newPax) => setModalChildPassengers(newPax)}
                     onConfirmWhatsApp={() => {
                       window.open(waUrl, '_blank');
                     }}

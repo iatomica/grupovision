@@ -203,21 +203,43 @@ export const UI_TRANSLATIONS = {
 
 /**
  * Retorna el precio correspondiente según el idioma activo:
- * - 'en': Retorna priceEnglish (tarifa en inglés con guía bilingüe). Si no está definido, calcula ~1.25x.
+ * - 'en': Si la excursión dispone de guía en inglés (hasEnglishGuide !== false y priceEnglish > 0), retorna priceEnglish.
+ *         Si NO dispone de guía en inglés (hasEnglishGuide === false o no se configuró precio en inglés), ofrece la versión en español al mismo precio estándar sin recargo artificial.
  * - 'es' | 'pt': Retorna priceNum (Español y Portugués comparten la misma tarifa estándar).
+ * Respeta fielmente tarifa $0 para paseos gratuitos.
  */
 export function getExcursionPrice(excursion: Excursion, lang: LanguageCode): number {
+  const base = typeof excursion.priceNum === 'number' ? excursion.priceNum : 35000;
+
   if (lang === 'en') {
+    // Si no dispone de guía bilingüe, se ofrece la versión con guía en español al mismo precio
+    if (excursion.hasEnglishGuide === false) {
+      return base;
+    }
+    // Si tiene tarifa en inglés explícita configurada, se aplica
     if (typeof excursion.priceEnglish === 'number' && excursion.priceEnglish > 0) {
       return excursion.priceEnglish;
     }
-    // Diferencial por defecto en inglés si no se especificó (+25% redondeado a múltiplo de 5)
-    const base = excursion.priceNum || 30;
-    return Math.max(base, Math.round((base * 1.25) / 5) * 5);
+    // Si no se configuró tarifa en inglés, se mantiene la tarifa base
+    return base;
   }
 
   // Español y Portugués comparten el mismo precio estándar
-  return excursion.priceNum || 30;
+  return base;
+}
+
+/**
+ * Retorna la tarifa diferenciada de menor si está configurada:
+ */
+export function getExcursionChildPrice(excursion: Excursion, lang: LanguageCode): number | null {
+  if (typeof excursion.priceChild === 'number') {
+    if (lang === 'en' && excursion.hasEnglishGuide && excursion.priceEnglish && excursion.priceNum > 0) {
+      const ratio = excursion.priceEnglish / excursion.priceNum;
+      return Math.round(excursion.priceChild * ratio);
+    }
+    return excursion.priceChild;
+  }
+  return null;
 }
 
 /**

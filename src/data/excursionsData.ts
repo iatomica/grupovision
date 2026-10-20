@@ -25,6 +25,7 @@ export interface Excursion {
   category: 'Tradicional' | 'Aventura' | 'Navegación' | 'Experiencias' | 'Traslados' | 'Invierno' | 'Verano' | 'Alquileres';
   season: 'Todo el Año' | 'Invierno' | 'Verano';
   duration: string;
+  departureTime?: string;
   difficulty: 'Fácil' | 'Moderado' | 'Desafiante';
   image: string;
   description: string;
@@ -35,8 +36,10 @@ export interface Excursion {
   additionalInfo?: string;
   faq?: { question: string; answer: string }[];
   recommendedFor: string;
-  departureTime: string;
   priceNum: number;        // Tarifa base en ARS para Español y Portugués
+  priceChild?: number;     // Tarifa reducida/diferenciada en ARS para Menores (opcional)
+  childAgePolicy?: string; // Política/Rango de edad de menores (ej: "4 a 11 años")
+  hasEnglishGuide?: boolean; // Indica si ofrece guía bilingüe en inglés (default: false si no se especifica precio)
   priceEnglish?: number;   // Tarifa diferenciada en ARS para Inglés (guía bilingüe)
   isPublished?: boolean;   // Toggle ON/OFF para publicar en la web o dejar en borrador (default: true)
   gallery?: string[];      // Galería de fotos adicionales de la excursión
@@ -1603,19 +1606,21 @@ export const EXCURSIONS_DATA: Excursion[] = [
 ];
 
 export function normalizeExcursion(e: Excursion): Excursion {
-  let priceNum = e.priceNum !== undefined ? e.priceNum : 35000;
-  if (priceNum > 0 && priceNum < 1000) {
-    if (priceNum === 10 || priceNum === 12 || priceNum === 14 || priceNum === 15 || priceNum === 16 || priceNum === 22 || priceNum === 25 || priceNum === 52) {
-      priceNum = priceNum * 10000;
-    } else if (priceNum < 10) {
-      priceNum = priceNum * 10000;
-    } else {
-      priceNum = priceNum * 1000;
-    }
-  }
-  const priceEnglish = (typeof e.priceEnglish === 'number' && e.priceEnglish > 0)
-    ? (e.priceEnglish < 1000 ? (e.priceEnglish < 10 ? e.priceEnglish * 10000 : e.priceEnglish * 1000) : e.priceEnglish)
-    : Math.max(priceNum, Math.round((priceNum * 1.25) / 1000) * 1000);
+  // Mantener el precio exacto en ARS configurado por el usuario (respetando tarifa $0 para tours gratuitos)
+  const priceNum = typeof e.priceNum === 'number' ? e.priceNum : 35000;
+
+  // Guía en inglés: si está explícitamente configurada o si cuenta con tarifa en inglés diferenciada
+  const hasEnglishGuide = e.hasEnglishGuide !== undefined
+    ? e.hasEnglishGuide
+    : (typeof e.priceEnglish === 'number' && e.priceEnglish > priceNum);
+
+  // Si no dispone de guía bilingüe, la tarifa en inglés es idéntica a la tarifa estándar en pesos
+  const priceEnglish = hasEnglishGuide
+    ? (typeof e.priceEnglish === 'number' ? e.priceEnglish : Math.max(priceNum, Math.round((priceNum * 1.25) / 1000) * 1000))
+    : priceNum;
+
+  const priceChild = typeof e.priceChild === 'number' ? e.priceChild : undefined;
+  const childAgePolicy = e.childAgePolicy || undefined;
 
   const defaultShifts: ExcursionShift[] = [
     {
@@ -1648,12 +1653,16 @@ export function normalizeExcursion(e: Excursion): Excursion {
 
   return {
     ...e,
+    priceNum,
+    priceEnglish,
+    priceChild,
+    childAgePolicy,
+    hasEnglishGuide,
     isPublished,
     gallery,
     operatingDays,
     blockedDates,
     minBookingAdvanceHours,
-    priceEnglish,
     shifts: (Array.isArray(e.shifts) && e.shifts.length > 0) ? e.shifts : defaultShifts,
     translations: e.translations || {}
   };

@@ -172,8 +172,11 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   const [formFaq, setFormFaq] = useState<{ question: string; answer: string }[]>([]);
   const [formRecommendedFor, setFormRecommendedFor] = useState('Familias, Parejas y Grupos');
   const [formDepartureTime, setFormDepartureTime] = useState('09:00 hs');
-  const [formPriceNum, setFormPriceNum] = useState<number>(50);
-  const [formPriceEnglish, setFormPriceEnglish] = useState<number>(65);
+  const [formPriceNum, setFormPriceNum] = useState<number>(50000);
+  const [formPriceEnglish, setFormPriceEnglish] = useState<number>(65000);
+  const [formPriceChild, setFormPriceChild] = useState<number | ''>('');
+  const [formChildAgePolicy, setFormChildAgePolicy] = useState<string>('');
+  const [formHasEnglishGuide, setFormHasEnglishGuide] = useState<boolean>(true);
   const [formDiscountPercent, setFormDiscountPercent] = useState<number>(0);
   const [formPromoBadge, setFormPromoBadge] = useState('');
   const [formIsFeatured, setFormIsFeatured] = useState(false);
@@ -191,11 +194,18 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   const [mediaModalMode, setMediaModalMode] = useState<'cover' | 'gallery'>('cover');
   const [formShifts, setFormShifts] = useState<ExcursionShift[]>([]);
 
-  // Shift form temp states
+  // Shift form temp states (New shift)
   const [newShiftName, setNewShiftName] = useState('Turno Mañana');
   const [newShiftTime, setNewShiftTime] = useState('09:00 hs');
   const [newShiftCapacity, setNewShiftCapacity] = useState<number>(16);
   const [newShiftAvailable, setNewShiftAvailable] = useState<number>(6);
+
+  // Shift editing states (Existing shift)
+  const [editingShiftId, setEditingShiftId] = useState<string | null>(null);
+  const [editShiftName, setEditShiftName] = useState('');
+  const [editShiftTime, setEditShiftTime] = useState('');
+  const [editShiftCapacity, setEditShiftCapacity] = useState<number>(16);
+  const [editShiftAvailable, setEditShiftAvailable] = useState<number>(6);
 
   // Status Filter for Catalog view
   const [statusFilter, setStatusFilter] = useState<'Todas' | 'Publicadas' | 'Pausadas'>('Todas');
@@ -293,8 +303,12 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     ]);
     setFormRecommendedFor('Todo público, familias y parejas');
     setFormDepartureTime('09:30 hs');
-    setFormPriceNum(45);
-    setFormPriceEnglish(55);
+    setFormPriceNum(45000);
+    setFormPriceEnglish(55000);
+    setFormPriceChild('');
+    setFormChildAgePolicy('4 a 11 años');
+    setFormHasEnglishGuide(true);
+    setEditingShiftId(null);
     setFormDiscountPercent(0);
     setFormPromoBadge('');
     setFormIsFeatured(false);
@@ -342,8 +356,13 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     setFormFaq(exc.faq ? exc.faq.map(f => ({ ...f })) : []);
     setFormRecommendedFor(exc.recommendedFor || 'Todo público');
     setFormDepartureTime(exc.departureTime || '09:00 hs');
-    setFormPriceNum(exc.priceNum);
-    setFormPriceEnglish(exc.priceEnglish || Math.max(exc.priceNum, Math.round((exc.priceNum * 1.25) / 5) * 5));
+    setFormPriceNum(exc.priceNum ?? 0);
+    const hasEn = exc.hasEnglishGuide !== false && (typeof exc.priceEnglish === 'number' ? exc.priceEnglish > (exc.priceNum ?? 0) : true);
+    setFormHasEnglishGuide(exc.hasEnglishGuide ?? hasEn);
+    setFormPriceEnglish(typeof exc.priceEnglish === 'number' ? exc.priceEnglish : (exc.priceNum ?? 0));
+    setFormPriceChild(typeof exc.priceChild === 'number' ? exc.priceChild : '');
+    setFormChildAgePolicy(exc.childAgePolicy || '');
+    setEditingShiftId(null);
     setFormDiscountPercent(exc.discountPercent || 0);
     setFormPromoBadge(exc.promoBadge || '');
     setFormIsFeatured(exc.isFeatured || false);
@@ -407,10 +426,32 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
 
   const handleRemoveShift = (id: string) => {
     setFormShifts(prev => prev.filter(s => s.id !== id));
+    if (editingShiftId === id) setEditingShiftId(null);
   };
 
   const handleUpdateShift = (id: string, updates: Partial<ExcursionShift>) => {
     setFormShifts(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s));
+  };
+
+  const handleStartEditShift = (s: ExcursionShift) => {
+    setEditingShiftId(s.id);
+    setEditShiftName(s.name);
+    setEditShiftTime(s.time);
+    setEditShiftCapacity(s.totalCapacity);
+    setEditShiftAvailable(s.availableSpots);
+  };
+
+  const handleSaveShiftEdit = (id: string) => {
+    if (!editShiftName.trim() || !editShiftTime.trim()) return;
+    const capacity = Math.max(1, Number(editShiftCapacity) || 1);
+    const available = Math.max(0, Math.min(Number(editShiftAvailable) || 0, capacity));
+    handleUpdateShift(id, {
+      name: editShiftName.trim(),
+      time: editShiftTime.trim(),
+      totalCapacity: capacity,
+      availableSpots: available
+    });
+    setEditingShiftId(null);
   };
 
   // Calendar operating days helper
@@ -448,8 +489,8 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     const end = new Date(newBlockedEndDate + 'T12:00:00');
     const diffDays = Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
 
-    if (diffDays > 180) {
-      setRangeFeedbackMessage('El rango seleccionado no puede superar los 180 días corridos.');
+    if (diffDays > 250) {
+      setRangeFeedbackMessage('El rango seleccionado no puede superar los 250 días corridos (~8 meses).');
       setTimeout(() => setRangeFeedbackMessage(null), 3500);
       return;
     }
@@ -516,8 +557,13 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
       faq: formFaq.filter(f => f.question.trim().length > 0),
       recommendedFor: formRecommendedFor.trim() || 'Todo público',
       departureTime: formDepartureTime.trim() || '09:00 hs',
-      priceNum: Number(formPriceNum) || 0,
-      priceEnglish: Number(formPriceEnglish) || Math.max(Number(formPriceNum), Math.round((Number(formPriceNum) * 1.25) / 5) * 5),
+      priceNum: typeof formPriceNum === 'number' ? formPriceNum : (parseFloat(String(formPriceNum)) || 0),
+      hasEnglishGuide: formHasEnglishGuide,
+      priceEnglish: formHasEnglishGuide 
+        ? (typeof formPriceEnglish === 'number' ? formPriceEnglish : (parseFloat(String(formPriceEnglish)) || (typeof formPriceNum === 'number' ? formPriceNum : 0)))
+        : (typeof formPriceNum === 'number' ? formPriceNum : (parseFloat(String(formPriceNum)) || 0)),
+      priceChild: formPriceChild !== '' && !isNaN(Number(formPriceChild)) ? Math.max(0, Number(formPriceChild)) : undefined,
+      childAgePolicy: formChildAgePolicy.trim() || undefined,
       shifts: formShifts,
       translations: {
         en: (transTitleEn.trim() || transDescEn.trim() || transDetailsEn.trim()) ? {
@@ -1759,63 +1805,145 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                         </div>
                       ) : (
                         formShifts.map((s, idx) => (
-                          <div
-                            key={s.id || idx}
-                            className={`p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
-                              s.enabled ? 'bg-white border-slate-200 shadow-xs' : 'bg-slate-50/80 border-slate-200 opacity-60'
-                            }`}
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center font-mono font-bold text-xs text-slate-700 shrink-0">
-                                #{idx + 1}
+                          editingShiftId === s.id ? (
+                            <div key={s.id || idx} className="p-4 rounded-2xl border-2 border-[#00A896] bg-cyan-50/20 shadow-md space-y-3">
+                              <div className="flex items-center justify-between border-b border-cyan-100 pb-2">
+                                <span className="text-xs font-bold text-[#00A896] flex items-center gap-1.5">
+                                  <Edit3 className="w-3.5 h-3.5" />
+                                  <span>Editando #{idx + 1} - {s.name}</span>
+                                </span>
+                                <span className="text-[11px] font-mono text-slate-400">ID: {s.id}</span>
                               </div>
-                              <div>
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="font-bold text-sm text-slate-900">{s.name}</span>
-                                  <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">
-                                    {s.time}
-                                  </span>
-                                  {s.availableSpots === 0 ? (
-                                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-100 text-rose-700 border border-rose-200">
-                                      Agotado
-                                    </span>
-                                  ) : s.availableSpots <= 3 ? (
-                                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-800 border border-amber-200">
-                                      Últimos {s.availableSpots} lugares
-                                    </span>
-                                  ) : (
-                                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                                      {s.availableSpots} lugares libres
-                                    </span>
-                                  )}
+                              <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                                <div className="sm:col-span-2">
+                                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">Nombre del Turno *</label>
+                                  <input
+                                    type="text"
+                                    value={editShiftName}
+                                    onChange={(e) => setEditShiftName(e.target.value)}
+                                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-[#00A896]"
+                                  />
                                 </div>
-                                <div className="text-xs text-slate-500 mt-0.5 font-mono">
-                                  Capacidad Total: {s.totalCapacity} pasajeros · Disponibles: {s.availableSpots}
+                                <div>
+                                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">Horario de Salida *</label>
+                                  <input
+                                    type="text"
+                                    value={editShiftTime}
+                                    onChange={(e) => setEditShiftTime(e.target.value)}
+                                    placeholder="Ej: 09:30 hs"
+                                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-[#00A896]"
+                                  />
                                 </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                  <div>
+                                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">Capacidad</label>
+                                    <input
+                                      type="number"
+                                      min={1}
+                                      value={editShiftCapacity}
+                                      onChange={(e) => setEditShiftCapacity(parseInt(e.target.value) || 1)}
+                                      className="w-full px-2 py-2 bg-white border border-slate-300 rounded-xl text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-[#00A896]"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">Libres</label>
+                                    <input
+                                      type="number"
+                                      min={0}
+                                      max={editShiftCapacity}
+                                      value={editShiftAvailable}
+                                      onChange={(e) => setEditShiftAvailable(parseInt(e.target.value) || 0)}
+                                      className="w-full px-2 py-2 bg-white border border-slate-300 rounded-xl text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-[#00A896]"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="flex items-center justify-end gap-2 pt-1">
+                                <button
+                                  type="button"
+                                  onClick={() => setEditingShiftId(null)}
+                                  className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-slate-600 text-xs font-semibold cursor-pointer"
+                                >
+                                  Cancelar
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleSaveShiftEdit(s.id)}
+                                  className="px-4 py-1.5 rounded-lg bg-[#00A896] hover:bg-[#028090] text-white text-xs font-bold shadow-sm flex items-center gap-1 cursor-pointer"
+                                >
+                                  <Save className="w-3.5 h-3.5" />
+                                  <span>Guardar Turno</span>
+                                </button>
                               </div>
                             </div>
+                          ) : (
+                            <div
+                              key={s.id || idx}
+                              className={`p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+                                s.enabled ? 'bg-white border-slate-200 shadow-xs' : 'bg-slate-50/80 border-slate-200 opacity-60'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center font-mono font-bold text-xs text-slate-700 shrink-0">
+                                  #{idx + 1}
+                                </div>
+                                <div>
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <span className="font-bold text-sm text-slate-900">{s.name}</span>
+                                    <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                                      {s.time}
+                                    </span>
+                                    {s.availableSpots === 0 ? (
+                                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-100 text-rose-700 border border-rose-200">
+                                        Agotado
+                                      </span>
+                                    ) : s.availableSpots <= 3 ? (
+                                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                                        Últimos {s.availableSpots} lugares
+                                      </span>
+                                    ) : (
+                                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                        {s.availableSpots} lugares libres
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="text-xs text-slate-500 mt-0.5 font-mono">
+                                    Capacidad Total: {s.totalCapacity} pasajeros · Disponibles: {s.availableSpots}
+                                  </div>
+                                </div>
+                              </div>
 
-                            <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
-                              <label className="flex items-center gap-1.5 text-xs text-slate-600 font-medium cursor-pointer mr-2">
-                                <input
-                                  type="checkbox"
-                                  checked={s.enabled}
-                                  onChange={(e) => handleUpdateShift(s.id, { enabled: e.target.checked })}
-                                  className="rounded text-[#00A896] focus:ring-[#00A896]"
-                                />
-                                <span>{s.enabled ? 'Habilitado' : 'Deshabilitado'}</span>
-                              </label>
+                              <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                                <label className="flex items-center gap-1.5 text-xs text-slate-600 font-medium cursor-pointer mr-2">
+                                  <input
+                                    type="checkbox"
+                                    checked={s.enabled}
+                                    onChange={(e) => handleUpdateShift(s.id, { enabled: e.target.checked })}
+                                    className="rounded text-[#00A896] focus:ring-[#00A896]"
+                                  />
+                                  <span>{s.enabled ? 'Habilitado' : 'Deshabilitado'}</span>
+                                </label>
 
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveShift(s.id)}
-                                className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors"
-                                title="Eliminar turno"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleStartEditShift(s)}
+                                  className="p-1.5 text-slate-400 hover:text-[#00A896] rounded-lg hover:bg-[#00A896]/10 transition-colors"
+                                  title="Editar turno"
+                                >
+                                  <Edit3 className="w-4 h-4" />
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveShift(s.id)}
+                                  className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors"
+                                  title="Eliminar turno"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
                             </div>
-                          </div>
+                          )
                         ))
                       )}
                     </div>
@@ -2076,44 +2204,121 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-bold text-slate-700 mb-1">
-                          Tarifa Base Español / Portugués (ARS) *
+                          Tarifa Base Adulto Español / Portugués (ARS) *
                         </label>
                         <div className="relative">
                           <DollarSign className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
                           <input
                             type="number"
                             required
-                            min={1}
+                            min={0}
                             max={10000000}
                             value={formPriceNum}
-                            onChange={(e) => setFormPriceNum(parseFloat(e.target.value) || 0)}
+                            onChange={(e) => setFormPriceNum(e.target.value === '' ? 0 : parseFloat(e.target.value) || 0)}
                             className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base font-black text-slate-900 focus:outline-none focus:border-[#00A896]"
                           />
                         </div>
                         <span className="text-[11px] text-slate-500 mt-1 block">
-                          Tarifa estándar en pesos argentinos para viajeros de habla hispana y portuguesa.
+                          Tarifa estándar en pesos argentinos (ingresá 0 para paseos gratuitos o walking tours).
                         </span>
                       </div>
 
                       <div>
                         <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
                           <span>Tarifa en Inglés (ARS)</span>
-                          <span className="text-[10px] text-cyan-700 font-mono font-bold bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200">🇬🇧 Guía Bilingüe</span>
+                          <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
+                            formHasEnglishGuide 
+                              ? 'text-cyan-700 bg-cyan-50 border-cyan-200' 
+                              : 'text-slate-500 bg-slate-100 border-slate-200'
+                          }`}>
+                            {formHasEnglishGuide ? '🇬🇧 Guía Bilingüe Activa' : 'Sin Guía en Inglés'}
+                          </span>
                         </label>
                         <div className="relative">
                           <DollarSign className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
                           <input
                             type="number"
-                            min={1}
+                            min={0}
                             max={10000000}
-                            value={formPriceEnglish}
-                            onChange={(e) => setFormPriceEnglish(parseFloat(e.target.value) || 0)}
+                            disabled={!formHasEnglishGuide}
+                            value={formHasEnglishGuide ? formPriceEnglish : formPriceNum}
+                            onChange={(e) => setFormPriceEnglish(e.target.value === '' ? 0 : parseFloat(e.target.value) || 0)}
                             placeholder={`Sugerido: $${Math.round(formPriceNum * 1.25).toLocaleString('es-AR')} ARS`}
-                            className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base font-black text-slate-900 focus:outline-none focus:border-[#00A896]"
+                            className={`w-full pl-9 pr-4 py-2.5 border rounded-xl text-base font-black transition-colors ${
+                              formHasEnglishGuide
+                                ? 'bg-slate-50 border-slate-200 text-slate-900 focus:outline-none focus:border-[#00A896]'
+                                : 'bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed'
+                            }`}
                           />
                         </div>
                         <span className="text-[11px] text-slate-500 mt-1 block">
-                          Tarifa diferenciada en ARS con guía en inglés. Se activa automáticamente al elegir idioma inglés en la web.
+                          {formHasEnglishGuide 
+                            ? 'Tarifa diferenciada en ARS con guía en inglés.' 
+                            : 'Al no tener guía en inglés, se aplicará automáticamente la tarifa estándar en pesos sin recargo.'}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Switch: ¿Dispone de guía bilingüe en inglés? */}
+                    <div className="p-3.5 rounded-2xl bg-cyan-50/50 border border-cyan-200/80 flex items-center justify-between gap-4">
+                      <div>
+                        <span className="text-xs font-bold text-slate-900 block flex items-center gap-1.5">
+                          <span>🇬🇧</span>
+                          <span>¿Dispone de opción con Guía Bilingüe en Inglés?</span>
+                        </span>
+                        <span className="text-[11px] text-slate-600 block mt-0.5">
+                          {formHasEnglishGuide
+                            ? 'Activado: los turistas que naveguen en inglés verán la opción bilingüe con la tarifa inglesa.'
+                            : 'Desactivado: si el turista navega en inglés, se le ofrecerá el paseo con guía en español al mismo precio estándar sin recargo.'}
+                        </span>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                        <input
+                          type="checkbox"
+                          checked={formHasEnglishGuide}
+                          onChange={(e) => setFormHasEnglishGuide(e.target.checked)}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00A896]"></div>
+                      </label>
+                    </div>
+
+                    {/* Tarifas Diferenciadas para Menores */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-slate-100">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Tarifa Reducida Menores (ARS) — Opcional
+                        </label>
+                        <div className="relative">
+                          <DollarSign className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
+                          <input
+                            type="number"
+                            min={0}
+                            max={10000000}
+                            value={formPriceChild}
+                            onChange={(e) => setFormPriceChild(e.target.value === '' ? '' : parseFloat(e.target.value) || 0)}
+                            placeholder="Dejar vacío si aplica tarifa general"
+                            className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900 focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+                        <span className="text-[11px] text-slate-500 mt-1 block">
+                          Si se define, el cotizador y la web permitirán desglosar pasajeros Adultos y Menores.
+                        </span>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Rango de Edad / Política de Menores
+                        </label>
+                        <input
+                          type="text"
+                          value={formChildAgePolicy}
+                          onChange={(e) => setFormChildAgePolicy(e.target.value)}
+                          placeholder="Ej: 4 a 11 años / Menores de 5 sin cargo"
+                          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:border-[#00A896]"
+                        />
+                        <span className="text-[11px] text-slate-500 mt-1 block">
+                          Texto aclaratorio visible en el calendario y presupuesto.
                         </span>
                       </div>
                     </div>
@@ -2304,7 +2509,7 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                   <label className="block text-xs font-semibold text-slate-700 mb-1">Precio Base en ARS</label>
                   <input
                     type="number"
-                    min={1}
+                    min={0}
                     max={10000000}
                     value={formPrice}
                     onChange={(e) => setFormPrice(parseFloat(e.target.value) || 0)}
