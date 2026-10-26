@@ -109,7 +109,45 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y viajeros que buscan una experiencia de nieve durante el día.",
     "departureTime": "14:00 hs",
-    "priceNum": 250000
+    "priceNum": 300000,
+    "priceEnglish": 250000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/refugio-roca-negra.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "refugio-roca-negra-shift-1",
+        "name": "Turno Mañana",
+        "time": "14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "refugio-roca-negra-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {},
+    "priceChild": 250000,
+    "childAgePolicy": "4 a 11 años"
   },
   {
     "id": "cabalgata-la-fragua",
@@ -172,7 +210,45 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 90000
+    "priceNum": 240000,
+    "priceEnglish": 90000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/cabalgata-la-fragua.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "cabalgata-la-fragua-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "cabalgata-la-fragua-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {},
+    "priceChild": 230000,
+    "childAgePolicy": "4 a 12 años"
   },
   {
     "id": "camino-de-los-7-lagos-san-martin-de-los-andes",
@@ -221,7 +297,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 70000
+    "priceNum": 100000,
+    "priceEnglish": 180000,
+    "hasEnglishGuide": true,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/camino-de-los-7-lagos-san-martin-de-los-andes.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "camino-de-los-7-lagos-san-martin-de-los-andes-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "camino-de-los-7-lagos-san-martin-de-los-andes-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "cerro-catedral",
@@ -275,7 +387,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 20000
+    "priceNum": 45000,
+    "priceEnglish": 20000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/cerro-catedral.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "cerro-catedral-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "cerro-catedral-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "cerro-tronador-y-glaciares",
@@ -325,7 +473,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 60000
+    "priceNum": 90000,
+    "priceEnglish": 140000,
+    "hasEnglishGuide": true,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/cerro-tronador-y-glaciares.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "cerro-tronador-y-glaciares-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "cerro-tronador-y-glaciares-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "circuito-chico",
@@ -377,7 +561,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs",
-    "priceNum": 20000
+    "priceNum": 45000,
+    "priceEnglish": 80000,
+    "hasEnglishGuide": true,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/circuito-chico.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "circuito-chico-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "circuito-chico-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "circuito-grande-villa-traful-villa-la-angostura",
@@ -440,7 +660,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 60000
+    "priceNum": 60000,
+    "priceEnglish": 60000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/circuito-grande-villa-traful-villa-la-angostura.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "circuito-grande-villa-traful-villa-la-angostura-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "circuito-grande-villa-traful-villa-la-angostura-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "el-bolson-chacras-lago-puelo",
@@ -508,7 +764,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 60000
+    "priceNum": 85000,
+    "priceEnglish": 60000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/el-bolson-chacras-lago-puelo.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "el-bolson-chacras-lago-puelo-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "el-bolson-chacras-lago-puelo-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "el-refugio",
@@ -557,7 +849,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "parejas, grupos de amigos, familias y viajeros que buscan una experiencia de nieve completa.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 520000
+    "priceNum": 520000,
+    "priceEnglish": 520000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/el-refugio.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "el-refugio-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "el-refugio-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "free-walking-tour",
@@ -630,7 +958,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "12:30 hs",
-    "priceNum": 0
+    "priceNum": 0,
+    "priceEnglish": 0,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/free-walking-tour.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "free-walking-tour-shift-1",
+        "name": "Turno Mañana",
+        "time": "12:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "free-walking-tour-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "isla-victoria-y-bosque-de-arrayanes",
@@ -719,7 +1083,45 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 60000
+    "priceNum": 162000,
+    "priceEnglish": 60000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/isla-victoria-y-bosque-de-arrayanes.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "isla-victoria-y-bosque-de-arrayanes-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "isla-victoria-y-bosque-de-arrayanes-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {},
+    "priceChild": 92000,
+    "childAgePolicy": "Menores y Jubilados (hasta 4 años sin cargo)"
   },
   {
     "id": "kayac-lago-gutierrez",
@@ -776,7 +1178,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 40000
+    "priceNum": 99500,
+    "priceEnglish": 40000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/kayac-lago-gutierrez.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "kayac-lago-gutierrez-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "kayac-lago-gutierrez-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "motos-de-nieve",
@@ -830,7 +1268,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "parejas, grupos de amigos, familias y viajeros que buscan una experiencia invernal diferente.",
     "departureTime": "10:00 hs",
-    "priceNum": 220000
+    "priceNum": 220000,
+    "priceEnglish": 220000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/motos-de-nieve.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "motos-de-nieve-shift-1",
+        "name": "Turno Mañana",
+        "time": "10:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "motos-de-nieve-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "navegacion-en-brazo-tristeza",
@@ -885,7 +1359,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 70000
+    "priceNum": 70000,
+    "priceEnglish": 70000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/navegacion-en-brazo-tristeza.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "navegacion-en-brazo-tristeza-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "navegacion-en-brazo-tristeza-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "piedras-blancas",
@@ -934,7 +1444,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 90000
+    "priceNum": 150000,
+    "priceEnglish": 90000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/piedras-blancas.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "piedras-blancas-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "piedras-blancas-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "puerto-blest-y-cascada-de-los-cantaros",
@@ -1028,7 +1574,45 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "personas con movilidad suficiente para caminar por senderos y subir escaleras.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 70000
+    "priceNum": 162000,
+    "priceEnglish": 70000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/puerto-blest-y-cascada-de-los-cantaros.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "puerto-blest-y-cascada-de-los-cantaros-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "puerto-blest-y-cascada-de-los-cantaros-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {},
+    "priceChild": 92000,
+    "childAgePolicy": "Menores y Jubilados (hasta 4 años sin cargo)"
   },
   {
     "id": "rafting-rio-manso-al-limite",
@@ -1089,7 +1673,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 140000
+    "priceNum": 140000,
+    "priceEnglish": 140000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/rafting-rio-manso-al-limite.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "rafting-rio-manso-al-limite-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "rafting-rio-manso-al-limite-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "rafting-rio-manso-desde-villegas",
@@ -1142,7 +1762,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 120000
+    "priceNum": 120000,
+    "priceEnglish": 120000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/rafting-rio-manso-desde-villegas.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "rafting-rio-manso-desde-villegas-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "rafting-rio-manso-desde-villegas-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "ski-nordico",
@@ -1202,7 +1858,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 160000
+    "priceNum": 160000,
+    "priceEnglish": 160000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/ski-nordico.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "ski-nordico-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "ski-nordico-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "teleferico-cerro-otto",
@@ -1254,7 +1946,45 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "10:00 hs",
-    "priceNum": 20000
+    "priceNum": 60000,
+    "priceEnglish": 20000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/teleferico-cerro-otto.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "teleferico-cerro-otto-shift-1",
+        "name": "Turno Mañana",
+        "time": "10:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "teleferico-cerro-otto-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {},
+    "priceChild": 30000,
+    "childAgePolicy": "Menores hasta 12 años y mayores de 65 años"
   },
   {
     "id": "velero-el-orgulloso",
@@ -1310,7 +2040,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 60000
+    "priceNum": 70000,
+    "priceEnglish": 60000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/velero-el-orgulloso.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "velero-el-orgulloso-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "velero-el-orgulloso-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "villa-la-angostura-y-cerro-bayo",
@@ -1381,7 +2147,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "08:30 hs / 14:00 hs",
-    "priceNum": 100000
+    "priceNum": 90000,
+    "priceEnglish": 100000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/villa-la-angostura-y-cerro-bayo.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "villa-la-angostura-y-cerro-bayo-shift-1",
+        "name": "Turno Mañana",
+        "time": "08:30 hs / 14:00 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "villa-la-angostura-y-cerro-bayo-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "winter-park",
@@ -1430,7 +2232,43 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "recommendedFor": "Parejas, Familias y Grupos",
     "departureTime": "12:30 hs",
-    "priceNum": 150000
+    "priceNum": 260000,
+    "priceEnglish": 150000,
+    "hasEnglishGuide": false,
+    "isPublished": true,
+    "gallery": [
+      "/images/excursiones/winter-park.webp"
+    ],
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "shifts": [
+      {
+        "id": "winter-park-shift-1",
+        "name": "Turno Mañana",
+        "time": "12:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 6,
+        "enabled": true
+      },
+      {
+        "id": "winter-park-shift-2",
+        "name": "Turno Tarde",
+        "time": "14:30 hs",
+        "totalCapacity": 16,
+        "availableSpots": 11,
+        "enabled": true
+      }
+    ],
+    "translations": {}
   },
   {
     "id": "circuito-chico-y-colonia-suiza",
@@ -1467,7 +2305,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     "additionalInfo": "ITINERARIO DETALLADO:\n• Salida desde Bariloche e inicio del recorrido por la Avenida Bustillo, bordeando el lago Nahuel Huapi.\n• Paso por Playa Bonita y parada en el Cerro Campanario. Tiempo disponible para realizar, de manera opcional, el ascenso en aerosilla.\n• Continuación hacia la zona de Llao Llao, rodeada de bosques, lagos y montañas.\n• Parada en la Capilla San Eduardo, con vistas al Hotel Llao Llao, Puerto Pañuelo y el lago Nahuel Huapi.\n• Parada en el Punto Panorámico para contemplar el lago Moreno, la península Llao Llao y el paisaje andino.\n• Traslado hacia Colonia Suiza.\n• Tiempo libre para recorrer el pueblo, visitar ferias artesanales, almorzar o probar productos regionales.\n• Regreso a Bariloche.\n• El orden de las paradas y los tiempos puede variar por razones climáticas u operativas.\n• Circuito Chico y Colonia Suiza\n\nRECOMENDACIONES:\n• Usar calzado cómodo, apto para caminar por calles de montaña.\n• Llevar abrigo y ropa adecuada al clima durante todo el año.\n• Llevar agua, protector solar, anteojos de sol y cámara fotográfica.\n• Llevar dinero o un medio de pago para consumos personales en Colonia Suiza.\n• Consultar previamente horarios, días de salida y punto de encuentro.\n• La disponibilidad de ferias, restaurantes y curanto depende del día de visita y de la operación de cada establecimiento.\n\nDATOS DE LA EXPERIENCIA:\n• Duración aproximada: día completo.\n• Modalidad: servicio regular o privado.\n• Temporada: todo el año.\n• Dificultad: baja.\n• Actividad física: baja, con caminatas cortas y opcionales.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.\n• Ascenso al Cerro Campanario: opcional y abonado por separado.",
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "09:00 hs",
-    "priceNum": 45000,
+    "priceNum": 90000,
     "shifts": [
       {
         "id": "circuito-chico-y-colonia-suiza-shift-1",
@@ -1486,8 +2324,24 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "gallery": [],
-    "isPublished": true
+    "gallery": [
+      "/images/excursiones/circuito-chico.webp"
+    ],
+    "isPublished": true,
+    "priceEnglish": 45000,
+    "hasEnglishGuide": false,
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "translations": {}
   },
   {
     "id": "colonia-suiza",
@@ -1523,7 +2377,7 @@ export const EXCURSIONS_DATA: Excursion[] = [
     "additionalInfo": "ITINERARIO DETALLADO:\n• Salida desde Bariloche a las 11:00 hs.\n• Traslado hacia Colonia Suiza.\n• Llegada al pueblo e introducción sobre su historia y sus primeros pobladores.\n• Tiempo libre para recorrer las calles, visitar ferias, conocer comercios locales y disfrutar de la gastronomía regional.\n• Regreso hacia Bariloche.\n• Llegada estimada a las 15:00 hs.\n• Los tiempos y el orden del recorrido pueden variar por razones climáticas u operativas.\n• Colonia Suiza\n\nRECOMENDACIONES:\n• Usar calzado cómodo para caminar.\n• Llevar abrigo y ropa adecuada al clima.\n• Llevar agua, protector solar, anteojos de sol y cámara fotográfica.\n• Llevar dinero o un medio de pago para consumos personales.\n• Consultar previamente la disponibilidad de curanto, ferias y restaurantes para el día de la excursión.\n\nDATOS DE LA EXPERIENCIA:\n• Duración: 4 horas.\n• Horario: de 11:00 a 15:00 hs.\n• Modalidad: servicio regular o privado.\n• Temporada: todo el año.\n• Dificultad: baja.\n• Actividad física: baja, con caminatas cortas y opcionales.\n• Público recomendado: familias, parejas, grupos y personas de todas las edades.",
     "recommendedFor": "familias, parejas, grupos y personas de todas las edades.",
     "departureTime": "09:00 hs",
-    "priceNum": 30000,
+    "priceNum": 45000,
     "shifts": [
       {
         "id": "colonia-suiza-shift-1",
@@ -1542,8 +2396,24 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "gallery": [],
-    "isPublished": true
+    "gallery": [
+      "/images/excursiones/circuito-chico.webp"
+    ],
+    "isPublished": true,
+    "priceEnglish": 30000,
+    "hasEnglishGuide": false,
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "translations": {}
   },
   {
     "id": "noche-nordica",
@@ -1600,10 +2470,27 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "gallery": [],
-    "isPublished": true
+    "gallery": [
+      "/images/excursiones/ski-nordico.webp"
+    ],
+    "isPublished": true,
+    "priceEnglish": 170000,
+    "hasEnglishGuide": false,
+    "operatingDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "blockedDates": [],
+    "minBookingAdvanceHours": 24,
+    "translations": {}
   }
 ];
+
 
 export function normalizeExcursion(e: Excursion): Excursion {
   // Mantener el precio exacto en ARS configurado por el usuario (respetando tarifa $0 para tours gratuitos)
