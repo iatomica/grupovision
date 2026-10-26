@@ -123,7 +123,7 @@ interface StaffMember {
 const INITIAL_STAFF: StaffMember[] = [
   {
     id: 'st-1',
-    name: 'Luis Morales',
+    name: 'Luis González',
     role: 'Administrador General',
     branch: 'San Martín 398 (Casa Central)',
     email: 'luis@grupovision.tur.ar',
@@ -134,7 +134,7 @@ const INITIAL_STAFF: StaffMember[] = [
   },
   {
     id: 'st-2',
-    name: 'Thomas Benítez',
+    name: 'Thomas González',
     role: 'Asesor Comercial Senior',
     branch: 'Operativa de Montaña',
     email: 'thomas@grupovision.tur.ar',
@@ -145,7 +145,7 @@ const INITIAL_STAFF: StaffMember[] = [
   },
   {
     id: 'st-3',
-    name: 'Santiago Reyes',
+    name: 'Santiago González',
     role: 'Jefe de Logística & Flota',
     branch: 'San Martín 398 (Casa Central)',
     email: 'santiago@grupovision.tur.ar',
@@ -160,8 +160,8 @@ const INITIAL_BOOKINGS: Booking[] = [
   {
     id: 'b-101',
     code: 'GV-8492',
-    customerName: 'Carolina & Mateo Rossi',
-    customerEmail: 'carolina.rossi@gmail.com',
+    customerName: 'Carolina & Mateo González',
+    customerEmail: 'carolina.gonzalez@gmail.com',
     customerPhone: '+54 9 11 5829-4012',
     excursionTitle: 'Camino de los 7 Lagos - San Martín de los Andes',
     date: '2026-08-25',
@@ -171,19 +171,19 @@ const INITIAL_BOOKINGS: Booking[] = [
     status: 'CONFIRMADA',
     ticketType: 'Reserva',
     priority: 'VIP',
-    assignedGuide: 'Marcos Benítez (Guía AAGM)',
+    assignedGuide: 'Marcos González (Guía AAGM)',
     assignedVehicle: 'Van Sprinter AE-829-GV',
     operatorNotes: 'Pasajeros requieren almuerzo vegetariano en San Martín.',
     createdAt: '2026-08-22 14:30',
     comments: [
       {
         id: 'c-1',
-        authorName: 'Gonzalo Reyes',
+        authorName: 'Gonzalo González',
         authorEmail: 'logistica@grupovision.tur.ar',
-        avatar: 'GR',
-        content: '@Lucía Morales por favor verificar confirmación de almuerzo vegetariano en parador.',
+        avatar: 'GG',
+        content: '@Lucía González por favor verificar confirmación de almuerzo vegetariano en parador.',
         createdAt: 'Hace 1 hora',
-        mentions: ['lucia.m@grupovision.tur.ar']
+        mentions: ['lucia.g@grupovision.tur.ar']
       }
     ],
     attachments: [
@@ -204,17 +204,17 @@ const INITIAL_BOOKINGS: Booking[] = [
     status: 'CONFIRMADA',
     ticketType: 'VIP',
     priority: 'ALTA',
-    assignedGuide: 'Lucía Morales (WFR)',
+    assignedGuide: 'Lucía González (WFR)',
     assignedVehicle: 'Hilux 4x4 AF-302-RO',
     operatorNotes: 'Turno Nocturno con Cena Fondue.',
     createdAt: '2026-08-23 09:15',
     comments: [
       {
         id: 'c-2',
-        authorName: 'Marcos Benítez',
-        authorEmail: 'marcos.b@grupovision.tur.ar',
-        avatar: 'MB',
-        content: '@Gonzalo Reyes Hilux 4x4 equipada con raquetas y cadenas lista para el ascenso nocturno.',
+        authorName: 'Marcos González',
+        authorEmail: 'marcos.g@grupovision.tur.ar',
+        avatar: 'MG',
+        content: '@Gonzalo González Hilux 4x4 equipada con raquetas y cadenas lista para el ascenso nocturno.',
         createdAt: 'Hace 45 min',
         mentions: ['logistica@grupovision.tur.ar']
       }
@@ -270,18 +270,18 @@ const INITIAL_BOOKINGS: Booking[] = [
 const INITIAL_NOTIFICATIONS: UserNotification[] = [
   {
     id: 'notif-1',
-    recipientEmail: 'lucia.m@grupovision.tur.ar',
-    senderName: 'Gonzalo Reyes',
+    recipientEmail: 'lucia.g@grupovision.tur.ar',
+    senderName: 'Gonzalo González',
     ticketCode: 'GV-8492',
     ticketId: 'b-101',
-    message: 'te mencionó en el ticket GV-8492: "@Lucía Morales por favor verificar confirmación de almuerzo vegetariano"',
+    message: 'te mencionó en el ticket GV-8492: "@Lucía González por favor verificar confirmación de almuerzo vegetariano"',
     createdAt: 'Hace 1 hora',
     isRead: false
   },
   {
     id: 'notif-2',
-    recipientEmail: 'lucia.m@grupovision.tur.ar',
-    senderName: 'Marcos Benítez',
+    recipientEmail: 'lucia.g@grupovision.tur.ar',
+    senderName: 'Marcos González',
     ticketCode: 'GV-9104',
     ticketId: 'b-102',
     message: 'actualizó el ticket GV-9104 con unidades Hilux 4x4 para ascenso nocturno',

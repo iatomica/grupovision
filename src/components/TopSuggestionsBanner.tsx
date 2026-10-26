@@ -75,13 +75,21 @@ export const TopSuggestionsBanner: React.FC<TopSuggestionsBannerProps> = ({
     setCurrentIndex((prev) => (prev + 1) % items.length);
   };
 
-  const savings = Math.max(0, currentItem.originalPrice - currentItem.finalPrice);
+  const effectiveOriginalPrice = (matchedExcursion && typeof matchedExcursion.priceNum === 'number' && matchedExcursion.priceNum > 0)
+    ? matchedExcursion.priceNum
+    : currentItem.originalPrice;
+
+  const effectiveFinalPrice = (currentItem.discountPercent && currentItem.discountPercent > 0)
+    ? Math.round(effectiveOriginalPrice * (1 - currentItem.discountPercent / 100))
+    : (currentItem.finalPrice || effectiveOriginalPrice);
+
+  const savings = Math.max(0, effectiveOriginalPrice - effectiveFinalPrice);
   const discountLabel = currentItem.discountPercent ? `${currentItem.discountPercent}% OFF` : (currentItem.badge || 'Promoción Especial');
 
   // Dynamic WhatsApp message generation for each promo
   const dynamicWhatsappMessage = currentItem.whatsappMessage && currentItem.whatsappMessage.trim() !== ''
     ? currentItem.whatsappMessage
-    : `Hola Grupo Visión! Deseo aprovechar la promoción de "${displayTitle}" (${discountLabel}) | Tarifa Especial Promo: $${currentItem.finalPrice.toLocaleString('es-AR')} ARS / persona${savings > 0 ? ` (Ahorro: $${savings.toLocaleString('es-AR')})` : ''} | ¿Tienen disponibilidad confirmada para los próximos días?`;
+    : `Hola Grupo Visión! Deseo aprovechar la promoción de "${displayTitle}" (${discountLabel}) | Tarifa Especial Promo: $${effectiveFinalPrice.toLocaleString('es-AR')} ARS / persona${savings > 0 ? ` (Ahorro: $${savings.toLocaleString('es-AR')})` : ''} | ¿Tienen disponibilidad confirmada para los próximos días?`;
 
   const whatsappUrl = `https://wa.me/5492944235278?text=${encodeURIComponent(dynamicWhatsappMessage)}`;
 
@@ -205,10 +213,10 @@ export const TopSuggestionsBanner: React.FC<TopSuggestionsBannerProps> = ({
             <div className="pt-2 flex flex-wrap items-baseline gap-2 sm:gap-4 max-w-full">
               <div className="flex flex-wrap items-baseline gap-2 bg-slate-950/40 backdrop-blur-md px-3 sm:px-4 py-2 rounded-2xl border border-white/15">
                 <span className="text-slate-400 text-xs sm:text-base font-mono line-through">
-                  ${currentItem.originalPrice.toLocaleString('es-AR')}
+                  ${effectiveOriginalPrice.toLocaleString('es-AR')}
                 </span>
                 <span className="text-2xl sm:text-4xl lg:text-5xl font-black text-emerald-400 font-mono tracking-tight drop-shadow-sm">
-                  ${currentItem.finalPrice.toLocaleString('es-AR')}
+                  ${effectiveFinalPrice.toLocaleString('es-AR')}
                 </span>
                 <span className="text-[11px] sm:text-sm font-mono text-slate-300 font-semibold">
                   ARS / pax

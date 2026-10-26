@@ -16,8 +16,8 @@ export interface TravelerUser {
 export const INITIAL_TRAVELERS: TravelerUser[] = [
   {
     id: 'tr-1',
-    name: 'Carolina Rossi',
-    email: 'carolina.rossi@gmail.com',
+    name: 'Carolina González',
+    email: 'carolina.gonzalez@gmail.com',
     phone: '+54 9 11 5829-4012',
     membershipLevel: 'VIP',
     customDiscountPercent: 15,
@@ -25,7 +25,7 @@ export const INITIAL_TRAVELERS: TravelerUser[] = [
     passportOrDni: 'DNI 34.819.002',
     city: 'Buenos Aires',
     notes: 'Pasajera recurrente de temporada invernal. Preferencia por traslados privados.',
-    avatar: 'CR',
+    avatar: 'CG',
     createdAt: '2026-01-15'
   },
   {
