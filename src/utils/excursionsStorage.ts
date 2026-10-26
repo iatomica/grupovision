@@ -1,6 +1,6 @@
 import { Excursion, EXCURSIONS_DATA, normalizeExcursion } from '../data/excursionsData';
 
-const STORAGE_KEY = 'grupovision_excursions_catalog_v2';
+const STORAGE_KEY = 'grupovision_excursions_catalog_v3';
 
 export interface MediaItem {
   id: string;
@@ -17,22 +17,19 @@ export interface MediaItem {
 
 /**
  * Carga el catálogo de excursiones sincrónicamente desde localStorage como estado inicial instantáneo.
+ * Esta función es estrictamente de lectura: NUNCA emite un PUT hacia el backend.
  */
 export function loadExcursions(): Excursion[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      const normalized = EXCURSIONS_DATA.map(normalizeExcursion);
-      saveExcursions(normalized);
-      return normalized;
+      return EXCURSIONS_DATA.map(normalizeExcursion);
     }
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed) && parsed.length > 0) {
       return parsed.map(normalizeExcursion);
     }
-    const normalized = EXCURSIONS_DATA.map(normalizeExcursion);
-    saveExcursions(normalized);
-    return normalized;
+    return EXCURSIONS_DATA.map(normalizeExcursion);
   } catch (error) {
     console.warn('[ExcursionsStorage] Error al leer de localStorage, usando datos base:', error);
     return EXCURSIONS_DATA.map(normalizeExcursion);

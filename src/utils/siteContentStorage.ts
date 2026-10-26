@@ -1,22 +1,21 @@
 import { SiteContentData, DEFAULT_SITE_CONTENT } from '../data/siteContentData';
 
-const SITE_CONTENT_STORAGE_KEY = 'grupovision_site_content_v1';
+const SITE_CONTENT_STORAGE_KEY = 'grupovision_site_content_v2';
 
 /**
  * Carga el contenido del sitio sincrónicamente desde localStorage como estado inicial inmediato.
+ * Esta función es estrictamente de lectura: NUNCA emite un PUT hacia el backend.
  */
 export function loadSiteContent(): SiteContentData {
   try {
     const raw = localStorage.getItem(SITE_CONTENT_STORAGE_KEY);
     if (!raw) {
-      saveSiteContent(DEFAULT_SITE_CONTENT);
       return DEFAULT_SITE_CONTENT;
     }
     const parsed = JSON.parse(raw);
     if (parsed && parsed.about && parsed.exclusive) {
       return parsed;
     }
-    saveSiteContent(DEFAULT_SITE_CONTENT);
     return DEFAULT_SITE_CONTENT;
   } catch (err) {
     console.warn('[SiteContentStorage] Error al leer localStorage, usando valores por defecto:', err);
