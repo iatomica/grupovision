@@ -385,6 +385,7 @@ export default function App() {
   const [modalChildPassengers, setModalChildPassengers] = useState<number>(0);
   const [modalSelectedDate, setModalSelectedDate] = useState<string>(getTomorrowDateStr);
   const [modalActivePhoto, setModalActivePhoto] = useState<string | null>(null);
+  const [modalStep, setModalStep] = useState<1 | 2 | 3>(1);
   const [isExcursionModalOpen, setIsExcursionModalOpen] = useState(false);
   const [isBannerCollapsed, setIsBannerCollapsed] = useState(false);
   const [isOfficeModalOpen, setIsOfficeModalOpen] = useState(false);
@@ -397,6 +398,7 @@ export default function App() {
   const handleOpenExcursionModal = (item: Excursion) => {
     setActiveExcursion(item);
     setModalActivePhoto(null);
+    setModalStep(1);
     const nextDep = getNextAvailableDeparture(item, bookings);
     const initialDate = nextDep ? nextDep.dateStr : getTomorrowDateStr();
     setModalSelectedDate(initialDate);
@@ -2355,195 +2357,400 @@ export default function App() {
                   </div>
                 )}
 
+                {/* 3-STEP PROGRESSIVE WIZARD NAVIGATION BAR */}
+                <div className="bg-slate-50 border-b border-slate-200 px-4 sm:px-6 py-2.5 flex items-center justify-between gap-2 shrink-0">
+                  <div className="flex items-center gap-1.5 sm:gap-2 flex-1">
+                    <button
+                      type="button"
+                      onClick={() => setModalStep(1)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        modalStep === 1
+                          ? 'bg-[#00A896] text-white shadow-xs'
+                          : 'bg-white text-slate-600 hover:bg-slate-200/70 border border-slate-200'
+                      }`}
+                    >
+                      <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-mono font-bold ${
+                        modalStep === 1 ? 'bg-white text-[#00A896]' : 'bg-slate-200 text-slate-700'
+                      }`}>1</span>
+                      <span className="hidden sm:inline">La Experiencia</span>
+                      <span className="sm:hidden">Detalle</span>
+                    </button>
+
+                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+
+                    <button
+                      type="button"
+                      onClick={() => setModalStep(2)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        modalStep === 2
+                          ? 'bg-[#00A896] text-white shadow-xs'
+                          : 'bg-white text-slate-600 hover:bg-slate-200/70 border border-slate-200'
+                      }`}
+                    >
+                      <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-mono font-bold ${
+                        modalStep === 2 ? 'bg-white text-[#00A896]' : 'bg-slate-200 text-slate-700'
+                      }`}>2</span>
+                      <span className="hidden sm:inline">Fechas &amp; Cupos</span>
+                      <span className="sm:hidden">Fechas</span>
+                    </button>
+
+                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+
+                    <button
+                      type="button"
+                      onClick={() => setModalStep(3)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        modalStep === 3
+                          ? 'bg-[#00A896] text-white shadow-xs'
+                          : 'bg-white text-slate-600 hover:bg-slate-200/70 border border-slate-200'
+                      }`}
+                    >
+                      <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-mono font-bold ${
+                        modalStep === 3 ? 'bg-white text-[#00A896]' : 'bg-slate-200 text-slate-700'
+                      }`}>3</span>
+                      <span className="hidden sm:inline">Confirmación &amp; WPP</span>
+                      <span className="sm:hidden">Reserva</span>
+                    </button>
+                  </div>
+
+                  <span className="text-[11px] font-mono text-slate-400 hidden md:inline">
+                    Paso {modalStep} de 3
+                  </span>
+                </div>
+
                 {/* Scrollable Modal Content with Scroll Listener for Banner Collapse */}
                 <div 
                   onScroll={handleModalScroll}
                   className="p-6 sm:p-8 overflow-y-auto space-y-6 flex-1 text-slate-800"
                 >
-                  <div>
-                    <div className="flex items-center justify-between gap-3 mb-2">
-                      <h3 className="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
-                        {activeContent.title}
-                      </h3>
-                    </div>
-                    <p className="text-slate-600 text-sm leading-relaxed">
-                      {activeContent.fullDetails || activeContent.description}
-                    </p>
-                  </div>
-
-                  {/* Quick Info Grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-mono">
-                    <div>
-                      <span className="text-slate-400 block text-[10px] uppercase">TEMPORADA</span>
-                      <span className="font-bold text-slate-900">{activeExcursion.season}</span>
-                    </div>
-                    <div>
-                      <span className="text-slate-400 block text-[10px] uppercase">{t.modal.departure.toUpperCase()}</span>
-                      <span className="font-bold text-slate-900">{activeContent.departureTime || activeExcursion.departureTime}</span>
-                    </div>
-                    <div>
-                      <span className="text-slate-400 block text-[10px] uppercase">PRÓXIMA SALIDA</span>
-                      <span className="font-bold text-[#00A896] block">
-                        {modalNextDep?.formattedDate || 'Consultar'}
-                      </span>
-                      {modalNextDep && modalNextDep.availableSpots > 0 && (
-                        <span className="text-[10px] text-slate-500 font-mono block">
-                          {modalNextDep.availableSpots} cupos libres
-                        </span>
-                      )}
-                    </div>
-                    <div>
-                      <span className="text-slate-400 block text-[10px] uppercase">
-                        {currentLang === 'en' 
-                          ? (activeExcursion.hasEnglishGuide === false ? 'RATE (SPANISH GUIDE)' : 'RATE (EN GUIDE)') 
-                          : 'TARIFA (ES/PT)'}
-                      </span>
-                      <span className="font-bold text-[#00A896] text-sm block">
-                        {activePrice === 0 ? 'GRATUITA ($0 ARS)' : `$${activePrice.toLocaleString('es-AR')} ARS / pax`}
-                      </span>
-                      {hasChildPrice && (
-                        <span className="text-[10px] text-amber-700 font-mono block">
-                          Menores ({activeExcursion.childAgePolicy || 'Tarifa niños'}): {childPrice === 0 ? 'Gratis' : `$${childPrice.toLocaleString('es-AR')} ARS`}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Banner si está fuera de temporada */}
-                  {activeExcursion.category === 'Fuera de Temporada' && (
-                    <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
-                      <span className="text-2xl shrink-0">❄️</span>
+                  {/* ========================================================================= */}
+                  {/* FASE 1: LA EXPERIENCIA (INSPIRACIÓN & DETALLES) */}
+                  {/* ========================================================================= */}
+                  {modalStep === 1 && (
+                    <div className="space-y-6 animate-fadeIn">
                       <div>
-                        <h5 className="text-xs font-black uppercase tracking-wider text-amber-800 flex items-center gap-2">
-                          <span>Excursión Fuera de Temporada</span>
-                          <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold">
-                            Planificación Anticipada
-                          </span>
-                        </h5>
-                        <p className="text-xs text-amber-900 mt-1 leading-relaxed">
-                          Esta excursión no opera en las fechas inmediatas pero permanece visible en el catálogo para que puedas consultar sus características y planificar con tiempo tus próximas vacaciones.
-                          {modalNextDep && modalNextDep.dateStr && (
-                            <span className="block mt-1.5 font-bold text-amber-950">
-                              🗓️ Próxima salida disponible: <span className="text-[#00A896]">{modalNextDep.formattedDate}</span> ({modalNextDep.availableSpots} cupos)
-                            </span>
-                          )}
+                        <div className="flex items-center justify-between gap-3 mb-2">
+                          <h3 className="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
+                            {activeContent.title}
+                          </h3>
+                        </div>
+                        <p className="text-slate-600 text-sm leading-relaxed">
+                          {activeContent.fullDetails || activeContent.description}
                         </p>
                       </div>
-                    </div>
-                  )}
 
-                  {/* 1 & 2. INTERACTIVE MONTHLY CALENDAR, SHIFTS & LIVE CAPACITY */}
-                  <PublicExcursionCalendar
-                    excursion={activeExcursion}
-                    activePrice={activePrice}
-                    currentLang={currentLang}
-                    bookings={bookings}
-                    selectedDate={modalSelectedDate}
-                    onSelectDate={(newDate) => setModalSelectedDate(newDate)}
-                    selectedShiftId={selectedShiftId}
-                    onSelectShiftId={(newShiftId) => setSelectedShiftId(newShiftId)}
-                    passengers={modalPassengers}
-                    onChangePassengers={(newPax) => setModalPassengers(newPax)}
-                    childPassengers={modalChildPassengers}
-                    onChangeChildPassengers={(newPax) => setModalChildPassengers(newPax)}
-                    onConfirmWhatsApp={() => {
-                      window.open(waUrl, '_blank');
-                    }}
-                  />
-
-                  {/* Highlights */}
-                  {activeContent.highlights && activeContent.highlights.length > 0 && (
-                    <div className="space-y-3">
-                      <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#00A896]">
-                        {t.modal.highlights}:
-                      </h4>
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700 font-medium">
-                        {activeContent.highlights.map((hl, i) => (
-                          <li key={i} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-4 h-4 text-[#00A896] shrink-0 mt-0.5" />
-                            <span>{hl}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Included / Not Included */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
-                    {activeContent.includes && activeContent.includes.length > 0 && (
-                      <div className="space-y-2">
-                        <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-700">
-                          {t.modal.includes}:
-                        </h4>
-                        <ul className="space-y-1.5 text-xs text-slate-700">
-                          {activeContent.includes.map((inc, i) => (
-                            <li key={i} className="flex items-start gap-2">
-                              <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                              <span>{inc}</span>
-                            </li>
-                          ))}
-                        </ul>
+                      {/* Quick Info Grid */}
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-mono">
+                        <div>
+                          <span className="text-slate-400 block text-[10px] uppercase">TEMPORADA</span>
+                          <span className="font-bold text-slate-900">{activeExcursion.season}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[10px] uppercase">{t.modal.departure.toUpperCase()}</span>
+                          <span className="font-bold text-slate-900">{activeContent.departureTime || activeExcursion.departureTime}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[10px] uppercase">PRÓXIMA SALIDA</span>
+                          <span className="font-bold text-[#00A896] block">
+                            {modalNextDep?.formattedDate || 'Consultar'}
+                          </span>
+                          {modalNextDep && modalNextDep.availableSpots > 0 && (
+                            <span className="text-[10px] text-slate-500 font-mono block">
+                              {modalNextDep.availableSpots} cupos libres
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[10px] uppercase">
+                            {currentLang === 'en' 
+                              ? (activeExcursion.hasEnglishGuide === false ? 'RATE (SPANISH GUIDE)' : 'RATE (EN GUIDE)') 
+                              : 'TARIFA BASE'}
+                          </span>
+                          <span className="font-bold text-[#00A896] text-sm block">
+                            {activePrice === 0 ? 'GRATUITA ($0 ARS)' : `$${activePrice.toLocaleString('es-AR')} ARS`}
+                          </span>
+                          {hasChildPrice && (
+                            <span className="text-[10px] text-amber-700 font-mono block">
+                              Menores ({activeExcursion.childAgePolicy || 'Tarifa niños'}): {childPrice === 0 ? 'Gratis' : `$${childPrice.toLocaleString('es-AR')} ARS`}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    )}
 
-                    {activeContent.notIncludes && activeContent.notIncludes.length > 0 && (
-                      <div className="space-y-2">
-                        <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-rose-700">
-                          {t.modal.notIncludes}:
-                        </h4>
-                        <ul className="space-y-1.5 text-xs text-slate-600">
-                          {activeContent.notIncludes.map((ninc, i) => (
-                            <li key={i} className="flex items-start gap-2">
-                              <X className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
-                              <span>{ninc}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-
-                  {activeExcursion.additionalInfo && (
-                    <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs space-y-1">
-                      <span className="font-mono font-bold text-amber-800 uppercase text-[11px] block">Información Adicional & Recomendaciones</span>
-                      <p className="text-slate-700 whitespace-pre-line leading-relaxed">{activeExcursion.additionalInfo}</p>
-                    </div>
-                  )}
-
-                  {activeExcursion.faq && activeExcursion.faq.length > 0 && (
-                    <div className="space-y-3 pt-2">
-                      <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900">{t.modal.faq}:</h4>
-                      <div className="space-y-2">
-                        {activeExcursion.faq.map((f, i) => (
-                          <div key={i} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs space-y-1">
-                            <span className="font-bold text-slate-900 block">{f.question}</span>
-                            <p className="text-slate-600 leading-relaxed">{f.answer}</p>
+                      {/* Banner si está fuera de temporada */}
+                      {activeExcursion.category === 'Fuera de Temporada' && (
+                        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
+                          <span className="text-2xl shrink-0">❄️</span>
+                          <div>
+                            <h5 className="text-xs font-black uppercase tracking-wider text-amber-800 flex items-center gap-2">
+                              <span>Excursión Fuera de Temporada</span>
+                              <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold">
+                                Planificación Anticipada
+                              </span>
+                            </h5>
+                            <p className="text-xs text-amber-900 mt-1 leading-relaxed">
+                              Esta excursión no opera en las fechas inmediatas pero permanece visible en el catálogo para que puedas consultar sus características y planificar con tiempo tus próximas vacaciones.
+                              {modalNextDep && modalNextDep.dateStr && (
+                                <span className="block mt-1.5 font-bold text-amber-950">
+                                  🗓️ Próxima salida disponible: <span className="text-[#00A896]">{modalNextDep.formattedDate}</span> ({modalNextDep.availableSpots} cupos)
+                                </span>
+                              )}
+                            </p>
                           </div>
-                        ))}
+                        </div>
+                      )}
+
+                      {/* Highlights */}
+                      {activeContent.highlights && activeContent.highlights.length > 0 && (
+                        <div className="space-y-3">
+                          <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#00A896]">
+                            {t.modal.highlights}:
+                          </h4>
+                          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700 font-medium">
+                            {activeContent.highlights.map((hl, i) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <CheckCircle2 className="w-4 h-4 text-[#00A896] shrink-0 mt-0.5" />
+                                <span>{hl}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* Included / Not Included */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
+                        {activeContent.includes && activeContent.includes.length > 0 && (
+                          <div className="space-y-2">
+                            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-700">
+                              {t.modal.includes}:
+                            </h4>
+                            <ul className="space-y-1.5 text-xs text-slate-700">
+                              {activeContent.includes.map((inc, i) => (
+                                <li key={i} className="flex items-start gap-2">
+                                  <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                                  <span>{inc}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {activeContent.notIncludes && activeContent.notIncludes.length > 0 && (
+                          <div className="space-y-2">
+                            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-rose-700">
+                              {t.modal.notIncludes}:
+                            </h4>
+                            <ul className="space-y-1.5 text-xs text-slate-600">
+                              {activeContent.notIncludes.map((ninc, i) => (
+                                <li key={i} className="flex items-start gap-2">
+                                  <X className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
+                                  <span>{ninc}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Phase 1 Footer Action Bar */}
+                      <div className="pt-5 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <div>
+                          <span className="text-[11px] font-mono text-slate-400 block">Tarifa por persona:</span>
+                          <span className="text-xl font-black text-[#00A896]">
+                            ${activePrice.toLocaleString('es-AR')} ARS
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2 w-full sm:w-auto">
+                          <button
+                            type="button"
+                            onClick={() => { setIsExcursionModalOpen(false); setIsBannerCollapsed(false); }}
+                            className="px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer"
+                          >
+                            Cerrar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setModalStep(2)}
+                            className="flex-1 sm:flex-initial px-6 py-3 rounded-xl bg-[#00A896] hover:bg-[#028090] text-white font-extrabold text-xs shadow-md shadow-[#00A896]/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                          >
+                            <span>Elegir Fecha &amp; Turno</span>
+                            <ChevronRight className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}
 
-                  <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row gap-3">
-                    <motion.a 
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      href={waUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-black font-extrabold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 text-xs transition-all shadow-md shadow-[#25D366]/20"
-                    >
-                      <MessageCircle className="w-4 h-4 fill-current" />
-                      <span>{t.modal.whatsappInquiry} ({modalPassengers} pax)</span>
-                    </motion.a>
+                  {/* ========================================================================= */}
+                  {/* FASE 2: FECHAS, TURNOS & PASAJEROS (ACCIÓN & COTIZADOR EN VIVO) */}
+                  {/* ========================================================================= */}
+                  {modalStep === 2 && (
+                    <div className="space-y-6 animate-fadeIn">
+                      <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-100">
+                        <div>
+                          <h4 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                            <span>🗓️ Seleccioná la Fecha, Turno y Cantidad de Pasajeros</span>
+                          </h4>
+                          <p className="text-xs text-slate-500 mt-0.5">
+                            Los cupos y tarifas se actualizan automáticamente en tiempo real.
+                          </p>
+                        </div>
+                      </div>
 
-                    <button 
-                      onClick={() => { setIsExcursionModalOpen(false); setIsBannerCollapsed(false); }}
-                      className="px-6 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold"
-                    >
-                      {t.modal.close}
-                    </button>
-                  </div>
+                      {/* 1 & 2. INTERACTIVE MONTHLY CALENDAR, SHIFTS & LIVE CAPACITY */}
+                      <PublicExcursionCalendar
+                        excursion={activeExcursion}
+                        activePrice={activePrice}
+                        currentLang={currentLang}
+                        bookings={bookings}
+                        selectedDate={modalSelectedDate}
+                        onSelectDate={(newDate) => setModalSelectedDate(newDate)}
+                        selectedShiftId={selectedShiftId}
+                        onSelectShiftId={(newShiftId) => setSelectedShiftId(newShiftId)}
+                        passengers={modalPassengers}
+                        onChangePassengers={(newPax) => setModalPassengers(newPax)}
+                        childPassengers={modalChildPassengers}
+                        onChangeChildPassengers={(newPax) => setModalChildPassengers(newPax)}
+                        onConfirmWhatsApp={() => {
+                          setModalStep(3);
+                        }}
+                      />
+
+                      {/* Phase 2 Footer Action Bar */}
+                      <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setModalStep(1)}
+                          className="w-full sm:w-auto px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer"
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                          <span>Volver a Detalles</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setModalStep(3)}
+                          className="w-full sm:flex-1 px-6 py-3.5 rounded-xl bg-[#00A896] hover:bg-[#028090] text-white font-black text-xs shadow-md shadow-[#00A896]/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                        >
+                          <span>Confirmar &amp; Ver Resumen ({totalPax} pax · {rateText})</span>
+                          <ChevronRight className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ========================================================================= */}
+                  {/* FASE 3: CONFIRMACIÓN, RECOMENDACIONES & WHATSAPP */}
+                  {/* ========================================================================= */}
+                  {modalStep === 3 && (
+                    <div className="space-y-6 animate-fadeIn">
+                      {/* Booking Summary Card */}
+                      <div className="p-5 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#00A896]/10 rounded-full blur-2xl" />
+                        
+                        <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
+                          <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#00A896]">
+                            ✓ Resumen de tu Consulta
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setModalStep(2)}
+                            className="text-[11px] font-mono text-cyan-300 hover:text-white underline cursor-pointer"
+                          >
+                            Modificar selección
+                          </button>
+                        </div>
+
+                        <div className="space-y-2">
+                          <h4 className="text-lg font-black text-white">
+                            {activeContent.title}
+                          </h4>
+                          
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs font-mono pt-1">
+                            <div className="bg-white/10 px-3 py-2 rounded-xl backdrop-blur-xs">
+                              <span className="text-slate-400 block text-[10px]">FECHA SELECCIONADA</span>
+                              <span className="font-bold text-white capitalize">{formattedSelectedDate}</span>
+                            </div>
+                            <div className="bg-white/10 px-3 py-2 rounded-xl backdrop-blur-xs">
+                              <span className="text-slate-400 block text-[10px]">TURNO / HORARIO</span>
+                              <span className="font-bold text-white">{selectedShift ? `${selectedShift.name} (${selectedShift.time})` : 'A coordinar'}</span>
+                            </div>
+                            <div className="bg-white/10 px-3 py-2 rounded-xl backdrop-blur-xs">
+                              <span className="text-slate-400 block text-[10px]">PASAJEROS</span>
+                              <span className="font-bold text-emerald-300">{paxBreakdown}</span>
+                            </div>
+                          </div>
+
+                          <div className="pt-2 flex items-baseline justify-between border-t border-white/10">
+                            <span className="text-xs text-slate-300 font-mono">Total estimado oficial:</span>
+                            <span className="text-2xl font-black text-emerald-400 font-mono">
+                              {rateText}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Información Adicional & Recomendaciones */}
+                      {activeExcursion.additionalInfo && (
+                        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs space-y-1">
+                          <span className="font-mono font-bold text-amber-800 uppercase text-[11px] block">
+                            💡 Información Adicional &amp; Recomendaciones de Indumentaria
+                          </span>
+                          <p className="text-slate-700 whitespace-pre-line leading-relaxed">{activeExcursion.additionalInfo}</p>
+                        </div>
+                      )}
+
+                      {/* FAQ */}
+                      {activeExcursion.faq && activeExcursion.faq.length > 0 && (
+                        <div className="space-y-3 pt-1">
+                          <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900">
+                            {t.modal.faq}:
+                          </h4>
+                          <div className="space-y-2">
+                            {activeExcursion.faq.map((f, i) => (
+                              <div key={i} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs space-y-1">
+                                <span className="font-bold text-slate-900 block">{f.question}</span>
+                                <p className="text-slate-600 leading-relaxed">{f.answer}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Phase 3 WhatsApp Call To Action */}
+                      <div className="pt-4 border-t border-slate-200 space-y-2.5">
+                        <motion.a 
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          href={waUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-black font-extrabold py-4 px-6 rounded-2xl flex items-center justify-center gap-2.5 text-sm transition-all shadow-lg shadow-[#25D366]/20 cursor-pointer"
+                        >
+                          <MessageCircle className="w-5 h-5 fill-current" />
+                          <span>Enviar Consulta y Reservar por WhatsApp ({totalPax} pax · {rateText})</span>
+                        </motion.a>
+
+                        <div className="flex items-center justify-between gap-3 text-xs">
+                          <button
+                            type="button"
+                            onClick={() => setModalStep(2)}
+                            className="text-slate-500 hover:text-slate-800 font-mono underline cursor-pointer"
+                          >
+                            ← Modificar fecha o cantidad de personas
+                          </button>
+                          <button 
+                            type="button"
+                            onClick={() => { setIsExcursionModalOpen(false); setIsBannerCollapsed(false); }}
+                            className="text-slate-400 hover:text-slate-600 font-mono cursor-pointer"
+                          >
+                            Cerrar ventana
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             </div>
