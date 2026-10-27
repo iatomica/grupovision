@@ -22,7 +22,8 @@ import {
   Mail, 
   DollarSign, 
   Lock,
-  ChevronLeft
+  ChevronLeft,
+  UserCheck
 } from 'lucide-react';
 
 export interface TicketComment {
@@ -58,7 +59,9 @@ export interface Booking {
   assignedGuide: string;
   assignedVehicle: string;
   operatorNotes: string;
+  emittedBy?: string;
   createdAt: string;
+  passengerList?: Array<{ name: string; type: 'Adulto' | 'Menor'; dni?: string }>;
   comments: TicketComment[];
   attachments: { name: string; url: string; size: string }[];
 }
@@ -321,6 +324,48 @@ export const JiraTicketModal: React.FC<JiraTicketModalProps> = ({
             {/* TAB 1: DETAILS & NOTES */}
             {activeTab === 'details' && (
               <div className="space-y-6 text-xs">
+                
+                {/* Banner Destacado: Emitido por (Asesor) */}
+                <div className="p-4 rounded-2xl bg-[#00A896]/10 border border-[#00A896]/30 flex items-center justify-between gap-3 shadow-xs">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#00A896] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
+                      <UserCheck className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-mono text-[#00A896] font-bold uppercase tracking-wider block">
+                        Responsable de Emisión
+                      </span>
+                      <span className="font-extrabold text-sm text-slate-900">
+                        {ticket.emittedBy || 'Thomas González (Asesor Comercial)'}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="px-3 py-1 bg-white border border-[#00A896]/30 rounded-xl text-[11px] font-mono font-bold text-[#00A896] shrink-0">
+                    {ticket.source === 'mostrador-san-martin' ? 'Mostrador San Martín' : 'Canal Receptivo'}
+                  </span>
+                </div>
+
+                {/* Nómina de Pasajeros si fue emitida con acompañantes */}
+                {ticket.passengerList && ticket.passengerList.length > 0 && (
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2">
+                    <span className="text-[10px] font-mono text-slate-400 block uppercase font-bold">
+                      Nómina de Pasajeros Asignados ({ticket.passengerList.length} pax)
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {ticket.passengerList.map((p, idx) => (
+                        <div key={idx} className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                          <span className="font-bold text-slate-800 text-xs">
+                            {idx + 1}. {p.name}
+                          </span>
+                          <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-white border border-slate-200 text-slate-600 font-semibold">
+                            {p.type} {p.dni ? `• ${p.dni}` : ''}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                   <span className="font-mono font-bold text-slate-500 text-[10px] uppercase block">Notas Operativas del Ticket</span>
                   <p className="text-slate-800 leading-relaxed font-medium">

@@ -75,6 +75,7 @@ import {
 } from './data/translations';
 import { loadExcursions, saveExcursions, resetExcursionsToDefault, fetchExcursionsAsync } from './utils/excursionsStorage';
 import { JiraTicketModal, Booking, TicketComment } from './components/JiraTicketModal';
+import { loadBookings, fetchBookingsAsync, saveBookingAsync, saveAllBookingsAsync } from './utils/bookingsStorage';
 import { NotificationsModal, UserNotification } from './components/NotificationsModal';
 import { TravelerUser, INITIAL_TRAVELERS } from './data/usersData';
 import { TravelerDashboard } from './components/TravelerDashboard';
@@ -290,19 +291,6 @@ const INITIAL_NOTIFICATIONS: UserNotification[] = [
   }
 ];
 
-const loadInitialBookings = (): Booking[] => {
-  try {
-    const saved = localStorage.getItem('grupovision_bookings');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-    }
-  } catch (e) {
-    console.error('Error loading bookings from localStorage', e);
-  }
-  return INITIAL_BOOKINGS;
-};
-
 export default function App() {
   // Navigation & User Auth States
   const [currentView, setCurrentView] = useState<'landing' | 'login' | 'admin-board' | 'traveler-board' | 'advisor-board'>('landing');
@@ -339,7 +327,7 @@ export default function App() {
   const [travelersList, setTravelersList] = useState<TravelerUser[]>(INITIAL_TRAVELERS);
   const [activityLogs, setActivityLogs] = useState<SystemActivityLog[]>(INITIAL_ACTIVITY_LOGS);
 
-  // Sync fresh excursions and site content from persistent API on mount
+  // Sync fresh excursions, site content and bookings from persistent API on mount
   useEffect(() => {
     fetchExcursionsAsync().then(fresh => {
       if (fresh && fresh.length > 0) {
@@ -350,6 +338,12 @@ export default function App() {
     fetchSiteContentAsync().then(freshContent => {
       if (freshContent && freshContent.about) {
         setSiteContent(freshContent);
+      }
+    });
+
+    fetchBookingsAsync(INITIAL_BOOKINGS).then(freshBookings => {
+      if (freshBookings && freshBookings.length > 0) {
+        setBookings(freshBookings);
       }
     });
   }, []);
@@ -392,7 +386,7 @@ export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Operations & Jira Ticket States
-  const [bookings, setBookings] = useState<Booking[]>(() => loadInitialBookings());
+  const [bookings, setBookings] = useState<Booking[]>(() => loadBookings(INITIAL_BOOKINGS));
 
   // Helper to open modal with preselected shift and next available departure
   const handleOpenExcursionModal = (item: Excursion) => {
@@ -411,15 +405,8 @@ export default function App() {
   };
 
   const handleSaveManualBooking = (newB: Booking) => {
-    setBookings(prev => {
-      const updated = [newB, ...prev];
-      try {
-        localStorage.setItem('grupovision_bookings', JSON.stringify(updated));
-      } catch (e) {
-        console.error(e);
-      }
-      return updated;
-    });
+    saveBookingAsync(newB);
+    setBookings(prev => [newB, ...prev]);
 
     setActivityLogs(prev => [
       {
@@ -440,6 +427,15 @@ export default function App() {
   // Notifications System States
   const [notifications, setNotifications] = useState<UserNotification[]>(INITIAL_NOTIFICATIONS);
   const [isNotificationsModalOpen, setIsNotificationsModalOpen] = useState(false);
+  const [liveAdminAlert, setLiveAdminAlert] = useState<{
+    code: string;
+    customerName: string;
+    excursionTitle: string;
+    date: string;
+    guests: number;
+    total: number;
+    source: string;
+  } | null>(null);
 
   // New Booking Modal Form
   const [isNewBookingModalOpen, setIsNewBookingModalOpen] = useState(false);
@@ -574,14 +570,19 @@ export default function App() {
     }
 
     const statusOrder: Booking['status'][] = ['BACKLOG', 'COTIZACION', 'CONFIRMADA', 'COMPLETADA'];
-    setBookings(prev => prev.map(b => {
-      if (b.id !== id) return b;
-      const currentIndex = statusOrder.indexOf(b.status);
-      const nextIndex = direction === 'next' 
-        ? Math.min(statusOrder.length - 1, currentIndex + 1)
-        : Math.max(0, currentIndex - 1);
-      return { ...b, status: statusOrder[nextIndex] };
-    }));
+    let updatedList: Booking[] = [];
+    setBookings(prev => {
+      updatedList = prev.map(b => {
+        if (b.id !== id) return b;
+        const currentIndex = statusOrder.indexOf(b.status);
+        const nextIndex = direction === 'next' 
+          ? Math.min(statusOrder.length - 1, currentIndex + 1)
+          : Math.max(0, currentIndex - 1);
+        return { ...b, status: statusOrder[nextIndex] };
+      });
+      saveAllBookingsAsync(updatedList);
+      return updatedList;
+    });
 
     if (selectedTicket && selectedTicket.id === id) {
       const currentIndex = statusOrder.indexOf(selectedTicket.status);
@@ -594,6 +595,7 @@ export default function App() {
 
   // Update Ticket from Jira Modal
   const handleUpdateTicket = (updated: Booking) => {
+    saveBookingAsync(updated);
     setBookings(prev => prev.map(b => b.id === updated.id ? updated : b));
     setSelectedTicket(updated);
   };
@@ -760,7 +762,7 @@ export default function App() {
     }
   };
 
-  // Create Booking from Advisor Portal
+  // Create Booking from Advisor Portal (Central Sync & Admin Notification)
   const handleCreateBookingForTraveler = (bookingData: Omit<Booking, 'id' | 'code' | 'createdAt' | 'comments' | 'attachments'>) => {
     const newB: Booking = {
       ...bookingData,
@@ -771,17 +773,45 @@ export default function App() {
       attachments: []
     };
 
+    // 1. Actualizar estado central de reservas y persistir en backend / localStorage
+    saveBookingAsync(newB);
     setBookings(prev => [newB, ...prev]);
+
+    // 2. Registrar en auditoría de actividad (Logs operativos)
     setActivityLogs(prev => [
       {
         id: `log-${Date.now().toString().slice(-4)}`,
-        user: userName || 'Asesor Comercial',
-        action: `Emitió ticket ${newB.code} para ${newB.customerName} (${newB.excursionTitle})`,
+        user: userName || 'Thomas González (Asesor Mostrador)',
+        action: `Emitió ticket ${newB.code} para ${newB.customerName} (${newB.guests} pax) en "${newB.excursionTitle}" - Salida: ${newB.date} (${newB.shiftTime || '09:00 hs'})`,
         timestamp: 'Justo ahora',
         type: 'ticket'
       },
       ...prev
     ]);
+
+    // 3. Notificar al Administrador en el centro de notificaciones (Campanita unread)
+    const newNotif: UserNotification = {
+      id: `n-${Date.now().toString().slice(-4)}`,
+      recipientEmail: 'admin@grupovision.tur.ar',
+      senderName: userName || 'Thomas González (Asesor Mostrador)',
+      ticketCode: newB.code,
+      ticketId: newB.id,
+      message: `Nueva reserva ingresada por mostrador para ${newB.customerName}: ${newB.excursionTitle} (${newB.guests} pax) para el ${newB.date}. Total: $${newB.totalPriceUSD.toLocaleString('es-AR')} ARS.`,
+      createdAt: 'Justo ahora',
+      isRead: false
+    };
+    setNotifications(prev => [newNotif, ...prev]);
+
+    // 4. Disparar Toast flotante en vivo para el Administrador
+    setLiveAdminAlert({
+      code: newB.code,
+      customerName: newB.customerName,
+      excursionTitle: newB.excursionTitle,
+      date: newB.date,
+      guests: newB.guests,
+      total: newB.totalPriceUSD,
+      source: 'Mostrador Asesor'
+    });
   };
 
   // Request Discount / Inquiry from Traveler Portal
@@ -814,6 +844,7 @@ export default function App() {
       attachments: []
     };
 
+    saveBookingAsync(newB);
     setBookings(prev => [newB, ...prev]);
     setActivityLogs(prev => [
       {
@@ -864,15 +895,8 @@ export default function App() {
       attachments: []
     };
 
-    setBookings(prev => {
-      const updated = [newB, ...prev];
-      try {
-        localStorage.setItem('grupovision_bookings', JSON.stringify(updated));
-      } catch (err) {
-        console.error(err);
-      }
-      return updated;
-    });
+    saveBookingAsync(newB);
+    setBookings(prev => [newB, ...prev]);
     setIsNewBookingModalOpen(false);
     setNewBookingData({
       customerName: '', customerEmail: '', customerPhone: '',
@@ -1700,6 +1724,39 @@ export default function App() {
               </div>
             </form>
 
+            {/* Quick Demo Access Shortcuts */}
+            <div className="pt-2 space-y-2 border-t border-slate-100">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block text-center font-bold">
+                Accesos directos de prueba rápida
+              </span>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setUserRole('asesor');
+                    setUserName('Thomas González');
+                    setUserEmail('asesor@grupovision.tur.ar');
+                    setCurrentView('advisor-board');
+                  }}
+                  className="p-2.5 rounded-xl bg-[#00A896]/10 hover:bg-[#00A896]/20 border border-[#00A896]/30 text-teal-900 text-xs font-bold text-center transition-all cursor-pointer shadow-2xs"
+                >
+                  🍔 Rol Asesor (Kiosco POS)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setUserRole('admin');
+                    setUserName('Luis González');
+                    setUserEmail('admin@grupovision.tur.ar');
+                    setCurrentView('admin-board');
+                  }}
+                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-900 text-xs font-bold text-center transition-all cursor-pointer shadow-2xs"
+                >
+                  ⚙️ Rol Admin General
+                </button>
+              </div>
+            </div>
+
             {/* Pie de navegación */}
             <div className="pt-4 border-t border-slate-100 text-center">
               <button 
@@ -1924,6 +1981,11 @@ export default function App() {
                                 <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-mono text-[9px] font-semibold">
                                   {b.ticketType || 'Reserva'}
                                 </span>
+                                {b.source === 'mostrador-san-martin' && (
+                                  <span className="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono text-[9px] font-bold">
+                                    🏢 Mostrador
+                                  </span>
+                                )}
                               </div>
 
                               <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold ${
@@ -1937,11 +1999,21 @@ export default function App() {
                             <div>
                               <h4 className="font-bold text-slate-900 text-sm group-hover:text-[#00A896] transition-colors">{b.customerName}</h4>
                               <p className="text-slate-600 text-xs font-medium line-clamp-1">{b.excursionTitle}</p>
+                              {b.passengerList && b.passengerList.length > 1 && (
+                                <div className="text-[10px] text-slate-500 font-mono line-clamp-1 mt-0.5">
+                                  👥 {b.passengerList.map(p => p.name).join(', ')}
+                                </div>
+                              )}
                               <div className="flex items-center gap-2 text-[11px] font-mono text-slate-400 mt-1">
-                                <span className="flex items-center gap-1"><Calendar className="w-3 h-3 text-slate-400" /> {b.date}</span>
+                                <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-slate-400" /> {b.date}</span>
                                 <span>•</span>
-                                <span className="flex items-center gap-1"><User className="w-3 h-3 text-slate-400" /> {b.guests} Pax</span>
+                                <span className="flex items-center gap-1"><User className="w-3.5 h-3.5 text-slate-400" /> {b.guests} Pax</span>
                               </div>
+                              {b.emittedBy && (
+                                <div className="mt-1.5 flex items-center gap-1 text-[10px] font-mono text-teal-800 bg-[#00A896]/15 border border-[#00A896]/30 px-2 py-0.5 rounded-md font-bold truncate">
+                                  <span>Emitido por: {b.emittedBy}</span>
+                                </div>
+                              )}
                             </div>
 
                             <div className="text-[11px] font-mono bg-slate-50 p-2 rounded-xl border border-slate-100 space-y-0.5">
@@ -2973,6 +3045,65 @@ export default function App() {
 
       {/* FLOATING WHATSAPP BUTTON (ONLY ON PUBLIC LANDING) */}
       <FloatingWhatsApp isVisible={currentView === 'landing'} />
+
+      {/* FLOATING LIVE ADMIN NOTIFICATION TOAST (SOLO VISIBLE PARA ADMINISTRADORES) */}
+      <AnimatePresence>
+        {liveAdminAlert && userRole === 'admin' && (
+          <motion.div
+            initial={{ opacity: 0, y: 40, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="fixed bottom-6 right-6 z-50 bg-slate-900 border-2 border-[#00A896] text-white p-4.5 rounded-3xl shadow-2xl max-w-sm flex items-start gap-3 backdrop-blur-md"
+          >
+            <div className="w-10 h-10 rounded-2xl bg-[#00A896]/20 text-[#00A896] flex items-center justify-center shrink-0 border border-[#00A896]/30">
+              <CheckCircle className="w-5 h-5" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-[10px] font-mono text-[#00A896] font-bold uppercase tracking-wider flex items-center gap-1">
+                <span>Nueva Reserva Central</span> • <span>{liveAdminAlert.source}</span>
+              </div>
+              <div className="font-bold text-sm text-white truncate mt-0.5">
+                {liveAdminAlert.customerName} • #{liveAdminAlert.code}
+              </div>
+              <div className="text-xs text-slate-300 mt-0.5 line-clamp-1">
+                {liveAdminAlert.excursionTitle} ({liveAdminAlert.guests} pax) • {liveAdminAlert.date}
+              </div>
+              <div className="text-xs font-mono font-bold text-white mt-1">
+                Total: ${liveAdminAlert.total.toLocaleString('es-AR')} ARS
+              </div>
+              <div className="mt-2.5 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const b = bookings.find(item => item.code === liveAdminAlert.code);
+                    if (b) setSelectedTicket(b);
+                    setCurrentView('admin-board');
+                    setAdminTab('kanban');
+                    setLiveAdminAlert(null);
+                  }}
+                  className="px-3 py-1.5 bg-[#00A896] hover:bg-[#028090] text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-xs"
+                >
+                  Ver en Tablero Admin
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLiveAdminAlert(null)}
+                  className="px-2.5 py-1.5 text-slate-400 hover:text-white text-xs font-medium cursor-pointer"
+                >
+                  Descartar
+                </button>
+              </div>
+            </div>
+            <button
+              onClick={() => setLiveAdminAlert(null)}
+              className="text-slate-400 hover:text-white text-xs cursor-pointer p-1"
+              aria-label="Cerrar notificación"
+            >
+              ✕
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   );

@@ -1,0 +1,114 @@
+[
+  {
+    "id": "b-101",
+    "code": "GV-8492",
+    "customerName": "Carolina & Mateo González",
+    "customerEmail": "carolina.gonzalez@gmail.com",
+    "customerPhone": "+54 9 11 5829-4012",
+    "excursionTitle": "Camino de los 7 Lagos - San Martín de los Andes",
+    "date": "2026-08-25",
+    "guests": 2,
+    "totalPriceUSD": 150000,
+    "pickupLocation": "Hotel Llao Llao Resort & Spa",
+    "status": "CONFIRMADA",
+    "ticketType": "Reserva",
+    "priority": "VIP",
+    "assignedGuide": "Marcos González (Guía AAGM)",
+    "assignedVehicle": "Van Sprinter AE-829-GV",
+    "operatorNotes": "Pasajeros requieren almuerzo vegetariano en San Martín.",
+    "emittedBy": "Thomas González (Asesor Mostrador)",
+    "createdAt": "2026-08-22 14:30",
+    "comments": [
+      {
+        "id": "c-1",
+        "authorName": "Gonzalo González",
+        "authorEmail": "logistica@grupovision.tur.ar",
+        "avatar": "GG",
+        "content": "@Lucía González por favor verificar confirmación de almuerzo vegetariano en parador.",
+        "createdAt": "Hace 1 hora",
+        "mentions": ["lucia.g@grupovision.tur.ar"]
+      }
+    ],
+    "attachments": [
+      { "name": "Voucher_Confirmacion_GV8492.pdf", "url": "#", "size": "240 KB" }
+    ]
+  },
+  {
+    "id": "b-102",
+    "code": "GV-9104",
+    "customerName": "Santiago Giménez",
+    "customerEmail": "santiago.g@techpatagonia.io",
+    "customerPhone": "+54 9 294 412-9988",
+    "excursionTitle": "Refugio Roca Negra",
+    "date": "2026-08-24",
+    "guests": 4,
+    "totalPriceUSD": 960000,
+    "pickupLocation": "Alma del Lago Suites (Av. Bustillo 1.150)",
+    "status": "CONFIRMADA",
+    "ticketType": "VIP",
+    "priority": "ALTA",
+    "assignedGuide": "Lucía González (WFR)",
+    "assignedVehicle": "Hilux 4x4 AF-302-RO",
+    "operatorNotes": "Turno Nocturno con Cena Fondue.",
+    "emittedBy": "Thomas González (Asesor Mostrador)",
+    "createdAt": "2026-08-23 09:15",
+    "comments": [
+      {
+        "id": "c-2",
+        "authorName": "Marcos González",
+        "authorEmail": "marcos.g@grupovision.tur.ar",
+        "avatar": "MG",
+        "content": "@Gonzalo González Hilux 4x4 equipada con raquetas y cadenas lista para el ascenso nocturno.",
+        "createdAt": "Hace 45 min",
+        "mentions": ["logistica@grupovision.tur.ar"]
+      }
+    ],
+    "attachments": [
+      { "name": "Hoja_Ruta_RocaNegra.pdf", "url": "#", "size": "180 KB" }
+    ]
+  },
+  {
+    "id": "b-103",
+    "code": "GV-7721",
+    "customerName": "Dr. Alejandro Fernández",
+    "customerEmail": "a.fernandez@medisur.org",
+    "customerPhone": "+54 9 351 690-1122",
+    "excursionTitle": "Cerro Tronador y Glaciares",
+    "date": "2026-08-26",
+    "guests": 3,
+    "totalPriceUSD": 180000,
+    "pickupLocation": "Hotel Panamericano Bariloche",
+    "status": "COTIZACION",
+    "ticketType": "Consulta",
+    "priority": "NORMAL",
+    "assignedGuide": "Pendiente de asignación",
+    "assignedVehicle": "Minibus Iveco Daily",
+    "operatorNotes": "Cotización enviada con opción de almuerzo en Pampa Linda.",
+    "emittedBy": "Thomas González (Asesor Mostrador)",
+    "createdAt": "2026-08-23 11:40",
+    "comments": [],
+    "attachments": []
+  },
+  {
+    "id": "b-104",
+    "code": "GV-6602",
+    "customerName": "Valeria & Tomás Larrea",
+    "customerEmail": "valeria.larrea@outlook.com",
+    "customerPhone": "+54 9 11 4091-8833",
+    "excursionTitle": "Cabalgata \" La Fragua \"",
+    "date": "2026-08-27",
+    "guests": 2,
+    "totalPriceUSD": 170000,
+    "pickupLocation": "Design Suites Bariloche",
+    "status": "BACKLOG",
+    "ticketType": "Logística",
+    "priority": "NORMAL",
+    "assignedGuide": "Don Celso (Capataz)",
+    "assignedVehicle": "Van H1 Hyundai",
+    "operatorNotes": "Consulta recibida por formulario web. Contactar por WPP.",
+    "emittedBy": "Recepción Web",
+    "createdAt": "2026-08-23 15:20",
+    "comments": [],
+    "attachments": []
+  }
+]

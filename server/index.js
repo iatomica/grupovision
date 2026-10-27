@@ -19,6 +19,8 @@ const EXCURSIONS_FILE = path.join(DATA_DIR, 'excursions.json');
 const DEFAULT_EXCURSIONS_FILE = path.join(__dirname, 'defaultExcursions.json');
 const SITE_CONTENT_FILE = path.join(DATA_DIR, 'site-content.json');
 const DEFAULT_SITE_CONTENT_FILE = path.join(__dirname, 'defaultSiteContent.json');
+const BOOKINGS_FILE = path.join(DATA_DIR, 'bookings.json');
+const DEFAULT_BOOKINGS_FILE = path.join(__dirname, 'defaultBookings.json');
 const PUBLIC_EXCURSIONS_DIR = path.resolve(__dirname, '../public/images/excursiones');
 const DIST_DIR = path.resolve(__dirname, '../dist');
 
@@ -30,7 +32,7 @@ if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
 
-// Initialize excursions and site-content data if not present
+// Initialize excursions, site-content and bookings data if not present
 function initializeDataFiles() {
   if (!fs.existsSync(EXCURSIONS_FILE)) {
     console.log('[Server] excursions.json not found in data/. Initializing from default catalog...');
@@ -49,6 +51,16 @@ function initializeDataFiles() {
       console.log('[Server] Successfully initialized site-content.json');
     } else {
       fs.writeFileSync(SITE_CONTENT_FILE, JSON.stringify({}, null, 2));
+    }
+  }
+
+  if (!fs.existsSync(BOOKINGS_FILE)) {
+    console.log('[Server] bookings.json not found in data/. Initializing from defaults...');
+    if (fs.existsSync(DEFAULT_BOOKINGS_FILE)) {
+      fs.copyFileSync(DEFAULT_BOOKINGS_FILE, BOOKINGS_FILE);
+      console.log('[Server] Successfully initialized bookings.json');
+    } else {
+      fs.writeFileSync(BOOKINGS_FILE, JSON.stringify([], null, 2));
     }
   }
 }
@@ -90,6 +102,29 @@ function saveSiteContent(data) {
   const tempPath = `${SITE_CONTENT_FILE}.tmp`;
   fs.writeFileSync(tempPath, JSON.stringify(data, null, 2), 'utf8');
   fs.renameSync(tempPath, SITE_CONTENT_FILE);
+}
+
+// Helpers for bookings
+function getBookings() {
+  try {
+    if (fs.existsSync(BOOKINGS_FILE)) {
+      const raw = fs.readFileSync(BOOKINGS_FILE, 'utf8');
+      return JSON.parse(raw);
+    }
+    if (fs.existsSync(DEFAULT_BOOKINGS_FILE)) {
+      return JSON.parse(fs.readFileSync(DEFAULT_BOOKINGS_FILE, 'utf8'));
+    }
+    return [];
+  } catch (err) {
+    console.error('[Server] Error reading bookings.json:', err);
+    return [];
+  }
+}
+
+function saveBookings(data) {
+  const tempPath = `${BOOKINGS_FILE}.tmp`;
+  fs.writeFileSync(tempPath, JSON.stringify(data, null, 2), 'utf8');
+  fs.renameSync(tempPath, BOOKINGS_FILE);
 }
 
 // Middleware
@@ -230,6 +265,59 @@ app.post('/api/site-content/reset', (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ error: 'Error al restablecer contenido del sitio' });
+  }
+});
+
+// ==========================================
+// BOOKINGS API (Persistent storage across redeploys & clients)
+// ==========================================
+
+// GET all bookings
+app.get('/api/bookings', (req, res) => {
+  try {
+    const bookings = getBookings();
+    res.json(bookings);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener reservas' });
+  }
+});
+
+// POST create or upsert a booking
+app.post('/api/bookings', (req, res) => {
+  try {
+    const newBooking = req.body;
+    if (!newBooking || !newBooking.id) {
+      return res.status(400).json({ error: 'Reserva inválida o sin ID' });
+    }
+    const bookings = getBookings();
+    const existingIndex = bookings.findIndex(b => b.id === newBooking.id);
+    if (existingIndex >= 0) {
+      bookings[existingIndex] = { ...bookings[existingIndex], ...newBooking };
+    } else {
+      bookings.unshift(newBooking);
+    }
+    saveBookings(bookings);
+    console.log(`[Server] Saved booking ${newBooking.id} (Total: ${bookings.length})`);
+    res.json({ success: true, booking: newBooking });
+  } catch (err) {
+    console.error('[Server] Error saving booking:', err);
+    res.status(500).json({ error: 'Error al guardar reserva' });
+  }
+});
+
+// PUT update all bookings in bulk
+app.put('/api/bookings', (req, res) => {
+  try {
+    const data = req.body;
+    if (!Array.isArray(data)) {
+      return res.status(400).json({ error: 'El cuerpo debe ser un array de reservas' });
+    }
+    saveBookings(data);
+    console.log(`[Server] Bulk updated ${data.length} bookings`);
+    res.json({ success: true, count: data.length });
+  } catch (err) {
+    console.error('[Server] Error updating bookings:', err);
+    res.status(500).json({ error: 'Error al actualizar reservas' });
   }
 });
 

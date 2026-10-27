@@ -163,6 +163,7 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
       shiftName: activeShiftInfo?.shift.name,
       source: 'mostrador-san-martin',
       paymentMethod,
+      emittedBy: currentUser || 'Operador Mostrador',
       assignedGuide: 'Asignación Logística Mostrador',
       assignedVehicle: 'Flota Receptiva Grupo Visión',
       operatorNotes: `[Carga Mostrador ${branch} por ${currentUser}]: ${paxDetails}. Pago: ${paymentMethod}. ${notes}`.trim(),
