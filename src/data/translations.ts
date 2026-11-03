@@ -243,6 +243,20 @@ export function getExcursionChildPrice(excursion: Excursion, lang: LanguageCode)
 }
 
 /**
+ * Retorna la tarifa diferenciada de jubilado si está configurada:
+ */
+export function getExcursionSeniorPrice(excursion: Excursion, lang: LanguageCode): number | null {
+  if (typeof excursion.priceSenior === 'number') {
+    if (lang === 'en' && excursion.hasEnglishGuide && excursion.priceEnglish && excursion.priceNum > 0) {
+      const ratio = excursion.priceEnglish / excursion.priceNum;
+      return Math.round(excursion.priceSenior * ratio);
+    }
+    return excursion.priceSenior;
+  }
+  return null;
+}
+
+/**
  * Retorna los textos de la excursión adaptados al idioma, con fallback a español.
  */
 export function getExcursionContent(excursion: Excursion, lang: LanguageCode) {

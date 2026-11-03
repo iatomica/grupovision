@@ -59,7 +59,8 @@ import {
   EyeOff,
   AlertCircle,
   KeyRound,
-  ChevronDown
+  ChevronDown,
+  Trash2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -71,11 +72,13 @@ import {
   UI_TRANSLATIONS, 
   getExcursionPrice, 
   getExcursionChildPrice,
+  getExcursionSeniorPrice,
   getExcursionContent 
 } from './data/translations';
 import { loadExcursions, saveExcursions, resetExcursionsToDefault, fetchExcursionsAsync } from './utils/excursionsStorage';
 import { JiraTicketModal, Booking, TicketComment } from './components/JiraTicketModal';
-import { loadBookings, fetchBookingsAsync, saveBookingAsync, saveAllBookingsAsync } from './utils/bookingsStorage';
+import { loadBookings, fetchBookingsAsync, saveBookingAsync, saveAllBookingsAsync, deleteBookingAsync } from './utils/bookingsStorage';
+import { DeleteBookingConfirmModal } from './components/DeleteBookingConfirmModal';
 import { NotificationsModal, UserNotification } from './components/NotificationsModal';
 import { TravelerUser, INITIAL_TRAVELERS } from './data/usersData';
 import { TravelerDashboard } from './components/TravelerDashboard';
@@ -377,6 +380,8 @@ export default function App() {
   const [selectedShiftId, setSelectedShiftId] = useState<string | null>(null);
   const [modalPassengers, setModalPassengers] = useState<number>(2);
   const [modalChildPassengers, setModalChildPassengers] = useState<number>(0);
+  const [modalSeniorPassengers, setModalSeniorPassengers] = useState<number>(0);
+  const [modalInfantPassengers, setModalInfantPassengers] = useState<number>(0);
   const [modalSelectedDate, setModalSelectedDate] = useState<string>(getTomorrowDateStr);
   const [modalActivePhoto, setModalActivePhoto] = useState<string | null>(null);
   const [modalStep, setModalStep] = useState<1 | 2 | 3>(1);
@@ -401,6 +406,8 @@ export default function App() {
     setSelectedShiftId(firstEnabledWithSpots ? firstEnabledWithSpots.id : firstEnabled ? firstEnabled.id : null);
     setModalPassengers(2);
     setModalChildPassengers(0);
+    setModalSeniorPassengers(0);
+    setModalInfantPassengers(0);
     setIsExcursionModalOpen(true);
   };
 
@@ -423,6 +430,8 @@ export default function App() {
   const [staffList, setStaffList] = useState<StaffMember[]>(INITIAL_STAFF);
   const [selectedTicket, setSelectedTicket] = useState<Booking | null>(null);
   const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
+  const [ticketToDelete, setTicketToDelete] = useState<Booking | null>(null);
+  const [isDeletingTicket, setIsDeletingTicket] = useState<boolean>(false);
 
   // Notifications System States
   const [notifications, setNotifications] = useState<UserNotification[]>(INITIAL_NOTIFICATIONS);
@@ -598,6 +607,44 @@ export default function App() {
     saveBookingAsync(updated);
     setBookings(prev => prev.map(b => b.id === updated.id ? updated : b));
     setSelectedTicket(updated);
+  };
+
+  // Delete Ticket (Admin Only with Confirmation Modal)
+  const handleConfirmDeleteTicket = async () => {
+    if (!ticketToDelete) return;
+    if (userRole !== 'admin') {
+      alert('Acceso restringido: Solo el Administrador del sistema puede eliminar tickets y pedidos.');
+      return;
+    }
+
+    setIsDeletingTicket(true);
+    const target = ticketToDelete;
+
+    // 1. Persistir eliminación en backend y localStorage
+    await deleteBookingAsync(target.id);
+
+    // 2. Actualizar estado reactivo de reservas
+    setBookings(prev => prev.filter(b => b.id !== target.id && b.code !== target.code));
+
+    // 3. Registrar en auditoría de actividad del sistema
+    setActivityLogs(prev => [
+      {
+        id: `log-${Date.now().toString().slice(-4)}`,
+        user: userName || 'Administrador General',
+        action: `Eliminó el ticket ${target.code} (${target.customerName} - "${target.excursionTitle}") de los registros del sistema`,
+        timestamp: 'Justo ahora',
+        type: 'system'
+      },
+      ...prev
+    ]);
+
+    // 4. Si el ticket eliminado estaba abierto en el modal de detalle, cerrarlo
+    if (selectedTicket && (selectedTicket.id === target.id || selectedTicket.code === target.code)) {
+      setSelectedTicket(null);
+    }
+
+    setIsDeletingTicket(false);
+    setTicketToDelete(null);
   };
 
   // Add Notification from Mentions
@@ -2030,11 +2077,11 @@ export default function App() {
                               onClick={e => e.stopPropagation()} 
                               className="flex items-center justify-between pt-2 border-t border-slate-100"
                             >
-                              <div className="flex gap-1">
+                              <div className="flex gap-1 items-center">
                                 <button 
                                   onClick={() => moveBookingStatus(b.id, 'prev')}
                                   disabled={col.key === 'BACKLOG'}
-                                  className="p-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed flex items-center"
+                                  className="p-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed flex items-center cursor-pointer"
                                   title={userRole !== 'admin' ? 'Requiere usuario Admin para mover hacia atrás' : 'Retroceder columna'}
                                 >
                                   {userRole !== 'admin' && <Lock className="w-3 h-3 text-amber-600 mr-0.5" />}
@@ -2043,11 +2090,21 @@ export default function App() {
                                 <button 
                                   onClick={() => moveBookingStatus(b.id, 'next')}
                                   disabled={col.key === 'COMPLETADA'}
-                                  className="p-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                                  className="p-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                                   title="Avanzar columna"
                                 >
                                   <ChevronRight className="w-3.5 h-3.5" />
                                 </button>
+                                {userRole === 'admin' && (
+                                  <button
+                                    type="button"
+                                    onClick={() => setTicketToDelete(b)}
+                                    className="p-1 ml-1 rounded-md bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors cursor-pointer"
+                                    title="Eliminar ticket / pedido (Solo Administrador)"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                )}
                               </div>
 
                               <div className="flex gap-2 items-center text-[10px] font-mono text-slate-400">
@@ -2198,9 +2255,21 @@ export default function App() {
             onUpdateTicket={handleUpdateTicket}
             onMoveStatus={moveBookingStatus}
             onAddNotification={handleAddNotification}
+            onDeleteTicket={(b) => setTicketToDelete(b)}
           />
         )}
       </AnimatePresence>
+
+      {/* ========================================================================= */}
+      {/* SUB-MODAL DE CONFIRMACIÓN DE ELIMINACIÓN (SOLO ADMIN) */}
+      {/* ========================================================================= */}
+      <DeleteBookingConfirmModal
+        isOpen={Boolean(ticketToDelete)}
+        booking={ticketToDelete}
+        onConfirm={handleConfirmDeleteTicket}
+        onClose={() => setTicketToDelete(null)}
+        isDeleting={isDeletingTicket}
+      />
 
       {/* ========================================================================= */}
       {/* NOTIFICATIONS MODAL */}
@@ -2304,11 +2373,27 @@ export default function App() {
             : ' [Guía Español / Portugués]';
           const childPrice = getExcursionChildPrice(activeExcursion, currentLang) ?? 0;
           const hasChildPrice = activeExcursion.priceChild !== undefined && activeExcursion.priceChild !== null;
-          const totalPax = modalPassengers + (hasChildPrice ? modalChildPassengers : 0);
-          const totalEstimate = (activePrice * modalPassengers) + (hasChildPrice ? (childPrice * modalChildPassengers) : 0);
-          const paxBreakdown = hasChildPrice && modalChildPassengers > 0
-            ? `Adultos: ${modalPassengers}, Menores: ${modalChildPassengers} (${totalPax} pax total)`
+          const seniorPrice = getExcursionSeniorPrice(activeExcursion, currentLang) ?? 0;
+          const hasSeniorPrice = activeExcursion.priceSenior !== undefined && activeExcursion.priceSenior !== null;
+          
+          const totalPax = modalPassengers + 
+            (hasChildPrice ? modalChildPassengers : 0) + 
+            (hasSeniorPrice ? modalSeniorPassengers : 0) + 
+            modalInfantPassengers;
+
+          const totalEstimate = (activePrice * modalPassengers) + 
+            (hasChildPrice ? (childPrice * modalChildPassengers) : 0) + 
+            (hasSeniorPrice ? (seniorPrice * modalSeniorPassengers) : 0);
+
+          const breakdownParts = [`${modalPassengers} Adultos`];
+          if (hasChildPrice && modalChildPassengers > 0) breakdownParts.push(`${modalChildPassengers} Menores`);
+          if (hasSeniorPrice && modalSeniorPassengers > 0) breakdownParts.push(`${modalSeniorPassengers} Jubilados`);
+          if (modalInfantPassengers > 0) breakdownParts.push(`${modalInfantPassengers} Infantes (<4 años)`);
+          
+          const paxBreakdown = (modalChildPassengers > 0 || modalSeniorPassengers > 0 || modalInfantPassengers > 0)
+            ? `${breakdownParts.join(', ')} (${totalPax} pax total)`
             : `${modalPassengers} pax`;
+
           const rateText = totalEstimate === 0 
             ? 'Actividad Gratuita ($0 ARS)' 
             : `$${totalEstimate.toLocaleString('es-AR')} ARS`;
@@ -2684,6 +2769,10 @@ export default function App() {
                         onChangePassengers={(newPax) => setModalPassengers(newPax)}
                         childPassengers={modalChildPassengers}
                         onChangeChildPassengers={(newPax) => setModalChildPassengers(newPax)}
+                        seniorPassengers={modalSeniorPassengers}
+                        onChangeSeniorPassengers={(newPax) => setModalSeniorPassengers(newPax)}
+                        infantPassengers={modalInfantPassengers}
+                        onChangeInfantPassengers={(newPax) => setModalInfantPassengers(newPax)}
                         onConfirmWhatsApp={() => {
                           setModalStep(3);
                         }}

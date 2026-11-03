@@ -62,6 +62,8 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
   const [selectedShiftId, setSelectedShiftId] = useState<string>('');
   const [passengersCount, setPassengersCount] = useState<number>(2);
   const [childCount, setChildCount] = useState<number>(0);
+  const [seniorCount, setSeniorCount] = useState<number>(0);
+  const [infantCount, setInfantCount] = useState<number>(0);
   const [branch, setBranch] = useState<'San Martín 398 (Casa Central)'>('San Martín 398 (Casa Central)');
   const [customerName, setCustomerName] = useState<string>('');
   const [customerPhone, setCustomerPhone] = useState<string>('');
@@ -116,13 +118,22 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
 
   const hasChildRate = currentExcursion?.priceChild !== undefined && currentExcursion?.priceChild !== null;
   const childRateARS = hasChildRate ? (currentExcursion.priceChild || 0) : 0;
-  const totalPax = passengersCount + (hasChildRate ? childCount : 0);
+  const hasSeniorRate = currentExcursion?.priceSenior !== undefined && currentExcursion?.priceSenior !== null;
+  const seniorRateARS = hasSeniorRate ? (currentExcursion.priceSenior || 0) : 0;
+
+  const totalPax = passengersCount + 
+    (hasChildRate ? childCount : 0) + 
+    (hasSeniorRate ? seniorCount : 0) + 
+    infantCount;
+
   const maxSpotsAvailable = activeShiftInfo ? activeShiftInfo.availableSpots : 0;
   const isOverbookingRisk = totalPax > maxSpotsAvailable;
 
   // Cálculo de tarifas (respetando tarifa 0 para Walking Tours)
   const rateARS = currentExcursion ? currentExcursion.priceNum : 60000;
-  const totalARS = (rateARS * passengersCount) + (hasChildRate ? (childRateARS * childCount) : 0);
+  const totalARS = (rateARS * passengersCount) + 
+    (hasChildRate ? (childRateARS * childCount) : 0) + 
+    (hasSeniorRate ? (seniorRateARS * seniorCount) : 0);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,8 +151,12 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
     }
 
     const code = `GV-${Math.floor(1000 + Math.random() * 9000)}`;
-    const paxDetails = hasChildRate && childCount > 0 
-      ? `${passengersCount} adultos, ${childCount} menores` 
+    const breakdownParts = [`${passengersCount} adultos`];
+    if (hasChildRate && childCount > 0) breakdownParts.push(`${childCount} menores`);
+    if (hasSeniorRate && seniorCount > 0) breakdownParts.push(`${seniorCount} jubilados`);
+    if (infantCount > 0) breakdownParts.push(`${infantCount} infantes (<4 años)`);
+    const paxDetails = (childCount > 0 || seniorCount > 0 || infantCount > 0)
+      ? `${breakdownParts.join(', ')} (${totalPax} pax)`
       : `${totalPax} pax`;
 
     const newBooking: Booking = {
@@ -153,6 +168,12 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
       excursionTitle: currentExcursion.title,
       date: selectedDate,
       guests: Number(totalPax),
+      paxBreakdown: {
+        adults: passengersCount,
+        children: childCount,
+        seniors: seniorCount,
+        infants: infantCount
+      },
       totalPriceUSD: totalARS,
       pickupLocation: pickupLocation.trim() || 'Sucursal Mostrador',
       status: 'CONFIRMADA',
@@ -442,6 +463,76 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
                       </span>
                     </div>
                   )}
+
+                  {hasSeniorRate && (
+                    <div className="flex items-center gap-2">
+                      <Users className="w-4 h-4 text-purple-600" />
+                      <span className="font-mono font-bold text-slate-700 min-w-[140px]">
+                        Jubilados ({currentExcursion.seniorPolicy || 'Tarifa senior'}):
+                      </span>
+                      <div className="flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white">
+                        <button
+                          type="button"
+                          onClick={() => setSeniorCount(prev => Math.max(0, prev - 1))}
+                          className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 font-bold"
+                        >
+                          -
+                        </button>
+                        <input
+                          type="number"
+                          min="0"
+                          max={maxSpotsAvailable || 20}
+                          value={seniorCount}
+                          onChange={e => setSeniorCount(Math.max(0, Number(e.target.value)))}
+                          className="w-12 text-center py-1 font-mono font-bold text-xs focus:outline-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setSeniorCount(prev => prev + 1)}
+                          className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 font-bold"
+                        >
+                          +
+                        </button>
+                      </div>
+                      <span className="text-[11px] font-mono text-slate-500">
+                        (${seniorRateARS.toLocaleString('es-AR')} c/u)
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4 text-sky-600" />
+                    <span className="font-mono font-bold text-slate-700 min-w-[140px]">
+                      Infantes (&lt;4 años · Sin cargo):
+                    </span>
+                    <div className="flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white">
+                      <button
+                        type="button"
+                        onClick={() => setInfantCount(prev => Math.max(0, prev - 1))}
+                        className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 font-bold"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        min="0"
+                        max={maxSpotsAvailable || 20}
+                        value={infantCount}
+                        onChange={e => setInfantCount(Math.max(0, Number(e.target.value)))}
+                        className="w-12 text-center py-1 font-mono font-bold text-xs focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setInfantCount(prev => prev + 1)}
+                        className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 font-bold"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <span className="text-[11px] font-mono text-emerald-600 font-bold">
+                      $0 ARS (Ocupa butaca)
+                    </span>
+                  </div>
                 </div>
 
                 {/* Indicador de Cupo Restante tras la carga */}

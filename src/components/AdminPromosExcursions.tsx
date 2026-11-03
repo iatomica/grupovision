@@ -178,6 +178,8 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
   const [formPriceEnglish, setFormPriceEnglish] = useState<number>(65000);
   const [formPriceChild, setFormPriceChild] = useState<number | ''>('');
   const [formChildAgePolicy, setFormChildAgePolicy] = useState<string>('');
+  const [formPriceSenior, setFormPriceSenior] = useState<number | ''>('');
+  const [formSeniorPolicy, setFormSeniorPolicy] = useState<string>('');
   const [formHasEnglishGuide, setFormHasEnglishGuide] = useState<boolean>(true);
   const [formDiscountPercent, setFormDiscountPercent] = useState<number>(0);
   const [formPromoBadge, setFormPromoBadge] = useState('');
@@ -313,6 +315,8 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     setFormPriceEnglish(55000);
     setFormPriceChild('');
     setFormChildAgePolicy('4 a 11 años');
+    setFormPriceSenior('');
+    setFormSeniorPolicy('Jubilados con carnet');
     setFormHasEnglishGuide(true);
     setEditingShiftId(null);
     setFormDiscountPercent(0);
@@ -368,6 +372,8 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
     setFormPriceEnglish(typeof exc.priceEnglish === 'number' ? exc.priceEnglish : (exc.priceNum ?? 0));
     setFormPriceChild(typeof exc.priceChild === 'number' ? exc.priceChild : '');
     setFormChildAgePolicy(exc.childAgePolicy || '');
+    setFormPriceSenior(typeof exc.priceSenior === 'number' ? exc.priceSenior : '');
+    setFormSeniorPolicy(exc.seniorPolicy || '');
     setEditingShiftId(null);
     setFormDiscountPercent(exc.discountPercent || 0);
     setFormPromoBadge(exc.promoBadge || '');
@@ -651,6 +657,8 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
         : (typeof formPriceNum === 'number' ? formPriceNum : (parseFloat(String(formPriceNum)) || 0)),
       priceChild: formPriceChild !== '' && !isNaN(Number(formPriceChild)) ? Math.max(0, Number(formPriceChild)) : undefined,
       childAgePolicy: formChildAgePolicy.trim() || undefined,
+      priceSenior: formPriceSenior !== '' && !isNaN(Number(formPriceSenior)) ? Math.max(0, Number(formPriceSenior)) : undefined,
+      seniorPolicy: formSeniorPolicy.trim() || undefined,
       shifts: formShifts,
       translations: {
         en: (transTitleEn.trim() || transDescEn.trim() || transDetailsEn.trim()) ? {
@@ -2562,6 +2570,45 @@ export const AdminPromosExcursions: React.FC<AdminPromosExcursionsProps> = ({
                         />
                         <span className="text-[11px] text-slate-500 mt-1 block">
                           Texto aclaratorio visible en el calendario y presupuesto.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-slate-100">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Tarifa Jubilados / Senior (ARS) — Opcional
+                        </label>
+                        <div className="relative">
+                          <DollarSign className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
+                          <input
+                            type="number"
+                            min={0}
+                            max={10000000}
+                            value={formPriceSenior}
+                            onChange={(e) => setFormPriceSenior(e.target.value === '' ? '' : parseFloat(e.target.value) || 0)}
+                            placeholder="Dejar vacío si no aplica tarifa jubilados"
+                            className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900 focus:outline-none focus:border-[#00A896]"
+                          />
+                        </div>
+                        <span className="text-[11px] text-slate-500 mt-1 block">
+                          Si se define, se habilitará la 3ra variante para Jubilados en la web, POS y cotizador.
+                        </span>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Condición / Acreditación Jubilados
+                        </label>
+                        <input
+                          type="text"
+                          value={formSeniorPolicy}
+                          onChange={(e) => setFormSeniorPolicy(e.target.value)}
+                          placeholder="Ej: Con carnet jubilado / Mayor de 65 años"
+                          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:border-[#00A896]"
+                        />
+                        <span className="text-[11px] text-slate-500 mt-1 block">
+                          Requisito visible al momento de seleccionar la tarifa.
                         </span>
                       </div>
                     </div>

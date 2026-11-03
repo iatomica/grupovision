@@ -321,6 +321,24 @@ app.put('/api/bookings', (req, res) => {
   }
 });
 
+// DELETE booking by ID (Admin only)
+app.delete('/api/bookings/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const bookings = getBookings();
+    const filtered = bookings.filter(b => b.id !== id && b.code !== id);
+    if (filtered.length === bookings.length) {
+      return res.status(404).json({ error: 'Reserva no encontrada' });
+    }
+    saveBookings(filtered);
+    console.log(`[Server] Deleted booking ${id} (Remaining: ${filtered.length})`);
+    res.json({ success: true, id, remaining: filtered.length });
+  } catch (err) {
+    console.error('[Server] Error deleting booking:', err);
+    res.status(500).json({ error: 'Error al eliminar reserva' });
+  }
+});
+
 // ==========================================
 // MEDIA LIBRARY API (WordPress Style)
 // ==========================================

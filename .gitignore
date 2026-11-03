@@ -29,6 +29,5 @@ Thumbs.db
 # User Uploads & Temporary Data
 data/uploads/*
 !data/uploads/.gitkeep
-scratch/*.txt
-scratch/*.json
+scratch/
 

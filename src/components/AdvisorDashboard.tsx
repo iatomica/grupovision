@@ -41,7 +41,7 @@ import { Excursion } from '../data/excursionsData';
 interface AdditionalPassenger {
   id: string;
   name: string;
-  type: 'Adulto' | 'Menor';
+  type: 'Adulto' | 'Menor' | 'Jubilado' | 'Infante';
   dni?: string;
 }
 
@@ -155,16 +155,26 @@ export const AdvisorDashboard: React.FC<AdvisorDashboardProps> = ({
   }, [selectedDate, detectedPastBookings]);
 
   // =========================================================================
-  // CÁLCULO DE PASAJEROS & TARIFA
+  // CÁLCULO DE PASAJEROS & TARIFA (4 VARIANTES)
   // =========================================================================
   // El titular siempre es 1 adulto
   const totalAdults = 1 + additionalPassengers.filter(p => p.type === 'Adulto').length + extraAdultsCount;
   const totalChildren = additionalPassengers.filter(p => p.type === 'Menor').length + extraChildrenCount;
-  const totalGuests = totalAdults + totalChildren;
+  const totalSeniors = additionalPassengers.filter(p => p.type === 'Jubilado').length;
+  const totalInfants = additionalPassengers.filter(p => p.type === 'Infante').length;
+  const totalGuests = totalAdults + totalChildren + totalSeniors + totalInfants;
 
   const adultPrice = selectedExcursion?.priceNum || 0;
-  const childPrice = Math.round(adultPrice * 0.8); // 20% descuento menor
-  const subtotal = (totalAdults * adultPrice) + (totalChildren * childPrice);
+  const childPrice = typeof selectedExcursion?.priceChild === 'number' 
+    ? selectedExcursion.priceChild 
+    : Math.round(adultPrice * 0.8);
+  const seniorPrice = typeof selectedExcursion?.priceSenior === 'number'
+    ? selectedExcursion.priceSenior
+    : adultPrice; // Si no tiene tarifa senior configurada, abona tarifa adulto
+  
+  const subtotal = (totalAdults * adultPrice) + 
+                   (totalChildren * childPrice) + 
+                   (totalSeniors * seniorPrice); // Infantes son $0 ARS
   const discountAmount = Math.round(subtotal * (advisorDiscountPercent / 100));
   const finalTotal = subtotal - discountAmount;
 
@@ -226,7 +236,7 @@ export const AdvisorDashboard: React.FC<AdvisorDashboardProps> = ({
     const ticketCode = `GV-${Math.floor(1000 + Math.random() * 9000)}`;
 
     // Construir lista nominal completa
-    const nominalPassengerList: Array<{ name: string; type: 'Adulto' | 'Menor'; dni?: string }> = [
+    const nominalPassengerList: Array<{ name: string; type: 'Adulto' | 'Menor' | 'Jubilado' | 'Infante'; dni?: string }> = [
       { name: leadPassenger.name.trim(), type: 'Adulto', dni: leadPassenger.dni.trim() || undefined }
     ];
 
@@ -261,6 +271,12 @@ export const AdvisorDashboard: React.FC<AdvisorDashboardProps> = ({
       excursionTitle: selectedExcursion.title,
       date: selectedDate,
       guests: totalGuests,
+      paxBreakdown: {
+        adults: totalAdults,
+        children: totalChildren,
+        seniors: totalSeniors,
+        infants: totalInfants
+      },
       totalPriceUSD: finalTotal,
       pickupLocation: finalPickup,
       status: 'COTIZACION',
@@ -603,7 +619,9 @@ export const AdvisorDashboard: React.FC<AdvisorDashboardProps> = ({
                                 className="sm:col-span-3 px-2 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#00A896]"
                               >
                                 <option value="Adulto">Adulto</option>
-                                <option value="Menor">Menor (3-11a)</option>
+                                <option value="Menor">Menor (4-11 años)</option>
+                                <option value="Jubilado">Jubilado / Senior</option>
+                                <option value="Infante">Infante (&lt;4 años - $0)</option>
                               </select>
 
                               <input
@@ -1139,7 +1157,7 @@ export const AdvisorDashboard: React.FC<AdvisorDashboardProps> = ({
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-slate-400 text-[11px]">PASAJEROS:</span>
                   <span className="font-bold text-slate-900 text-right">
-                    {totalGuests} pax ({totalAdults} Ad. {totalChildren > 0 ? `+ ${totalChildren} Men.` : ''})
+                    {totalGuests} pax ({totalAdults} Ad.{totalChildren > 0 ? ` + ${totalChildren} Men.` : ''}{totalSeniors > 0 ? ` + ${totalSeniors} Jub.` : ''}{totalInfants > 0 ? ` + ${totalInfants} Inf.` : ''})
                   </span>
                 </div>
 

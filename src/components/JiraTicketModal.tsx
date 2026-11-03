@@ -23,7 +23,8 @@ import {
   DollarSign, 
   Lock,
   ChevronLeft,
-  UserCheck
+  UserCheck,
+  Trash2
 } from 'lucide-react';
 
 export interface TicketComment {
@@ -61,7 +62,13 @@ export interface Booking {
   operatorNotes: string;
   emittedBy?: string;
   createdAt: string;
-  passengerList?: Array<{ name: string; type: 'Adulto' | 'Menor'; dni?: string }>;
+  paxBreakdown?: {
+    adults: number;
+    children?: number;
+    seniors?: number;
+    infants?: number;
+  };
+  passengerList?: Array<{ name: string; type: 'Adulto' | 'Menor' | 'Jubilado' | 'Infante'; dni?: string }>;
   comments: TicketComment[];
   attachments: { name: string; url: string; size: string }[];
 }
@@ -81,6 +88,7 @@ interface JiraTicketModalProps {
   onUpdateTicket: (updated: Booking) => void;
   onMoveStatus: (id: string, direction: 'next' | 'prev') => void;
   onAddNotification: (notif: { recipientEmail: string; senderName: string; ticketCode: string; ticketId: string; message: string }) => void;
+  onDeleteTicket?: (ticket: Booking) => void;
 }
 
 export const JiraTicketModal: React.FC<JiraTicketModalProps> = ({
@@ -90,7 +98,8 @@ export const JiraTicketModal: React.FC<JiraTicketModalProps> = ({
   onClose,
   onUpdateTicket,
   onMoveStatus,
-  onAddNotification
+  onAddNotification,
+  onDeleteTicket
 }) => {
   if (!ticket) return null;
 
@@ -282,7 +291,15 @@ export const JiraTicketModal: React.FC<JiraTicketModalProps> = ({
               <div className="flex items-center gap-4 text-xs font-mono text-slate-500 mt-2 flex-wrap">
                 <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-[#00A896]" /> {ticket.date}</span>
                 <span>•</span>
-                <span className="flex items-center gap-1"><User className="w-3.5 h-3.5 text-[#00A896]" /> {ticket.guests} Pax</span>
+                <span className="flex items-center gap-1">
+                  <User className="w-3.5 h-3.5 text-[#00A896]" /> 
+                  <span>{ticket.guests} Pax</span>
+                  {ticket.paxBreakdown && (
+                    <span className="text-[10px] text-slate-400 font-normal">
+                      ({ticket.paxBreakdown.adults} Ad{ticket.paxBreakdown.children ? ` · ${ticket.paxBreakdown.children} Men` : ''}{ticket.paxBreakdown.seniors ? ` · ${ticket.paxBreakdown.seniors} Jub` : ''}{ticket.paxBreakdown.infants ? ` · ${ticket.paxBreakdown.infants} Inf` : ''})
+                    </span>
+                  )}
+                </span>
                 <span>•</span>
                 <span className="flex items-center gap-1 text-slate-900 font-bold"><DollarSign className="w-3.5 h-3.5 text-emerald-600" /> ${ticket.totalPriceUSD.toLocaleString('es-AR')} ARS</span>
               </div>
@@ -590,6 +607,20 @@ export const JiraTicketModal: React.FC<JiraTicketModalProps> = ({
                 <MessageSquare className="w-4 h-4 fill-current" />
                 <span>Contactar por WhatsApp</span>
               </a>
+
+              {userRole === 'admin' && onDeleteTicket && (
+                <div className="pt-3 border-t border-slate-200">
+                  <button
+                    type="button"
+                    onClick={() => onDeleteTicket(ticket)}
+                    className="w-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs cursor-pointer"
+                    title="Eliminar este ticket del sistema (Solo Administrador)"
+                  >
+                    <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+                    <span>Eliminar Ticket (Solo Admin)</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 

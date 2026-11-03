@@ -39,6 +39,9 @@ export interface Excursion {
   priceNum: number;        // Tarifa base en ARS para Español y Portugués
   priceChild?: number;     // Tarifa reducida/diferenciada en ARS para Menores (opcional)
   childAgePolicy?: string; // Política/Rango de edad de menores (ej: "4 a 11 años")
+  priceSenior?: number;    // Tarifa reducida/diferenciada en ARS para Jubilados (opcional)
+  seniorPolicy?: string;   // Política/acreditación de jubilados (ej: "Jubilados con carnet / DNI argentino")
+  infantAgePolicy?: string;// Política menores de 4 años (default: "Menores de 4 años sin cargo")
   hasEnglishGuide?: boolean; // Indica si ofrece guía bilingüe en inglés (default: false si no se especifica precio)
   priceEnglish?: number;   // Tarifa diferenciada en ARS para Inglés (guía bilingüe)
   isPublished?: boolean;   // Toggle ON/OFF para publicar en la web o dejar en borrador (default: true)
@@ -145,19 +148,80 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {},
+    "translations": {
+      "en": {
+        "title": "Roca Negra — 4x4 Ride, Snowshoeing and Fondue",
+        "description": "Discover the winter side of Cerro López on a full-day experience that combines a Land Rover 4x4 ascent, a snowshoe walk and fondue at the Roca Negra lodge. An ideal choice for enjoying the snow, the forests and the views of the Andes Mountains.",
+        "fullDetails": "Roca Negra is a daytime experience designed to enjoy the snow and landscapes of Cerro López with no previous experience required. The adventure begins with the transfer from Bariloche to the base of the mountain, where you will board Land Rover 4x4 vehicles for a ride along mountain roads surrounded by native forest.\n\nUpon reaching the lodge area, you will receive snowshoes for a guided walk along snowy trails. The route lets you discover the lenga and coihue forest, take in the views of the Andes Mountains and experience the snow in an active, accessible and safe way.\n\nThe experience ends at the Roca Negra lodge with a fondue. The morning shift includes cheese fondue and the afternoon shift includes chocolate fondue. Drinks are not included.\n\nAn excellent option for families, couples and groups looking for a different day of snow, nature and Patagonian gastronomy.",
+        "highlights": [
+          "You will be transferred from Bariloche to the base of Cerro López.",
+          "You will ride up in Land Rover 4x4 vehicles.",
+          "You will walk snowy trails on snowshoes.",
+          "You will discover native forests and views of the Andes Mountains.",
+          "You will enjoy a fondue at the lodge.",
+          "You will choose between the morning experience with cheese fondue or the afternoon one with chocolate fondue."
+        ],
+        "includes": [
+          "Round-trip transfer between Bariloche and the base of Cerro López.",
+          "Ascent and descent in Land Rover 4x4 vehicles.",
+          "Guided snowshoe walk.",
+          "Snowshoes during the activity.",
+          "Specialized guides.",
+          "Cheese fondue on the morning shift.",
+          "Chocolate fondue on the afternoon shift."
+        ],
+        "notIncludes": [
+          "Drinks.",
+          "Snow clothing, unless expressly stated at the time of booking.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "14:00 hs"
+      },
+      "pt": {
+        "title": "Roca Negra — Travessia em 4x4, Raquetes de Neve e Fondue",
+        "description": "Descubra a face invernal do Cerro López em uma experiência de dia inteiro que combina subida em Land Rover 4x4, caminhada com raquetes de neve e fondue no refúgio Roca Negra. Uma proposta ideal para aproveitar a neve, os bosques e as vistas da Cordilheira.",
+        "fullDetails": "Roca Negra é uma experiência diurna pensada para aproveitar a neve e as paisagens do Cerro López sem necessidade de ter experiência prévia. A aventura começa com o traslado de Bariloche até a base do morro, onde você subirá em veículos Land Rover 4x4 por caminhos de montanha cercados de bosque nativo.\n\nAo chegar à área do refúgio, você receberá as raquetes de neve para fazer uma caminhada guiada por trilhas nevadas. O percurso permite descobrir o entorno de lenga e coihue, contemplar as vistas da Cordilheira e viver a neve de uma maneira ativa, acessível e segura.\n\nA experiência termina no refúgio Roca Negra com uma proposta de fondue. O turno da manhã inclui fondue de queijo e o turno da tarde, fondue de chocolate. As bebidas não estão incluídas.\n\nUma excelente opção para famílias, casais e grupos que buscam um dia diferente de neve, natureza e gastronomia patagônica.",
+        "highlights": [
+          "Você será levado de Bariloche até a base do Cerro López.",
+          "Você subirá em veículos Land Rover 4x4.",
+          "Você percorrerá trilhas nevadas com raquetes de neve.",
+          "Você descobrirá bosques nativos e vistas da Cordilheira.",
+          "Você desfrutará de uma proposta de fondue no refúgio.",
+          "Você escolherá entre a experiência da manhã com fondue de queijo ou a da tarde com fondue de chocolate."
+        ],
+        "includes": [
+          "Traslado de ida e volta entre Bariloche e a base do Cerro López.",
+          "Subida e descida em veículos Land Rover 4x4.",
+          "Caminhada guiada com raquetes de neve.",
+          "Raquetes de neve durante a atividade.",
+          "Guias especializados.",
+          "Fondue de queijo no turno da manhã.",
+          "Fondue de chocolate no turno da tarde."
+        ],
+        "notIncludes": [
+          "Bebidas.",
+          "Roupa de neve, salvo se indicado expressamente no momento da reserva.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "14:00 hs"
+      }
+    },
     "priceChild": 250000,
     "childAgePolicy": "4 a 11 años"
   },
   {
     "id": "cabalgata-la-fragua",
-    "title": "Cabalgata \" La Fragua \"",
+    "title": "Cabalgata \"La Fragua\" y Asado Patagónico",
     "category": "Aventura",
     "season": "Todo el Año",
     "duration": "Medio Día (4h)",
     "difficulty": "Moderado",
     "image": "/images/excursiones/cabalgata-la-fragua.webp",
-    "description": "Cabalgar en el medio de la estepa Patagónica !!!",
+    "description": "Cabalgar en el medio de la estepa patagónica y disfrutar de un auténtico asado de campo en las históricas instalaciones de La Fragua.",
     "fullDetails": "Salida 09:30 hs Regreso 15:00 hs Nivel de Dificultad: Bajo Traslados desde el centro de la ciudad hasta la Estancia San Ramón, a 30 Kmts.  de distancia. Realizaremos una cabalgata de aproximadamente 2 hs. por un paisaje único, en plena estepa patagónica, que nos permite admirar la flora la fauna y el característico paisaje que nos rodea. Al mediodía disfrutaremos un asado de campo en las instalaciones de la antigua escuela rural de la zona llamada La Fragua.",
     "highlights": [
       "Traslado a La Fragua",
@@ -166,9 +230,9 @@ export const EXCURSIONS_DATA: Excursion[] = [
       "Asado"
     ],
     "includes": [
-      "Traslados",
-      "Cabalgata",
-      "Almuerzo ( Asado) con Bebidas"
+      "Traslados ida y vuelta desde Bariloche",
+      "Cabalgata guiada de 2 horas",
+      "Almuerzo criollo (Asado) con bebidas incluidas"
     ],
     "notIncludes": [
       "Fotografías"
@@ -246,7 +310,54 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {},
+    "translations": {
+      "en": {
+        "title": "Patagonian Horseback Riding at La Fragua & Country Asado",
+        "description": "Experience an authentic horseback ride through the Patagonian steppe at Estancia San Ramón, followed by a traditional Argentine country barbecue at La Fragua.",
+        "fullDetails": "Immerse yourself in traditional gaucho culture on a memorable day in the vast Patagonian steppe. Departing from central Bariloche, travel 30 km east to the historic Estancia San Ramón. Here, experienced local wranglers will pair you with gentle, sure-footed horses suited to your riding level.\n\nEmbark on a scenic 2-hour ride across open golden plateaus, crossing streams and observing native wildlife such as guanacos, rheas, and eagles against the backdrop of distant Andean summits. At midday, arrive at La Fragua, the estancia's restored historic rural schoolhouse, to savor a feast of traditional Argentine wood-fired asado (beef barbecue), fresh salads, regional desserts, and local beverages.",
+        "highlights": [
+          "2-hour guided horseback ride across the scenic Patagonian steppe.",
+          "Gentle, trained horses suitable for beginners and seasoned riders alike.",
+          "Stunning open landscape with native flora and wildlife sightings.",
+          "Traditional Argentine country asado (barbecue) with drinks included.",
+          "Visit the historic rural schoolhouse of La Fragua."
+        ],
+        "includes": [
+          "Round-trip transfers from central Bariloche.",
+          "2-hour guided horseback ride with experienced local baqueanos.",
+          "Complete riding equipment and safety briefing.",
+          "Traditional Argentine barbecue (asado) with salads, desserts, and drinks."
+        ],
+        "notIncludes": [
+          "Professional souvenir photographs.",
+          "Personal expenses."
+        ],
+        "departureTime": "09:30 hs"
+      },
+      "pt": {
+        "title": "Cavalgada na Estepe em La Fragua e Churrasco Típico",
+        "description": "Viva a autêntica cultura gaúcha cavalgando pela imensidão da estepe patagônica na Estância San Ramón, com um tradicional churrasco argentino em La Fragua.",
+        "fullDetails": "Conecte-se com a tradição rural da Patagônia em uma experiência inesquecível a 30 km do centro de Bariloche, na histórica Estância San Ramón. Após receber as instruções e ser apresentado ao seu cavalo — selecionado conforme sua experiência — começará uma cavalgada de aproximadamente 2 horas por paisagens amplas e douradas da estepe.\n\nDurante o percurso, é possível admirar a fauna nativa, avistar guanacos, emas e aves de rapina, contemplando a imensidão da cordilheira ao longe. Ao meio-dia, chegaremos às aconchegantes instalações de La Fragua, a antiga escola rural restaurada, para desfrutar de um farto churrasco tradicional argentino (asado) preparado na brasa, acompanhado de saladas, sobremesas e bebidas.",
+        "highlights": [
+          "Cavalgada guiada de 2 horas pela típica estepe patagônica.",
+          "Cavalos mansos e treinados, ideal para iniciantes e famílias.",
+          "Observação de paisagens abertas e fauna nativa em liberdade.",
+          "Churrasco argentino completo (asado) com carnes nobres e bebidas inclusas.",
+          "Visita ao espaço histórico da antiga escola rural La Fragua."
+        ],
+        "includes": [
+          "Traslado ida e volta a partir do centro de Bariloche.",
+          "Cavalgada guiada com guias campeiros locais.",
+          "Equipamento de montaria e instruções de segurança.",
+          "Almoço completo de churrasco campeiro com bebidas incluídas."
+        ],
+        "notIncludes": [
+          "Fotografias profissionais.",
+          "Despesas pessoais."
+        ],
+        "departureTime": "09:30 hs"
+      }
+    },
     "priceChild": 230000,
     "childAgePolicy": "4 a 12 años"
   },
@@ -333,7 +444,60 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "San Martín de los Andes via the Seven Lakes Route",
+        "description": "Travel one of the most spectacular scenic routes in Patagonia on a full-day excursion. Mountain lakes, Andean forests, unforgettable viewpoints and free time to explore San Martín de los Andes, on the shores of Lácar Lake.",
+        "fullDetails": "San Martín de los Andes via the Seven Lakes Route is one of the most complete and scenic excursions in the region. During the day you will travel an unforgettable stretch of National Route 40, crossing Nahuel Huapi and Lanín National Parks, among glacial lakes, native forests, mountains and viewpoints.\n\nThe road links Bariloche with San Martín de los Andes and lets you enjoy some of the most beautiful lakes in Patagonia, such as Nahuel Huapi, Correntoso, Espejo, Escondido, Falkner, Villarino and Machónico, among other mountain landscapes. Along the way there are scenic stops to take in the surroundings and take photographs.\n\nBefore reaching the destination, the tour visits the Villa La Angostura area, known for its mountain architecture and natural setting. Finally you arrive in San Martín de los Andes, a charming town on the shores of Lácar Lake, where you will have free time for lunch, a stroll through the town center and to enjoy the tranquility of the mountains.\n\nIt is an ideal experience for those who want to discover Patagonia at its best: nature, lakes, mountains and mountain villages in one unforgettable day.",
+        "highlights": [
+          "You will travel the famous Seven Lakes Route.",
+          "You will enjoy glacial lakes, Andean forests and mountain scenery.",
+          "You will make scenic stops to take photographs.",
+          "You will see the Villa La Angostura area.",
+          "You will have free time in San Martín de los Andes, on the shores of Lácar Lake.",
+          "You will see landscapes of Nahuel Huapi and Lanín National Parks."
+        ],
+        "includes": [
+          "Round-trip transfer from Bariloche.",
+          "Tour guide.",
+          "Scenic stops included in the itinerary.",
+          "Free time in San Martín de los Andes."
+        ],
+        "notIncludes": [
+          "Meals and drinks.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      },
+      "pt": {
+        "title": "San Martín de los Andes pela Rota dos 7 Lagos",
+        "description": "Percorra uma das rotas panorâmicas mais espetaculares da Patagônia em uma excursão de dia inteiro. Lagos de montanha, bosques andinos, mirantes inesquecíveis e tempo livre para conhecer San Martín de los Andes, às margens do Lago Lácar.",
+        "fullDetails": "San Martín de los Andes pela Rota dos 7 Lagos é uma das excursões mais completas e paisagísticas da região. Durante o dia você percorrerá um trecho inesquecível da Rota Nacional 40, atravessando os Parques Nacionais Nahuel Huapi e Lanín, entre lagos de origem glacial, bosques nativos, montanhas e mirantes.\n\nO caminho liga Bariloche a San Martín de los Andes e permite aproveitar alguns dos lagos mais belos da Patagônia, como Nahuel Huapi, Correntoso, Espejo, Escondido, Falkner, Villarino e Machónico, entre outras paisagens de montanha. Durante o percurso são feitas paradas panorâmicas para contemplar o entorno e tirar fotografias.\n\nAntes de chegar ao destino, visita-se a região de Villa La Angostura, reconhecida por sua arquitetura de montanha e seu entorno natural. Por fim, chega-se a San Martín de los Andes, uma cidade encantadora localizada às margens do Lago Lácar, onde você terá tempo livre para almoçar, caminhar pelo centro e desfrutar da tranquilidade da cordilheira.\n\nÉ uma experiência ideal para quem deseja descobrir a Patagônia em sua máxima expressão: natureza, lagos, montanhas e povoados de montanha em um dia inesquecível.",
+        "highlights": [
+          "Você percorrerá a famosa Rota dos 7 Lagos.",
+          "Você aproveitará lagos de origem glacial, bosques andinos e paisagens de montanha.",
+          "Você fará paradas panorâmicas para tirar fotografias.",
+          "Você conhecerá a região de Villa La Angostura.",
+          "Você terá tempo livre em San Martín de los Andes, às margens do Lago Lácar.",
+          "Você percorrerá paisagens dos Parques Nacionais Nahuel Huapi e Lanín."
+        ],
+        "includes": [
+          "Traslado de ida e volta desde Bariloche.",
+          "Guia de turismo.",
+          "Paradas panorâmicas previstas no roteiro.",
+          "Tempo livre em San Martín de los Andes."
+        ],
+        "notIncludes": [
+          "Refeições e bebidas.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      }
+    }
   },
   {
     "id": "cerro-catedral",
@@ -423,7 +587,62 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Cerro Catedral Panoramic Tour",
+        "description": "Discover one of the most important mountain resorts in South America on a half-day panoramic excursion to Cerro Catedral. Enjoy high-altitude scenery and views of the lakes and the Andes Mountains, with the option of an optional ride on the lifts.",
+        "fullDetails": "The Cerro Catedral Panoramic Tour is a half-day excursion designed for those who want to see one of the most impressive mountain landscapes in Bariloche during the winter season. The route heads to the base of Cerro Catedral, passing through a setting of forests, mountains and open views over Nahuel Huapi National Park.\n\nUpon arrival at the mountain you will have time to explore the base, enjoy the mountain atmosphere and take in the landscapes surrounding one of South America's best-known ski resorts. Those who wish can optionally ride the available lifts to reach panoramic views of the Andes Mountains, the lakes and the peaks of the region.\n\nIt is an ideal choice for travelers who want to see Cerro Catedral without skiing or snowboarding, enjoy the snow when conditions allow and have an accessible and memorable mountain experience.",
+        "highlights": [
+          "You will travel from Bariloche to the base of Cerro Catedral.",
+          "You will enjoy forest and mountain scenery and views of Nahuel Huapi National Park.",
+          "You will see one of the most important ski resorts in South America.",
+          "You will have free time to explore the base and enjoy the mountain atmosphere.",
+          "You will have the option of riding the available lifts."
+        ],
+        "includes": [
+          "Round-trip transfer from Bariloche.",
+          "Tour guide.",
+          "Free time at the base of Cerro Catedral."
+        ],
+        "notIncludes": [
+          "Lift rides.",
+          "Rental of snow clothing or equipment.",
+          "Skiing, snowboarding, lessons or lift passes for snow activities.",
+          "Meals and drinks.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      },
+      "pt": {
+        "title": "Cerro Catedral Panorâmico",
+        "description": "Descubra um dos centros de montanha mais importantes da América do Sul em uma excursão panorâmica de meio dia ao Cerro Catedral. Aproveite paisagens de altitude, vistas dos lagos e da Cordilheira dos Andes, com a possibilidade de uma subida opcional nos meios de elevação.",
+        "fullDetails": "O Cerro Catedral Panorâmico é uma excursão de meio dia pensada para quem deseja conhecer uma das paisagens de montanha mais imponentes de Bariloche durante a temporada de inverno. O percurso segue até a base do Cerro Catedral, atravessando um cenário de bosques, montanhas e vistas abertas para o Parque Nacional Nahuel Huapi.\n\nAo chegar ao morro, você terá tempo para percorrer a base, aproveitar o clima de montanha e contemplar as paisagens que cercam um dos centros de esqui mais reconhecidos da América do Sul. Quem desejar poderá fazer, opcionalmente, uma subida nos meios de elevação em funcionamento para acessar vistas panorâmicas da Cordilheira dos Andes, dos lagos e dos cumes da região.\n\nÉ uma proposta ideal para viajantes que querem conhecer o Cerro Catedral sem praticar esqui ou snowboard, aproveitar a neve quando as condições permitem e viver uma experiência de montanha acessível e memorável.",
+        "highlights": [
+          "Você viajará de Bariloche até a base do Cerro Catedral.",
+          "Você aproveitará paisagens de bosque, montanha e vistas do Parque Nacional Nahuel Huapi.",
+          "Você conhecerá um dos centros de esqui mais importantes da América do Sul.",
+          "Você terá tempo livre para percorrer a base e aproveitar o clima de montanha.",
+          "Você poderá fazer opcionalmente uma subida nos meios de elevação em funcionamento."
+        ],
+        "includes": [
+          "Traslado de ida e volta desde Bariloche.",
+          "Guia de turismo.",
+          "Tempo livre na base do Cerro Catedral."
+        ],
+        "notIncludes": [
+          "Subida nos meios de elevação.",
+          "Aluguel de roupa ou equipamento de neve.",
+          "Esqui, snowboard, aulas ou passes de meios de elevação para atividades de neve.",
+          "Refeições e bebidas.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      }
+    }
   },
   {
     "id": "cerro-tronador-y-glaciares",
@@ -509,7 +728,62 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Cerro Tronador and Ventisquero Negro",
+        "description": "Enjoy an unforgettable day in the heart of Nahuel Huapi National Park. Travel through lakes, forests and mountain valleys to reach the imposing Cerro Tronador and the Ventisquero Negro, one of the most striking glacier landscapes in Bariloche.",
+        "fullDetails": "Cerro Tronador and Ventisquero Negro is a full-day excursion to one of the most impressive natural settings in Patagonia. The route crosses the southern part of Nahuel Huapi National Park, among lakes, native forests, rivers and mountains, with landscapes that change at every stretch of the road.\n\nAlong the way you will follow the shores of Gutiérrez and Mascardi lakes, pass through Villa Mascardi and continue to Pampa Linda, a mountain valley surrounded by forests and Andean peaks. From there, the landscape becomes ever more imposing until you reach the Cerro Tronador area, whose name (\"Thunderer\") comes from the roar produced by ice breaking off its glaciers.\n\nOne of the most special moments of the excursion is the visit to the Ventisquero Negro (\"Black Glacier\"), a dark-toned glacier colored by the sediment that descends from the ice. You will have time to take in this unique landscape, take photographs and enjoy the immensity of the mountain.\n\nAn ideal experience for those looking to discover the wildest and most spectacular nature in Bariloche.",
+        "highlights": [
+          "You will travel through the southern area of Nahuel Huapi National Park.",
+          "You will enjoy views of Gutiérrez and Mascardi lakes.",
+          "You will see Villa Mascardi and the Pampa Linda valley.",
+          "You will reach the base of the imposing Cerro Tronador.",
+          "You will visit the Ventisquero Negro and its glacier landscapes.",
+          "You will have time to take photographs and enjoy Patagonian nature."
+        ],
+        "includes": [
+          "Round-trip transfer from Bariloche.",
+          "Tour guide.",
+          "Scenic stops included in the itinerary.",
+          "Visit to the Ventisquero Negro area."
+        ],
+        "notIncludes": [
+          "Entrance to Nahuel Huapi National Park.",
+          "Meals and drinks.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      },
+      "pt": {
+        "title": "Cerro Tronador e Ventisquero Negro",
+        "description": "Viva um dia inesquecível no coração do Parque Nacional Nahuel Huapi. Percorra lagos, bosques e vales de montanha até chegar ao imponente Cerro Tronador e ao Ventisquero Negro, uma das paisagens glaciais mais impressionantes de Bariloche.",
+        "fullDetails": "Cerro Tronador e Ventisquero Negro é uma excursão de dia inteiro a um dos cenários naturais mais impressionantes da Patagônia. O percurso atravessa a zona sul do Parque Nacional Nahuel Huapi, entre lagos, bosques nativos, rios e montanhas, com paisagens que mudam a cada trecho do caminho.\n\nDurante a viagem margeiam-se os lagos Gutiérrez e Mascardi, atravessa-se Villa Mascardi e segue-se até Pampa Linda, um vale de montanha cercado de bosques e cumes andinos. A partir dali, a paisagem se torna cada vez mais imponente até chegar à área do Cerro Tronador, cujo nome (\"Trovejador\") vem do estrondo produzido pelos desprendimentos de gelo em suas geleiras.\n\nUm dos momentos mais especiais da excursão é a visita ao Ventisquero Negro (\"Geleira Negra\"), uma geleira de tonalidades escuras formada por sedimentos que descem do gelo. Você terá tempo para contemplar esta paisagem única, tirar fotografias e desfrutar da imensidão da montanha.\n\nUma experiência ideal para quem busca conhecer a natureza mais selvagem e espetacular de Bariloche.",
+        "highlights": [
+          "Você percorrerá a zona sul do Parque Nacional Nahuel Huapi.",
+          "Você aproveitará vistas dos lagos Gutiérrez e Mascardi.",
+          "Você conhecerá Villa Mascardi e o vale de Pampa Linda.",
+          "Você chegará à base do imponente Cerro Tronador.",
+          "Você visitará o Ventisquero Negro e suas paisagens glaciais.",
+          "Você terá tempo para tirar fotografias e aproveitar a natureza patagônica."
+        ],
+        "includes": [
+          "Traslado de ida e volta desde Bariloche.",
+          "Guia de turismo.",
+          "Paradas panorâmicas previstas no roteiro.",
+          "Visita à área do Ventisquero Negro."
+        ],
+        "notIncludes": [
+          "Entrada no Parque Nacional Nahuel Huapi.",
+          "Refeições e bebidas.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      }
+    }
   },
   {
     "id": "circuito-chico",
@@ -597,7 +871,58 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Circuito Chico",
+        "description": "Discover the most emblematic landscapes of Bariloche on a scenic tour along Avenida Bustillo, among lakes, forests and mountains. Visit San Eduardo Chapel, the Llao Llao area and the Punto Panorámico viewpoint, with time to enjoy every view and take unforgettable photos.",
+        "fullDetails": "Circuito Chico is one of Bariloche's must-do excursions and the best way to discover, in just a few hours, the landscapes that make this Patagonian city unique. The route runs along Nahuel Huapi Lake on Avenida Bustillo, passing through mountain forests and viewpoints with views of lakes, peninsulas and Andean peaks.\n\nDuring the excursion you will visit the Llao Llao area, Puerto Pañuelo and San Eduardo Chapel, where there is a stop to take in the Llao Llao Hotel and its natural surroundings. The tour continues to the Punto Panorámico viewpoint, one of the most photographed lookouts in the region, with a privileged view of Moreno Lake, the Llao Llao peninsula and the mountains.\n\nAlong the way, a guide will share information about the history, nature and curiosities of Bariloche. Optionally, those who wish to can take the chairlift up Cerro Campanario, known for offering one of the best panoramic views of the city.",
+        "highlights": [
+          "You will travel along Avenida Bustillo beside Nahuel Huapi Lake.",
+          "You will see the Llao Llao area, Puerto Pañuelo and San Eduardo Chapel.",
+          "You will enjoy a stop with a view of the Llao Llao Hotel and its surroundings.",
+          "You will visit the Punto Panorámico viewpoint, with views of Moreno Lake and the Llao Llao peninsula.",
+          "You will have the option to take the chairlift up Cerro Campanario."
+        ],
+        "includes": [
+          "Transportation throughout the entire tour.",
+          "Tour guide.",
+          "Scenic stops included in the itinerary."
+        ],
+        "notIncludes": [
+          "Chairlift ride up Cerro Campanario.",
+          "Meals and drinks.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "08:30 hs"
+      },
+      "pt": {
+        "title": "Circuito Chico",
+        "description": "Descubra as paisagens mais emblemáticas de Bariloche em uma excursão panorâmica pela Avenida Bustillo, entre lagos, bosques e montanhas. Conheça a Capela San Eduardo, a região de Llao Llao e o Punto Panorámico, com tempo para aproveitar cada vista e tirar fotografias inesquecíveis.",
+        "fullDetails": "O Circuito Chico é uma das excursões imperdíveis de Bariloche e a melhor maneira de descobrir, em poucas horas, as paisagens que tornam única esta cidade patagônica. O percurso margeia o Lago Nahuel Huapi pela Avenida Bustillo, atravessando bosques de montanha e mirantes com vistas para lagos, penínsulas e cumes andinos.\n\nDurante a excursão visita-se a região de Llao Llao, Puerto Pañuelo e a Capela San Eduardo, onde é feita uma parada para contemplar o Hotel Llao Llao e seu entorno natural. O passeio continua até o Punto Panorámico, um dos mirantes mais fotografados da região, com uma vista privilegiada do Lago Moreno, da península de Llao Llao e das montanhas.\n\nAo longo do percurso, um guia compartilhará informações sobre a história, a natureza e as curiosidades de Bariloche. Opcionalmente, quem desejar poderá subir de teleférico ao Cerro Campanario, reconhecido por oferecer uma das melhores vistas panorâmicas da cidade.",
+        "highlights": [
+          "Você percorrerá a Avenida Bustillo ao lado do Lago Nahuel Huapi.",
+          "Você conhecerá a região de Llao Llao, Puerto Pañuelo e a Capela San Eduardo.",
+          "Você aproveitará uma parada com vista para o Hotel Llao Llao e seu entorno.",
+          "Você visitará o Punto Panorámico, com vistas para o Lago Moreno e a península de Llao Llao.",
+          "Você terá a possibilidade de subir opcionalmente ao Cerro Campanario."
+        ],
+        "includes": [
+          "Traslado durante todo o percurso.",
+          "Guia de turismo.",
+          "Paradas panorâmicas previstas no roteiro."
+        ],
+        "notIncludes": [
+          "Subida de teleférico ao Cerro Campanario.",
+          "Refeições e bebidas.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "08:30 hs"
+      }
+    }
   },
   {
     "id": "circuito-grande-villa-traful-villa-la-angostura",
@@ -696,7 +1021,64 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Circuito Grande — Villa Traful and Villa La Angostura",
+        "description": "Discover one of the most surprising routes in northern Patagonia on a full-day excursion to Villa Traful and Villa La Angostura. Travel through steppe, rivers, Andean forests, lakes and unique viewpoints, with time to explore two of the most picturesque villages in Neuquén.",
+        "fullDetails": "Circuito Grande is a full-day excursion that links some of the most varied and surprising landscapes in the region. The route begins by leaving Bariloche toward the northeast, to the mouth of Nahuel Huapi Lake, where the Limay River begins and the natural border between the provinces of Río Negro and Neuquén is marked.\n\nThe road continues alongside the Limay River, crossing steppe landscapes and unique rock formations such as the Anfiteatro and the Valle Encantado (Enchanted Valley). There, nature has carved silhouettes that locals know by names such as the Dedo de Dios (Finger of God), the Centinela (Sentinel) and the Siameses (Siamese Twins).\n\nNext you reach the confluence of the Limay and Traful rivers. From that point, the route follows gravel roads and the landscape gradually transforms: the steppe gives way to Andean forest, the valleys become narrower and the peaks accompany the journey to Villa Traful. From the Mirador del Viento viewpoint you get one of the most impressive panoramic views of Traful Lake.\n\nIn Villa Traful you will have time to walk along its picturesque pier and enjoy the tranquility of this small village. The return trip follows the Seven Lakes Road, visiting places such as Puerto Arrayán, Paso Portezuelo, Correntoso Lake, the Ruca Malén bridge and Espejo Lake. Finally you arrive in Villa La Angostura, with time to see its most representative sights, and in Puerto Manzano before returning to Bariloche.",
+        "highlights": [
+          "You will see the source of the Limay River at the mouth of Nahuel Huapi Lake.",
+          "You will discover the Anfiteatro and the rock formations of the Valle Encantado.",
+          "You will see the confluence of the Limay and Traful rivers.",
+          "You will visit the Mirador del Viento viewpoint, with an exceptional view of Traful Lake.",
+          "You will have free time in Villa Traful and on its pier.",
+          "You will travel part of the Seven Lakes Road.",
+          "You will see Villa La Angostura, Puerto Manzano and the northern shore of Nahuel Huapi Lake."
+        ],
+        "includes": [
+          "Full route of the excursion.",
+          "Guide during the activity.",
+          "Scenic stops included in the itinerary.",
+          "Free time in Villa Traful.",
+          "Free time in Villa La Angostura."
+        ],
+        "notIncludes": [
+          "Meals and drinks.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      },
+      "pt": {
+        "title": "Circuito Grande — Villa Traful e Villa La Angostura",
+        "description": "Descubra uma das rotas mais surpreendentes do norte patagônico em uma excursão de dia inteiro por Villa Traful e Villa La Angostura. Percorra estepe, rios, bosques andinos, lagos e mirantes únicos, com tempo para conhecer duas das vilas mais pitorescas de Neuquén.",
+        "fullDetails": "O Circuito Grande é uma excursão de dia inteiro que une algumas das paisagens mais variadas e surpreendentes da região. O percurso começa saindo de Bariloche rumo ao nordeste, até chegar à desembocadura do Lago Nahuel Huapi, onde nasce o rio Limay e se marca o limite natural entre as províncias de Río Negro e Neuquén.\n\nO caminho continua ao lado do rio Limay, atravessando paisagens de estepe e formações rochosas únicas como o Anfiteatro e o Valle Encantado (Vale Encantado). Ali a natureza criou silhuetas que os moradores identificam com nomes como o Dedo de Dios (Dedo de Deus), o Centinela (Sentinela) e os Siameses (Gêmeos Siameses).\n\nEm seguida chega-se à confluência dos rios Limay e Traful. A partir desse ponto, o percurso avança por estradas de cascalho e a paisagem se transforma gradualmente: a estepe dá lugar ao bosque andino, os vales se tornam mais fechados e os cumes acompanham o trajeto até Villa Traful. Do Mirador del Viento obtém-se uma das vistas panorâmicas mais imponentes do Lago Traful.\n\nEm Villa Traful você terá tempo para caminhar por seu pitoresco píer e desfrutar da tranquilidade desta pequena vila. O retorno é feito pelo Caminho dos Sete Lagos, visitando lugares como Puerto Arrayán, Paso Portezuelo, o Lago Correntoso, a ponte Ruca Malén e o Lago Espejo. Por fim, chega-se a Villa La Angostura, com tempo para conhecer seus pontos mais representativos, e a Puerto Manzano antes de voltar a Bariloche.",
+        "highlights": [
+          "Você conhecerá a nascente do rio Limay na desembocadura do Lago Nahuel Huapi.",
+          "Você descobrirá o Anfiteatro e as formações rochosas do Valle Encantado.",
+          "Você contemplará a confluência dos rios Limay e Traful.",
+          "Você visitará o Mirador del Viento, com uma vista excepcional do Lago Traful.",
+          "Você terá tempo livre em Villa Traful e em seu píer.",
+          "Você percorrerá parte do Caminho dos Sete Lagos.",
+          "Você conhecerá Villa La Angostura, Puerto Manzano e a costa norte do Lago Nahuel Huapi."
+        ],
+        "includes": [
+          "Percurso completo da excursão.",
+          "Guia durante a atividade.",
+          "Paradas panorâmicas previstas no roteiro.",
+          "Tempo livre em Villa Traful.",
+          "Tempo livre em Villa La Angostura."
+        ],
+        "notIncludes": [
+          "Refeições e bebidas.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      }
+    }
   },
   {
     "id": "el-bolson-chacras-lago-puelo",
@@ -800,7 +1182,66 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "El Bolsón and Lago Puelo",
+        "description": "Travel through the Comarca Andina del Paralelo 42 on a full-day excursion to El Bolsón and Lago Puelo. Discover the regional fair, the flavors of local produce and the turquoise waters of Lago Puelo National Park, surrounded by forests and mountains.",
+        "fullDetails": "El Bolsón and Lago Puelo is a full-day excursion that invites you to discover one of the most authentic and picturesque regions of Patagonia. The route leaves Bariloche heading south on National Route 40, crossing valleys, lakes and native forest landscapes until it reaches the Comarca Andina del Paralelo 42.\n\nThe first visit is El Bolsón, a town known for its relaxed atmosphere, its artisan production, its berries and its identity closely tied to nature. You will have free time to explore the center, see local shops and, on operating days, visit the Regional Artisans' Fair at Plaza Pagano.\n\nThe excursion continues to Lago Puelo, in Chubut Province. There you will visit the Lago Puelo National Park area, where turquoise waters, forests and peaks create one of the most characteristic landscapes of the Comarca Andina.\n\nIt is an ideal choice for those who want to combine nature, local culture, regional products and landscapes different from those of Bariloche in a single day.",
+        "highlights": [
+          "You will travel National Route 40 south of Bariloche.",
+          "You will discover landscapes of lakes, valleys and native forest.",
+          "You will see El Bolsón and its artisan identity.",
+          "You will have free time to visit the regional fair, when it is open.",
+          "You will be able to try local products and dining options from the Comarca Andina.",
+          "You will visit Lago Puelo National Park and its turquoise waters."
+        ],
+        "includes": [
+          "Round-trip transfer from Bariloche.",
+          "Tour guide.",
+          "Visit to El Bolsón.",
+          "Free time in the town center.",
+          "Visit to the Lago Puelo National Park area."
+        ],
+        "notIncludes": [
+          "Entrance to Lago Puelo National Park.",
+          "Meals and drinks.",
+          "Purchases at the fair, shops or local stands.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      },
+      "pt": {
+        "title": "El Bolsón e Lago Puelo",
+        "description": "Percorra a Comarca Andina do Paralelo 42 em uma excursão de dia inteiro a El Bolsón e Lago Puelo. Conheça a feira regional, os sabores da produção local e as águas turquesa do Parque Nacional Lago Puelo, cercadas de bosques e Cordilheira.",
+        "fullDetails": "El Bolsón e Lago Puelo é uma excursão de dia inteiro que convida a descobrir uma das regiões mais autênticas e pitorescas da Patagônia. O percurso parte de Bariloche rumo ao sul pela Rota Nacional 40, atravessando vales, lagos e paisagens de bosque nativo até chegar à Comarca Andina do Paralelo 42.\n\nA primeira visita é El Bolsón, uma localidade reconhecida por seu ambiente descontraído, sua produção artesanal, suas frutas vermelhas e sua identidade ligada à natureza. Você terá tempo livre para percorrer o centro, conhecer comércios locais e, nos dias de funcionamento, visitar a Feira Regional de Artesãos na Plaza Pagano.\n\nA excursão continua até Lago Puelo, na província de Chubut. Ali visita-se a área do Parque Nacional Lago Puelo, onde as águas de tonalidade turquesa, os bosques e os cumes criam uma das paisagens mais características da Comarca Andina.\n\nÉ uma proposta ideal para quem deseja combinar natureza, cultura local, produtos regionais e paisagens diferentes das de Bariloche em um mesmo dia.",
+        "highlights": [
+          "Você percorrerá a Rota Nacional 40 ao sul de Bariloche.",
+          "Você descobrirá paisagens de lagos, vales e bosque nativo.",
+          "Você conhecerá El Bolsón e sua identidade artesanal.",
+          "Você terá tempo livre para visitar a feira regional, quando estiver em funcionamento.",
+          "Você poderá conhecer produtos locais e propostas gastronômicas da Comarca Andina.",
+          "Você visitará o Parque Nacional Lago Puelo e suas águas turquesa."
+        ],
+        "includes": [
+          "Traslado de ida e volta desde Bariloche.",
+          "Guia de turismo.",
+          "Visita a El Bolsón.",
+          "Tempo livre no centro da localidade.",
+          "Visita à área do Parque Nacional Lago Puelo."
+        ],
+        "notIncludes": [
+          "Entrada no Parque Nacional Lago Puelo.",
+          "Refeições e bebidas.",
+          "Compras na feira, em comércios ou barracas locais.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      }
+    }
   },
   {
     "id": "el-refugio",
@@ -885,7 +1326,68 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Arelauquen Lodge — 4x4, Snowmobile and Dinner",
+        "description": "Enjoy a night of adventure in the snowy surroundings of Arelauquen. Ride up in 4x4 vehicles, travel winter trails by snowmobile and enjoy dinner in a mountain lodge surrounded by forest and mountains.",
+        "fullDetails": "Arelauquen Lodge combines three unforgettable moments in a single experience: a 4x4 ride up the mountain, a guided snowmobile ride and dinner in a mountain lodge.\n\nThe adventure begins with a 4x4 ascent along snow and forest roads, a different way to enter the Andean setting of Arelauquen. Upon reaching the starting point of the ride, you will receive safety and driving instructions before getting on the snowmobile.\n\nEach vehicle is shared by two passengers. Accompanied by specialized guides, you will travel snowy trails among lenga trees and winter landscapes until you reach the lodge. There you can relax, enjoy the warm atmosphere indoors and share a dinner in the middle of nature.\n\nIt is an ideal choice for those seeking a complete night-time experience, with adventure, snow and Patagonian cuisine.",
+        "highlights": [
+          "You will ride up in 4x4 vehicles along snow-covered roads.",
+          "You will receive safety and driving instructions.",
+          "You will take a guided snowmobile ride.",
+          "You will share a snowmobile with another passenger.",
+          "You will travel through snowy forests and landscapes around Arelauquen.",
+          "You will enjoy dinner in a mountain lodge."
+        ],
+        "includes": [
+          "4x4 vehicle ascent.",
+          "Guided snowmobile ride.",
+          "One two-seater snowmobile for every two passengers.",
+          "Safety and driving instructions.",
+          "Specialized guides during the activity.",
+          "Dinner in a mountain lodge."
+        ],
+        "notIncludes": [
+          "Transfers to or from the resort, unless expressly stated at the time of booking.",
+          "Drinks not specified in the dinner.",
+          "Snow clothing, unless expressly stated.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      },
+      "pt": {
+        "title": "Refugio Arelauquen — 4x4, Moto de Neve e Jantar",
+        "description": "Viva uma noite de aventura no entorno nevado de Arelauquen. Suba em veículos 4x4, percorra trilhas de inverno de moto de neve e desfrute de um jantar em um refúgio de montanha cercado de bosque e Cordilheira.",
+        "fullDetails": "O Refugio Arelauquen combina três momentos inesquecíveis em uma mesma experiência: uma subida em veículos 4x4, um passeio guiado de moto de neve e um jantar em um refúgio de montanha.\n\nA aventura começa com a subida em 4x4 por caminhos de neve e bosque, uma forma diferente de entrar no cenário andino de Arelauquen. Ao chegar ao ponto de partida do passeio, você receberá as instruções de segurança e de condução antes de subir na moto de neve.\n\nCada veículo é compartilhado por dois passageiros. Acompanhado por guias especializados, você percorrerá trilhas nevadas entre lengas e paisagens de inverno até chegar ao refúgio. Ali poderá relaxar, aproveitar o ambiente aconchegante do interior e compartilhar um jantar em plena natureza.\n\nÉ uma proposta ideal para quem busca uma experiência noturna completa, com aventura, neve e gastronomia patagônica.",
+        "highlights": [
+          "Você subirá em veículos 4x4 por caminhos de neve.",
+          "Você receberá instruções de segurança e de condução.",
+          "Você fará um passeio guiado de moto de neve.",
+          "Você compartilhará uma moto de neve com outro passageiro.",
+          "Você percorrerá bosques nevados e paisagens do entorno de Arelauquen.",
+          "Você desfrutará de um jantar em um refúgio de montanha."
+        ],
+        "includes": [
+          "Subida em veículos 4x4.",
+          "Passeio guiado de moto de neve.",
+          "Uma moto de neve dupla para cada dois passageiros.",
+          "Instruções de segurança e de condução.",
+          "Guias especializados durante a atividade.",
+          "Jantar em refúgio de montanha."
+        ],
+        "notIncludes": [
+          "Traslados de ou para o complexo, salvo se indicados expressamente no momento da reserva.",
+          "Bebidas não especificadas no jantar.",
+          "Roupa de neve, salvo se indicado expressamente.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      }
+    }
   },
   {
     "id": "free-walking-tour",
@@ -994,7 +1496,52 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Walking Tour Bariloche · History, Architecture and Nahuel Huapi Lake",
+        "description": "Discover Bariloche on foot through the streets of its historic center. A guided tour that combines history, architecture and landscapes to get to know the essence of the Jewel of Patagonia.",
+        "fullDetails": "Experience Bariloche from a local perspective on a guided walk through the most emblematic corners of its historic center. Over two hours we will visit the Civic Center, Our Lady of Nahuel Huapi Cathedral, the traditional Mitre Street and the shores of Nahuel Huapi Lake, discovering the stories, characters and curiosities that shaped the identity of the city.\n\nAlong the way, a professional guide will share the evolution of Bariloche, its Alpine-inspired architecture, the development of mountaineering, Patagonian culture and the secrets that often go unnoticed by those visiting for the first time.\n\nThe experience ends by the lake, with one of the most representative postcard views of Patagonia and personalized recommendations to keep enjoying Bariloche.",
+        "highlights": [
+          "Guided tour of Bariloche's historic center.",
+          "Civic Center, Mitre Street, the Cathedral and the shores of Nahuel Huapi Lake.",
+          "History, architecture and local culture told by a professional guide.",
+          "Ideal for starting your trip and discovering the city from a different perspective."
+        ],
+        "includes": [
+          "Professional guide",
+          "Guided walk of approximately 2 hours",
+          "Food and cultural recommendations"
+        ],
+        "notIncludes": [
+          "Meals and drinks",
+          "Transfer to the meeting point",
+          "Personal expenses"
+        ],
+        "departureTime": "12:30 hs"
+      },
+      "pt": {
+        "title": "Walking Tour Bariloche · História, Arquitetura e Lago Nahuel Huapi",
+        "description": "Descubra Bariloche caminhando pelas ruas do seu centro histórico. Um passeio guiado que combina história, arquitetura e paisagens para conhecer a essência da Joia da Patagônia.",
+        "fullDetails": "Conheça Bariloche com um olhar local, em uma caminhada guiada pelos cantos mais emblemáticos do seu centro histórico. Durante duas horas percorreremos o Centro Cívico, a Catedral Nossa Senhora do Nahuel Huapi, a tradicional Rua Mitre e a orla do Lago Nahuel Huapi, descobrindo as histórias, os personagens e as curiosidades que deram identidade à cidade.\n\nAo longo do percurso, um guia profissional compartilhará a evolução de Bariloche, sua arquitetura de inspiração alpina, o desenvolvimento do montanhismo, a cultura patagônica e os segredos que muitas vezes passam despercebidos para quem a visita pela primeira vez.\n\nA experiência termina junto ao lago, com um dos cartões-postais mais representativos da Patagônia e recomendações personalizadas para continuar aproveitando Bariloche.",
+        "highlights": [
+          "Passeio guiado pelo centro histórico de Bariloche.",
+          "Centro Cívico, Rua Mitre, Catedral e orla do Lago Nahuel Huapi.",
+          "História, arquitetura e cultura local contadas por um guia profissional.",
+          "Ideal para começar a sua viagem e descobrir a cidade a partir de outra perspectiva."
+        ],
+        "includes": [
+          "Guia profissional",
+          "Caminhada guiada de aproximadamente 2 horas",
+          "Recomendações gastronômicas e culturais"
+        ],
+        "notIncludes": [
+          "Refeições e bebidas",
+          "Traslado até o ponto de encontro",
+          "Despesas pessoais"
+        ],
+        "departureTime": "12:30 hs"
+      }
+    }
   },
   {
     "id": "isla-victoria-y-bosque-de-arrayanes",
@@ -1119,7 +1666,68 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {},
+    "translations": {
+      "en": {
+        "title": "Isla Victoria and Arrayanes Forest",
+        "description": "Sail across Nahuel Huapi Lake and discover two of Bariloche's most enchanting landscapes: Isla Victoria and the Arrayanes Forest. A full-day experience that combines boat travel, easy trails and unique Patagonian forests.",
+        "fullDetails": "Isla Victoria and Arrayanes Forest is one of the most traditional and fascinating lake excursions in Bariloche. The experience begins with a boat trip from Puerto Pañuelo across the waters of Nahuel Huapi Lake, surrounded by mountains, forests and National Park landscapes.\n\nThe first part of the day lets you discover Isla Victoria, an island of great natural and historical value. There you can walk forest trails, view the lake from different points and enjoy the Patagonian scenery in a peaceful, protected setting.\n\nThe boat trip continues to the Quetrihue peninsula, home to the Arrayanes Forest. This forest is one of the few in the world with arrayán trees of such large size and age, recognizable by their cinnamon-colored bark and distinctive appearance. A gentle walk along its trails lets you appreciate this unique landscape up close.\n\nIt is an ideal excursion for those who want to combine boating, nature and accessible walks, enjoying a different kind of day in the heart of Nahuel Huapi National Park.",
+        "highlights": [
+          "You will sail on Nahuel Huapi Lake from Puerto Pañuelo.",
+          "You will discover the landscapes of Isla Victoria.",
+          "You will walk easy forest trails.",
+          "You will visit the Quetrihue peninsula.",
+          "You will walk through the Arrayanes Forest, one of the most unique in Patagonia.",
+          "You will enjoy views of the lake, the mountains and the nature of the National Park."
+        ],
+        "includes": [
+          "Boat trip on Nahuel Huapi Lake.",
+          "Visit to Isla Victoria.",
+          "Visit to the Arrayanes Forest.",
+          "Guide during the excursion.",
+          "Walks on open trails."
+        ],
+        "notIncludes": [
+          "Transfer to or from the hotel, unless specifically booked.",
+          "Entrance to Nahuel Huapi National Park.",
+          "Boarding fee.",
+          "Meals and drinks.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      },
+      "pt": {
+        "title": "Isla Victoria e Bosque de Arrayanes",
+        "description": "Navegue pelo Lago Nahuel Huapi e descubra duas das paisagens mais encantadoras de Bariloche: a Isla Victoria e o Bosque de Arrayanes. Uma experiência de dia inteiro que combina navegação, trilhas de baixa dificuldade e bosques únicos da Patagônia.",
+        "fullDetails": "Isla Victoria e Bosque de Arrayanes é uma das excursões lacustres mais tradicionais e fascinantes de Bariloche. A experiência começa com uma navegação a partir de Puerto Pañuelo pelas águas do Lago Nahuel Huapi, cercado de montanhas, bosques e paisagens do Parque Nacional.\n\nA primeira parte do dia permite descobrir a Isla Victoria, uma ilha de grande valor natural e histórico. Ali você poderá percorrer trilhas de bosque, contemplar o lago de diferentes pontos e aproveitar a paisagem patagônica em um entorno tranquilo e protegido.\n\nA navegação continua até a península de Quetrihue, onde fica o Bosque de Arrayanes. Este bosque é um dos poucos do mundo com exemplares de arrayán de grande tamanho e antiguidade, reconhecíveis por sua casca cor de canela e seu aspecto singular. Uma caminhada suave por suas trilhas permite apreciar de perto esta paisagem única.\n\nÉ uma excursão ideal para quem deseja combinar navegação, natureza e caminhadas acessíveis, desfrutando de um dia diferente no coração do Parque Nacional Nahuel Huapi.",
+        "highlights": [
+          "Você navegará pelo Lago Nahuel Huapi a partir de Puerto Pañuelo.",
+          "Você descobrirá as paisagens da Isla Victoria.",
+          "Você percorrerá trilhas de bosque de baixa dificuldade.",
+          "Você visitará a península de Quetrihue.",
+          "Você caminhará pelo Bosque de Arrayanes, um dos mais singulares da Patagônia.",
+          "Você aproveitará vistas do lago, das montanhas e da natureza do Parque Nacional."
+        ],
+        "includes": [
+          "Navegação pelo Lago Nahuel Huapi.",
+          "Visita à Isla Victoria.",
+          "Visita ao Bosque de Arrayanes.",
+          "Guia durante a excursão.",
+          "Caminhadas por trilhas liberadas."
+        ],
+        "notIncludes": [
+          "Traslado de ou para o hotel, salvo se contratado expressamente.",
+          "Entrada no Parque Nacional Nahuel Huapi.",
+          "Taxa de embarque.",
+          "Refeições e bebidas.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      }
+    },
     "priceChild": 92000,
     "childAgePolicy": "Menores y Jubilados (hasta 4 años sin cargo)"
   },
@@ -1214,7 +1822,52 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Kayaking on Gutiérrez Lake",
+        "description": "Discover Gutiérrez Lake from the water on a half-day kayaking experience. Paddle surrounded by forests and Patagonian landscapes, with a prior briefing, two hours of activity and an afternoon snack included.",
+        "fullDetails": "Enjoy a different afternoon on Gutiérrez Lake, one of the most attractive bodies of water in Bariloche. The experience begins with the transfer to the starting point, where you will receive a briefing before heading out on the water.\n\nFor two hours, you will paddle across the lake by kayak and enjoy the surroundings from a unique perspective: the water, the forests along the shore and the views this corner of Patagonia offers. It is not just a sporting activity, but a calm, close-up way of connecting with the landscape.\n\nAt the end of the paddle, you will enjoy an afternoon snack before returning to Bariloche. It is an ideal choice for those looking to combine outdoor activity, nature and a moment of disconnection during the afternoon.",
+        "highlights": [
+          "You will kayak on Gutiérrez Lake.",
+          "You will receive a briefing before starting.",
+          "You will enjoy two hours of activity on the water.",
+          "You will share an afternoon snack at the end of the experience."
+        ],
+        "includes": [
+          "Round-trip transfer.",
+          "Briefing before the activity.",
+          "Two hours of kayaking.",
+          "Afternoon snack."
+        ],
+        "notIncludes": [
+          "Services not expressly listed as included.",
+          "Personal expenses."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      },
+      "pt": {
+        "title": "Caiaque no Lago Gutiérrez",
+        "description": "Descubra o Lago Gutiérrez a partir da água em uma experiência de caiaque de meio dia. Reme cercado de bosques e paisagens patagônicas, com instrução prévia, duas horas de atividade e lanche incluído.",
+        "fullDetails": "Viva uma tarde diferente no Lago Gutiérrez, um dos espelhos d'água mais atraentes de Bariloche. A experiência começa com o traslado até o ponto de início, onde você receberá uma instrução prévia antes de sair para remar.\n\nDurante duas horas, você percorrerá o lago de caiaque e poderá desfrutar do entorno a partir de uma perspectiva única: a água, os bosques da costa e as vistas que este canto da Patagônia oferece. Não se trata apenas de uma atividade esportiva, mas de uma forma tranquila e próxima de se conectar com a paisagem.\n\nAo final do passeio, você desfrutará de um lanche antes do retorno a Bariloche. É uma proposta ideal para quem busca combinar atividade ao ar livre, natureza e um momento de desconexão durante a tarde.",
+        "highlights": [
+          "Você remará de caiaque pelo Lago Gutiérrez.",
+          "Você receberá uma instrução prévia antes de começar.",
+          "Você aproveitará duas horas de atividade na água.",
+          "Você compartilhará um lanche ao final da experiência."
+        ],
+        "includes": [
+          "Traslado de ida e volta.",
+          "Instrução prévia à atividade.",
+          "Duas horas de passeio de caiaque.",
+          "Lanche."
+        ],
+        "notIncludes": [
+          "Serviços não detalhados expressamente como incluídos.",
+          "Despesas pessoais."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      }
+    }
   },
   {
     "id": "motos-de-nieve",
@@ -1304,17 +1957,80 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "La Cueva — After Ski and Dinner",
+        "description": "Enjoy a winter experience at Cerro Catedral that combines a guided snowmobile ride with a dining experience at La Cueva. Choose between the relaxed atmosphere of the After Ski at sunset or a multi-course night dinner in a lodge surrounded by snow.",
+        "fullDetails": "La Cueva offers two ways to enjoy a different experience at Cerro Catedral: After Ski or Night & Dinner. Both combine a guided snowmobile ride through an exclusive area of the ski resort with a dining experience in a warm, cozy setting.\n\nThe experience begins with the transfer to Cerro Catedral and a welcome at La Cueva. After receiving safety and driving instructions, the snowmobile tour starts along snowy trails, forests and high-altitude landscapes. Each snowmobile is shared by two passengers, always accompanied by specialized guides.\n\nIn the After Ski option, the ride is combined with a dining experience to enjoy the sunset and the mountain atmosphere. In the Night & Dinner option, the tour takes place at night and ends with a multi-course dinner inspired by regional flavors.\n\nIt is an ideal experience for those who want to combine snow, adventure and gastronomy without needing to ski or snowboard.",
+        "highlights": [
+          "You will be transferred from Bariloche to Cerro Catedral.",
+          "You will receive safety and driving instructions.",
+          "You will take a guided snowmobile ride.",
+          "You will travel through snowy forests and trails within an exclusive area of the ski resort.",
+          "You will share a snowmobile with another passenger.",
+          "You will enjoy a dining experience at La Cueva.",
+          "You can choose between the After Ski or Night & Dinner options."
+        ],
+        "includes": [
+          "Round-trip transfer between Bariloche and Cerro Catedral.",
+          "Guided snowmobile ride.",
+          "One two-seater snowmobile for every two passengers.",
+          "Safety and driving instructions.",
+          "Specialized guides during the activity.",
+          "Dining experience according to the chosen option.",
+          "Multi-course dinner in the Night & Dinner option."
+        ],
+        "notIncludes": [
+          "Snow clothing, unless expressly stated at the time of booking.",
+          "Drinks not specified in the dining experience.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "10:00 hs"
+      },
+      "pt": {
+        "title": "La Cueva — After Ski e Jantar",
+        "description": "Desfrute de uma experiência de inverno no Cerro Catedral que combina um passeio guiado de moto de neve e uma proposta gastronômica em La Cueva. Escolha entre o clima descontraído do After Ski ao entardecer ou um jantar noturno de vários pratos em um refúgio cercado de neve.",
+        "fullDetails": "La Cueva propõe duas maneiras de desfrutar uma experiência diferente no Cerro Catedral: After Ski ou Noturno e Jantar. Ambas combinam um passeio guiado de moto de neve por um setor exclusivo do centro de esqui com uma proposta gastronômica em um ambiente caloroso e aconchegante.\n\nA experiência começa com o traslado até o Cerro Catedral e a recepção em La Cueva. Depois de receber as instruções de segurança e de condução, inicia-se o passeio de moto de neve por caminhos nevados, bosques e paisagens de altitude. Cada moto é compartilhada por dois passageiros, sempre acompanhados por guias especializados.\n\nNa modalidade After Ski, o passeio se combina com uma proposta gastronômica para aproveitar o entardecer e o clima da cordilheira. Na opção Noturno e Jantar, o percurso é feito à noite e termina com um jantar de vários pratos, inspirado em sabores regionais.\n\nÉ uma experiência ideal para quem quer combinar neve, aventura e gastronomia sem precisar praticar esqui ou snowboard.",
+        "highlights": [
+          "Você será levado de Bariloche até o Cerro Catedral.",
+          "Você receberá instruções de segurança e de condução.",
+          "Você fará um passeio guiado de moto de neve.",
+          "Você percorrerá bosques e trilhas nevadas dentro de um setor exclusivo do centro de esqui.",
+          "Você compartilhará uma moto de neve com outro passageiro.",
+          "Você desfrutará de uma proposta gastronômica em La Cueva.",
+          "Você poderá escolher entre a modalidade After Ski ou Noturno e Jantar."
+        ],
+        "includes": [
+          "Traslado de ida e volta entre Bariloche e o Cerro Catedral.",
+          "Passeio guiado de moto de neve.",
+          "Uma moto de neve dupla para cada dois passageiros.",
+          "Instruções de segurança e de condução.",
+          "Guias especializados durante a atividade.",
+          "Proposta gastronômica conforme a modalidade escolhida.",
+          "Jantar de vários pratos na modalidade Noturno e Jantar."
+        ],
+        "notIncludes": [
+          "Roupa de neve, salvo se indicado expressamente no momento da reserva.",
+          "Bebidas não especificadas na proposta gastronômica.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "10:00 hs"
+      }
+    }
   },
   {
     "id": "navegacion-en-brazo-tristeza",
-    "title": "Navegaciòn en Brazo Tristeza",
+    "title": "Navegación en Brazo Tristeza y Cascada Frey",
     "category": "Navegación",
     "season": "Todo el Año",
     "duration": "Día Completo (8h)",
     "difficulty": "Fácil",
     "image": "/images/excursiones/navegacion-en-brazo-tristeza.webp",
-    "description": "Travesía por el increíble y salvaje brazo Tristeza del lago Nahuel Huapi",
+    "description": "Travesía por el increíble y salvaje brazo Tristeza del lago Nahuel Huapi, con caminata guiada por la selva valdiviana hasta la cascada Frey.",
     "fullDetails": "Excursión de medio día Salidas:  10:00 hs \nNivel de Dificultad: Bajo - Medio La excursión comienza y termina en el Puerto Bahía López (Circuito Chico a 30 kmts de la ciudad) La partida se realiza desde el histórico puerto construido en 1929 y en 10 minutos de navegación nos internamos en el increíble y agreste paisaje del Brazo Tristeza, un profundo fiordo glaciario en el sector suroeste del lago Nahuel Huapi.  Las aguas del lago se aquietan, protegidas del viento por las escarpadas montañas, a medida que avanzamos nos reciben numerosas cascadas y el bosque va transformándose en selva, denominada “Valdiviana”, debido a la cantidad de precipitaciones que recibe el lugar\nPodremos realizar avistajes de numerosas especies de aves, inclusive es común ver majestuosos cóndores en las cimas de las montañas y ver como las laderas llegan de forma abrupta a las costas del lago donde podremos apreciar los surcos dejados por el paso de los glaciares. Si el clima lo permite, es posible observar el majestuoso Monte Tronador de 3450 metros, que se eleva sobre el paisaje con sus glaciares y nieves eternas.\nArribados al final del brazo, desembarcamos para realizar una sencilla caminata de 1500 mts, por un sendero agreste, con escasas subidas y bajadas, hasta llegar a la gran cascada del Arroyo Frey, sorprendente e increíble, en el corazón de la selva, un lugar idílico y de naturaleza imponente, muy apreciado por todos los que disfrutan de esta excursión. Luego de un generoso momento de contemplación, regresamos por el mismo camino, para embarcar y navegar de regreso.  \nLa embarcación “Kaiken Patagonia” es muy confortable y se logra un estrecho contacto entre la tripulación, guía y los asistentes.",
     "highlights": [
       "Salida desde Puerto Pañuelo Av.Bustillo kmt. 25,000)",
@@ -1322,9 +2038,9 @@ export const EXCURSIONS_DATA: Excursion[] = [
       "Caminata al arroyo y cascada Frey ( 01:30 hs)"
     ],
     "includes": [
-      "Navegación",
-      "Caminata",
-      "Guías"
+      "Navegación por el fiorde en embarcación Kaiken Patagonia",
+      "Caminata guiada a la Cascada Frey",
+      "Guías profesionales"
     ],
     "notIncludes": [
       "Traslado a Puerto Pañuelo",
@@ -1395,7 +2111,56 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Brazo Tristeza Sailing & Cascada Frey Trek",
+        "description": "Sail through the wild, untouched fjord of Brazo Tristeza on Lake Nahuel Huapi, followed by a guided walk through the Valdivian rainforest to Cascada Frey.",
+        "fullDetails": "A half-day expedition departing from Bahía López into one of the most secluded and pristine arms of Lake Nahuel Huapi. Navigating aboard the comfortable Kaiken Patagonia, you will enter Brazo Tristeza, a deep glacial fjord surrounded by sheer granite walls, cascading waterfalls, and dense Valdivian rainforest.\n\nKeep an eye out for majestic Andean condors soaring above the peaks and, weather permitting, take in breathtaking views of Mount Tronador's hanging glaciers. Upon reaching the end of the fjord, disembark for an accessible 1.5 km guided hike through lush native forest to the spectacular Arroyo Frey waterfall, an idyllic haven of untamed nature. After taking time to enjoy this hidden paradise, return along the forest trail to embark and sail back across the calm, sheltered waters.",
+        "highlights": [
+          "Scenic navigation through the secluded Brazo Tristeza glacial fjord.",
+          "Up-close views of waterfalls, granite cliffs, and possible condor sightings.",
+          "Guided nature walk through the lush Valdivian rainforest.",
+          "Visit the stunning Arroyo Frey waterfall in the heart of the forest.",
+          "Panoramic vistas of Mount Tronador and its glaciers (weather permitting)."
+        ],
+        "includes": [
+          "Glacial fjord navigation aboard Kaiken Patagonia.",
+          "Guided nature hike to Arroyo Frey waterfall.",
+          "Professional bilingual guide (Spanish / English).",
+          "Navigation insurance."
+        ],
+        "notIncludes": [
+          "Transfer to Puerto Bahía López (optional addon).",
+          "Meals and drinks.",
+          "Personal expenses."
+        ],
+        "departureTime": "10:00 hs"
+      },
+      "pt": {
+        "title": "Navegação no Brazo Tristeza e Trilha da Cascata Frey",
+        "description": "Navegue pelo incrível e selvagem fiorde Brazo Tristeza no Lago Nahuel Huapi, com caminhada guiada pela selva valdiviana até a imponente Cascata Frey.",
+        "fullDetails": "Uma expedição de meio dia partindo de Bahía López para um dos braços mais isolados e intocados do Lago Nahuel Huapi. A bordo da confortável embarcação Kaiken Patagonia, você navegará pelo Brazo Tristeza, um profundo fiorde glaciar protegido dos ventos por montanhas escarpadas, cercado por densa floresta nativa e cachoeiras.\n\nDurante o percurso, é frequente avistar condores sobrevoando os picos e contemplar as geleiras eternas do imponente Monte Tronador. Ao chegar ao final do braço, desembarcaremos para uma caminhada leve e acessível de 1.500 metros pela trilha na selva valdiviana até a grandiosa Cascata do Arroyo Frey, um cenário paradisíaco no coração da natureza patagônica. Após um tempo de contemplação e fotos, retornaremos pelo mesmo caminho para reembarcar e navegar de volta.",
+        "highlights": [
+          "Navegação panorâmica pelo fiorde glaciar Brazo Tristeza.",
+          "Vistas espetaculares de cachoeiras, encostas rochosas e avistamento de condores.",
+          "Caminhada guiada de baixo impacto pela selva valdiviana.",
+          "Visita à impressionante Cascata do Arroyo Frey.",
+          "Vista panorâmica do Monte Tronador e suas geleiras (sujeito ao clima)."
+        ],
+        "includes": [
+          "Navegação pelo fiorde glaciar na embarcação Kaiken Patagonia.",
+          "Caminhada guiada até a Cascata Frey.",
+          "Guia profissional bilíngue.",
+          "Seguro de navegação."
+        ],
+        "notIncludes": [
+          "Traslado até Puerto Bahía López (opcional).",
+          "Alimentação e bebidas.",
+          "Despesas pessoais."
+        ],
+        "departureTime": "10:00 hs"
+      }
+    }
   },
   {
     "id": "piedras-blancas",
@@ -1480,7 +2245,60 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Piedras Blancas — Sledding and Magic Carpet",
+        "description": "Enjoy a day in the snow at Piedras Blancas, one of Bariloche's most traditional winter resorts. Admission includes rides up for the sled runs and the Magic Carpet, an ideal activity to share as a family and enjoy the snow in a fun way.",
+        "fullDetails": "Piedras Blancas is a snow experience designed for those who want to enjoy winter in Bariloche in an entertaining and accessible way. The resort has runs specially prepared for sledding and areas with a Magic Carpet, a lift system that lets you comfortably get back up to the activity areas.\n\nWith your admission you will have access to the resort, four rides up for the sled runs and two rides on the Magic Carpet. It is an ideal choice for families, couples and groups who want to spend time in the snow, play, slide and enjoy the winter setting without needing to ski or snowboard.\n\nThe transfer from Bariloche can be booked as an additional service, with different round-trip time slots to fit the length of your visit.",
+        "highlights": [
+          "You will enter the Piedras Blancas winter resort.",
+          "You will enjoy four rides up for the sled runs.",
+          "You will have two rides on the Magic Carpet.",
+          "You will enjoy a snow activity ideal for sharing with family or friends.",
+          "You can add the round-trip transfer from Bariloche as an extra."
+        ],
+        "includes": [
+          "Admission to the Piedras Blancas resort.",
+          "Four sled rides up.",
+          "Two rides on the Magic Carpet."
+        ],
+        "notIncludes": [
+          "Transfer to or from the resort, unless booked as an extra.",
+          "Meals and drinks.",
+          "Snow clothing.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      },
+      "pt": {
+        "title": "Piedras Blancas — Trenós e Magic Carpet",
+        "description": "Desfrute de um dia de neve em Piedras Blancas, um dos complexos de inverno mais tradicionais de Bariloche. O ingresso inclui subidas para as pistas de trenó e para o Magic Carpet, uma proposta ideal para compartilhar em família e viver a neve de forma divertida.",
+        "fullDetails": "Piedras Blancas é uma experiência de neve pensada para quem quer aproveitar o inverno em Bariloche de uma maneira divertida e acessível. O complexo conta com pistas especialmente preparadas para descer de trenó e setores com Magic Carpet, um sistema de subida que permite voltar com conforto às áreas de atividade.\n\nCom o ingresso você terá acesso ao complexo, quatro subidas para as pistas de trenó e duas subidas no Magic Carpet. É uma proposta ideal para famílias, casais e grupos que desejam passar tempo na neve, brincar, deslizar e aproveitar o cenário invernal sem precisar praticar esqui ou snowboard.\n\nO traslado desde Bariloche pode ser contratado como serviço adicional, com diferentes faixas de horário de ida e volta para se adaptar à duração da sua visita.",
+        "highlights": [
+          "Você entrará no complexo de inverno Piedras Blancas.",
+          "Você aproveitará quatro subidas para as pistas de trenó.",
+          "Você terá duas subidas no Magic Carpet.",
+          "Você viverá uma atividade de neve ideal para compartilhar em família ou com amigos.",
+          "Você poderá acrescentar o traslado de ida e volta desde Bariloche como adicional."
+        ],
+        "includes": [
+          "Ingresso no complexo Piedras Blancas.",
+          "Quatro subidas para trenó.",
+          "Duas subidas no Magic Carpet."
+        ],
+        "notIncludes": [
+          "Traslado de ou para o complexo, salvo se contratado como adicional.",
+          "Refeições e bebidas.",
+          "Roupa de neve.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      }
+    }
   },
   {
     "id": "puerto-blest-y-cascada-de-los-cantaros",
@@ -1610,19 +2428,82 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {},
+    "translations": {
+      "en": {
+        "title": "Puerto Blest and Los Cántaros Waterfall",
+        "description": "Sail across Nahuel Huapi Lake to Puerto Blest, one of the greenest and most spectacular corners of the National Park. Discover Los Cántaros Waterfall along forest trails and, optionally, add a boat trip on the emerald waters of Frías Lake.",
+        "fullDetails": "Puerto Blest and Los Cántaros Waterfall is a full-day lake excursion that invites you to discover one of the dampest, greenest and most surprising areas of Nahuel Huapi National Park. The experience begins with a boat trip from Puerto Pañuelo along the Blest arm of Nahuel Huapi Lake, surrounded by mountains, native forests and Patagonian landscapes.\n\nThe first landing is at Puerto Blest, a place of great natural beauty at the foot of the Andes Mountains. There you will have time to explore the area, enjoy the surroundings and appreciate the vegetation characteristic of this region.\n\nThe excursion continues to Los Cántaros Waterfall, where a forest trail runs alongside the stream that feeds the falls. During the walk you will see several cascades, native vegetation and views of the lake, until you reach the main section of the waterfall. The route includes stretches with stairs and moderate elevation changes.\n\nOptionally, you can add a boat trip on Frías Lake, known for the turquoise color of its waters, which comes from the glacial sediments of Cerro Tronador. An ideal experience that combines boating, forest, waterfalls and mountain scenery in an unforgettable day.",
+        "highlights": [
+          "You will sail on the Blest arm of Nahuel Huapi Lake.",
+          "You will disembark at Puerto Blest, at the foot of the Andes Mountains.",
+          "You will walk trails surrounded by native vegetation.",
+          "You will visit Los Cántaros Waterfall and its several cascades.",
+          "You will enjoy views of lakes, forests and mountains.",
+          "You can optionally add a boat trip on Frías Lake."
+        ],
+        "includes": [
+          "Boat trip on Nahuel Huapi Lake to Puerto Blest.",
+          "Visit to Puerto Blest.",
+          "Visit to Los Cántaros Waterfall.",
+          "Guide during the excursion.",
+          "Walk on open trails."
+        ],
+        "notIncludes": [
+          "Transfer to or from the hotel, unless specifically booked.",
+          "Entrance to Nahuel Huapi National Park.",
+          "Boarding fee.",
+          "Boat trip on Frías Lake.",
+          "Meals and drinks.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      },
+      "pt": {
+        "title": "Puerto Blest e Cascata de Los Cántaros",
+        "description": "Navegue pelo Lago Nahuel Huapi até Puerto Blest, um dos cantos mais verdes e espetaculares do Parque Nacional. Descubra a Cascata de Los Cántaros entre trilhas de bosque e acrescente, opcionalmente, a navegação pelas águas cor de esmeralda do Lago Frías.",
+        "fullDetails": "Puerto Blest e Cascata de Los Cántaros é uma excursão lacustre de dia inteiro que convida a descobrir um dos setores mais úmidos, verdes e surpreendentes do Parque Nacional Nahuel Huapi. A experiência começa com uma navegação a partir de Puerto Pañuelo pelo braço Blest do Lago Nahuel Huapi, cercado de montanhas, bosques nativos e paisagens patagônicas.\n\nO primeiro desembarque é feito em Puerto Blest, um lugar de grande beleza natural situado ao pé da Cordilheira dos Andes. Ali você terá tempo para percorrer a área, aproveitar o entorno e apreciar a vegetação característica desta região.\n\nA excursão continua até a Cascata de Los Cántaros, onde uma trilha de bosque conduz ao lado do riacho que alimenta a cascata. Durante a caminhada você poderá observar diferentes quedas d'água, vegetação nativa e vistas do lago, até chegar ao setor principal da cascata. O percurso inclui trechos com escadas e desnível moderado.\n\nOpcionalmente, você poderá acrescentar uma navegação pelo Lago Frías, reconhecido pela cor turquesa de suas águas, originada nos sedimentos das geleiras do Cerro Tronador. Uma experiência ideal para combinar navegação, bosque, cascatas e paisagens de montanha em um dia inesquecível.",
+        "highlights": [
+          "Você navegará pelo braço Blest do Lago Nahuel Huapi.",
+          "Você desembarcará em Puerto Blest, ao pé da Cordilheira dos Andes.",
+          "Você percorrerá trilhas cercadas de vegetação nativa.",
+          "Você visitará a Cascata de Los Cántaros e suas diferentes quedas d'água.",
+          "Você aproveitará vistas de lagos, bosques e montanhas.",
+          "Você poderá acrescentar opcionalmente a navegação pelo Lago Frías."
+        ],
+        "includes": [
+          "Navegação pelo Lago Nahuel Huapi até Puerto Blest.",
+          "Visita a Puerto Blest.",
+          "Visita à Cascata de Los Cántaros.",
+          "Guia durante a excursão.",
+          "Caminhada por trilhas liberadas."
+        ],
+        "notIncludes": [
+          "Traslado de ou para o hotel, salvo se contratado expressamente.",
+          "Entrada no Parque Nacional Nahuel Huapi.",
+          "Taxa de embarque.",
+          "Navegação pelo Lago Frías.",
+          "Refeições e bebidas.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      }
+    },
     "priceChild": 92000,
     "childAgePolicy": "Menores y Jubilados (hasta 4 años sin cargo)"
   },
   {
     "id": "rafting-rio-manso-al-limite",
-    "title": "Rafting Rio Manso \" Al Limite\"",
+    "title": "Rafting Río Manso \"Al Límite\" (Clase III-IV)",
     "category": "Aventura",
     "season": "Todo el Año",
     "duration": "Día Completo (8h)",
     "difficulty": "Moderado",
     "image": "/images/excursiones/rafting-rio-manso-al-limite.webp",
-    "description": "Pura Adrenalina en los ríos de montaña, si buscas acción no te la podes perder!!!",
+    "description": "Pura adrenalina en los rápidos del río Manso Inferior hasta el hito fronterizo con Chile. ¡La máxima aventura de montaña!",
     "fullDetails": "Excursión de Todo el día Salida 08:30 hs Regreso 18:30 hs Nivel de Dificultad: Grado III – IV ( Medio /Alto) Este paseo se inicia en el hotel, con un traslado hacia el sur de Bariloche , de 60 kmts aproximadamente hasta el Valle del Manso Al llegar tomaremos un desayuno (Tostadas, café, té etc.), tendremos la charla técnica y luego de equiparnos, comienza la aventura!! Navegaremos 12km. por la sección del Manso inferior con rápidos potentes y emocionantes! Durante el recorrido podrás disfrutar de la belleza del cañón del Manso atravesando el cañón de terciopelo y 9 rápidos espectaculares, que nos harán sentir la fuerza de los rápidos, luego de unas 2hs. de navegación llegaremos al hito fronterizo con Chile, donde nos esperan para trasladarnos de regreso al punto de partida, donde podremos almorzar y disfrutar de las costas de este maravilloso rio. Al atardecer regresamos a Bariloche.",
     "highlights": [
       "Traslado al Rio Manso",
@@ -1634,11 +2515,11 @@ export const EXCURSIONS_DATA: Excursion[] = [
       "Guías Bilingües"
     ],
     "includes": [
-      "Valor del Paseo $150.000 .- por persona",
-      "Traslados",
-      "Equipamiento",
-      "Guías Bilingües",
-      "Navegación"
+      "Traslados ida y vuelta desde Bariloche",
+      "Desayuno de bienvenida",
+      "Equipamiento térmico completo",
+      "Guías bilingües certificados",
+      "Navegación de 12 km por rápidos clase III y IV"
     ],
     "notIncludes": [
       "Almuerzo",
@@ -1709,17 +2590,66 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Manso River Rafting to the Border — Class III-IV (To the Limit)",
+        "description": "The ultimate whitewater rafting adventure in Patagonia: tackle Class III and IV rapids through deep granite canyons all the way to the border with Chile.",
+        "fullDetails": "For thrill-seekers looking for maximum adrenaline, Manso River 'Al Límite' offers the most intense and breathtaking whitewater rafting in Northern Patagonia. The journey begins with a 60 km scenic drive south of Bariloche through Nahuel Huapi National Park to the lush Manso Valley.\n\nAfter a hearty energizing breakfast and a comprehensive safety briefing, gear up in professional thermal wetsuits, life vests, and helmets. Launch onto the Lower Manso River for an exhilarating 12 km descent through 9 thunderous Class III and IV rapids, including the spectacular Velvet Canyon. The thrilling descent culminates right at the international border milestone between Argentina and Chile. Vehicles will be waiting to take you back to the riverside base for a well-deserved lunch before returning to Bariloche.",
+        "highlights": [
+          "12 km of intense whitewater rafting on Class III and IV rapids.",
+          "Navigate through the awe-inspiring Manso Canyon and Velvet Gorge.",
+          "Paddle all the way to the international border milestone with Chile.",
+          "Includes morning breakfast and full professional cold-water river gear.",
+          "Led by certified international whitewater river guides (IRF)."
+        ],
+        "includes": [
+          "Round-trip transfers from central Bariloche.",
+          "Complete technical rafting gear (wetsuit, windbreaker, neoprene boots, helmet, life vest).",
+          "Welcome breakfast at the river base.",
+          "Professional certified bilingual whitewater guides and safety kayaker.",
+          "Safety briefing and 2 hours on the river."
+        ],
+        "notIncludes": [
+          "Riverside lunch (available for purchase or bring packed lunch).",
+          "Souvenir photo/video package."
+        ],
+        "departureTime": "08:30 hs"
+      },
+      "pt": {
+        "title": "Rafting no Rio Manso até a Fronteira — Classe III-IV (Ao Limite)",
+        "description": "A aventura definitiva de águas bravas na Patagônia: enfrente corredeiras emocionantes de Classe III e IV através de cânions até a fronteira com o Chile.",
+        "fullDetails": "Se você busca adrenalina pura e esportes de aventura em cenários intocados, o Rafting no Rio Manso 'Al Límite' é a experiência mais intensa da região. Partindo do hotel rumo ao sul de Bariloche, viajaremos 60 km pelo Parque Nacional até o pitoresco Vale do Rio Manso.\n\nNa base, desfrutaremos de um café da manhã revigorante antes de receber as instruções técnicas de remada e segurança. Equipados com roupas de neoprene, capacetes e coletes homologados, iniciaremos uma descida de 12 km pelo trecho inferior do rio, vencendo 9 corredeiras potentes de Classe III e IV e atravessando o deslumbrante Cânion de Veludo. A aventura termina no marco fronteiriço com o Chile, onde os veículos estarão aguardando para nos levar de volta à base à beira do rio.",
+        "highlights": [
+          "12 km de pura adrenalina navegando corredeiras de Classe III e IV.",
+          "Travessia pelo impressionante Cânion do Manso e Garganta de Veludo.",
+          "Chegada ao marco fronteiriço internacional entre Argentina e Chile.",
+          "Café da manhã de boas-vindas e equipamento térmico profissional incluídos.",
+          "Guias experientes e caiaque de segurança em todo o percurso."
+        ],
+        "includes": [
+          "Traslados ida e volta a partir de Bariloche.",
+          "Equipamento térmico completo (roupa de neoprene, bota, jaqueta corta-vento, colete e capacete).",
+          "Café da manhã na base do rio.",
+          "Descida guiada de rafting com guias bilíngues certificados.",
+          "Acompanhamento de caiaquista de resgate e segurança."
+        ],
+        "notIncludes": [
+          "Almoço pós-rafting.",
+          "Serviço de foto e vídeo."
+        ],
+        "departureTime": "08:30 hs"
+      }
+    }
   },
   {
     "id": "rafting-rio-manso-desde-villegas",
-    "title": "Rafting Rio Manso desde Villegas \"",
+    "title": "Rafting Río Manso desde Villegas (Clase II-III)",
     "category": "Aventura",
     "season": "Todo el Año",
     "duration": "Día Completo (8h)",
     "difficulty": "Moderado",
     "image": "/images/excursiones/rafting-rio-manso-desde-villegas.webp",
-    "description": "Es la excursión de Rafting más divertida para todas las edades !!!",
+    "description": "La excursión de rafting más divertida y accesible para todas las edades: aguas cristalinas, playas de arena y emocionantes rápidos en el Valle del Manso.",
     "fullDetails": "Excursión de Todo el día Salida 9:00-14:00 o 11:30-17:00Nivel de Dificultad: Grado II – III (Bajo /Medio) Partiendo desde Bariloche nos dirigimos por la ruta 40 hacia el sur hasta llegar al Paraje Villegas. Este recorrido implica 70 km aproximadamente de ruta asfaltada, trayecto en el que podrás ir disfrutando del paisaje de lagos y montañas.Al llegar al paraje será necesario desviarse por camino de ripio durante 1,5km hasta el punto de embarque. Allí los guías te proveerán del equipamiento necesario para realizar la excursión. Una vez equipado recibirás las instrucciones y la charla de seguridad para luego subirte a la balsa donde comienza la diversión!Banda de Billar, Diente de Hipopótamo, Montaña Rusa y Roca Magnética son algunos de los rápidos que navegaremos durante los 6 km de recorrido.\nEl escenario que nos rodeara es fascinante: aguas cristalinas, pozones, bosques frondosos, montañas….\nAl llegar al valle del Manso Inferior finalizaremos la navegación desembarcando en el campo de la Familia Lanfré donde podrás secarte y cambiarte antes de compartir un refrigerio. Finalmente emprenderemos el regreso a Bariloche con una nueva anécdota de vacaciones.",
     "highlights": [
       "Valor $95.000.- por persona",
@@ -1729,10 +2659,11 @@ export const EXCURSIONS_DATA: Excursion[] = [
       "Rafting por el rio Manso"
     ],
     "includes": [
-      "Traslados",
-      "Equipamiento",
-      "Guías Bilingües",
-      "Navegación"
+      "Traslados ida y vuelta desde Bariloche",
+      "Equipamiento térmico completo",
+      "Guías bilingües certificados",
+      "Navegación de 6 km por rápidos clase II y III",
+      "Refrigerio de campo"
     ],
     "notIncludes": [
       "Servicio  Fotografía"
@@ -1798,7 +2729,56 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Manso River Rafting from Villegas — Class II-III (Family Fun)",
+        "description": "The most popular and enjoyable rafting trip for all ages: crystal-clear waters, splashy Class II-III rapids, and scenic mountain beaches in the Manso Valley.",
+        "fullDetails": "Enjoy a fun-filled day of gentle thrills and stunning Patagonian scenery, perfect for families, couples, and first-time rafters. Travel south from Bariloche along iconic Route 40, enjoying vistas of Lake Gutiérrez, Lake Mascardi, and the Andes until reaching Paraje Villegas in the Manso Valley.\n\nAfter gearing up with neoprene suits and life vests, listen to a friendly safety talk before boarding the rafts. Paddle along 6 km of crystal-clear river, navigating lively Class II and III rapids with whimsical names like 'Banda de Billar', 'Diente de Hipopótamo', and 'Montaña Rusa'. In between rapids, relax as you float past white-pebble beaches and emerald swimming pools surrounded by lush native forests. The journey ends at the Lanfré family estancia, where warm changing rooms and a snack await before heading back to Bariloche.",
+        "highlights": [
+          "6 km of fun, accessible rafting on Class II and III rapids.",
+          "Perfect for beginners, children, families, and mixed groups.",
+          "Crystal-clear mountain waters and scenic swimming spots in summer.",
+          "Scenic drive along Route 40 and through Nahuel Huapi National Park.",
+          "Changing facilities and post-tour snack at an authentic Patagonian ranch."
+        ],
+        "includes": [
+          "Round-trip transfers from Bariloche.",
+          "Complete rafting gear (neoprene suit, boots, life vest, helmet).",
+          "Certified bilingual guides and safety instructions.",
+          "6 km river descent with support crew.",
+          "Post-tour snack at the ranch."
+        ],
+        "notIncludes": [
+          "Professional photo service.",
+          "Personal expenses."
+        ],
+        "departureTime": "09:00 hs"
+      },
+      "pt": {
+        "title": "Rafting no Rio Manso a partir de Villegas — Classe II-III (Familiar)",
+        "description": "A descida de rafting mais divertida e acessível para todas as idades: águas cristalinas, corredeiras Classe II-III e paisagens deslumbrantes no Vale do Manso.",
+        "fullDetails": "Uma aventura ideal para famílias, crianças e quem deseja vivenciar a emoção do rafting em um ritmo seguro, divertido e cercado pela exuberante natureza patagônica. Saindo de Bariloche pela famosa Rota 40 sul, contornaremos os lagos Gutiérrez e Mascardi até chegar ao Paraje Villegas, no Vale do Rio Manso.\n\nApós vestir o equipamento térmico e receber as orientações da equipe de guias, embarcaremos nos botes para uma descida de 6 km. Você se divertirá com corredeiras animadas de Classe II e III como 'Montanha-Russa', 'Dente de Hipopótamo' e 'Pedra Magnética', intercaladas com trechos calmos de águas esmeraldas perfeitas para fotos e banho nos dias quentes. A navegação termina na histórica fazenda da Família Lanfré, com vestiários para troca de roupa e um lanche antes do retorno a Bariloche.",
+        "highlights": [
+          "6 km de navegação em corredeiras divertidas de Classe II e III.",
+          "Acessível para crianças a partir de 5 anos, iniciantes e famílias.",
+          "Águas límpidas, piscinas naturais e praias de montanha.",
+          "Trajeto panorâmico pela Rota 40 através do Parque Nacional.",
+          "Vestiários confortáveis e lanche campestre ao término do passeio."
+        ],
+        "includes": [
+          "Traslados ida e volta a partir de Bariloche.",
+          "Equipamento completo de neoprene, colete salva-vidas e capacete.",
+          "Guias profissionais bilíngues certificados.",
+          "Navegação com apoio e segurança na água.",
+          "Lanche campestre de encerramento."
+        ],
+        "notIncludes": [
+          "Serviço de fotos profissionais.",
+          "Despesas pessoais."
+        ],
+        "departureTime": "09:00 hs"
+      }
+    }
   },
   {
     "id": "ski-nordico",
@@ -1894,17 +2874,68 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Nordic Ski Day at Cerro Otto",
+        "description": "Discover cross-country skiing in a snowy forest setting, just a few kilometers from downtown Bariloche. Receive a group lesson, full equipment and access to the trails to enjoy a different day on the snow.",
+        "fullDetails": "Enjoy a different winter experience at the Nordic Ski Center, located on Cerro Otto, just 6 km from downtown Bariloche. This activity lets you get started with, or simply enjoy, cross-country skiing, a discipline that allows you to travel over flat terrain as well as gentle climbs and descents.\n\nUpon arrival, you will receive the full equipment — skis, boots and poles — and take part in a group lesson with an instructor. Over approximately 1 hour and 15 minutes you will learn the basic techniques, how to handle the equipment and the fundamentals needed to move safely on the snow.\n\nAfter the lesson, you can continue exploring the groomed trails until 5:00 p.m. The circuit runs through a lenga forest and offers spaces to connect with the winter landscape of Cerro Otto. It is an ideal activity to do with family, friends or as a couple, both for those trying this discipline for the first time and for those who want to keep practicing it.",
+        "highlights": [
+          "You will learn the basics of cross-country skiing with an instructor.",
+          "You will receive the full equipment for the activity.",
+          "You will travel groomed trails through snowy forests.",
+          "You will keep enjoying the trails after the lesson, until 5:00 p.m."
+        ],
+        "includes": [
+          "Nordic ski equipment: skis, boots and poles.",
+          "Group lesson with an instructor of approximately 1 hour and 15 minutes.",
+          "Trail access until 5:00 p.m."
+        ],
+        "notIncludes": [
+          "Transfer to the Nordic Ski Center.",
+          "Snow clothing.",
+          "Lockers.",
+          "Photography service.",
+          "Meals and drinks.",
+          "Personal expenses."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      },
+      "pt": {
+        "title": "Dia de Esqui Nórdico no Cerro Otto",
+        "description": "Descubra o esqui cross-country em um cenário de bosque nevado, a poucos quilômetros do centro de Bariloche. Receba uma aula em grupo, o equipamento completo e acesso às pistas para desfrutar de um dia diferente na neve.",
+        "fullDetails": "Viva uma experiência de inverno diferente no Centro de Esqui Nórdico, localizado no Cerro Otto, a apenas 6 km do centro de Bariloche. Esta atividade propõe iniciar-se ou desfrutar do esqui cross-country, uma modalidade que permite se deslocar tanto em terrenos planos quanto em subidas e descidas suaves.\n\nAo chegar, você receberá o equipamento completo — esquis, botas e bastões — e participará de uma aula em grupo com instrutor. Durante aproximadamente 1 hora e 15 minutos você aprenderá as técnicas iniciais, o manuseio do equipamento e as noções necessárias para se deslocar com segurança na neve.\n\nApós a aula, você poderá continuar percorrendo as pistas preparadas até as 17h. O circuito atravessa um bosque de lengas e oferece espaços para se conectar com a paisagem invernal do Cerro Otto. É uma proposta ideal para fazer em família, com amigos ou a dois, tanto para quem se aproxima desta modalidade pela primeira vez quanto para quem deseja continuar praticando.",
+        "highlights": [
+          "Você aprenderá os fundamentos do esqui cross-country com um instrutor.",
+          "Você receberá o equipamento completo para realizar a atividade.",
+          "Você percorrerá pistas traçadas entre bosques nevados.",
+          "Você continuará aproveitando as pistas depois da aula, até as 17h."
+        ],
+        "includes": [
+          "Equipamento de esqui nórdico: esquis, botas e bastões.",
+          "Aula em grupo com instrutor de aproximadamente 1 hora e 15 minutos.",
+          "Direito de uso das pistas até as 17h."
+        ],
+        "notIncludes": [
+          "Traslado até o Centro de Esqui Nórdico.",
+          "Roupa de neve.",
+          "Armários (lockers).",
+          "Serviço de fotografia.",
+          "Refeições e bebidas.",
+          "Despesas pessoais."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      }
+    }
   },
   {
     "id": "teleferico-cerro-otto",
-    "title": "Teleferico Cerro Otto",
+    "title": "Teleférico Cerro Otto y Confitería Giratoria",
     "category": "Tradicional",
     "season": "Todo el Año",
     "duration": "Día Completo (8h)",
     "difficulty": "Fácil",
     "image": "/images/excursiones/teleferico-cerro-otto.webp",
-    "description": "En Complejo Turístico Teleférico Cerro Otto los amantes de la naturaleza encontrarán incontables razones para pasar un día inolvidable.\nDiversión, Aventura, Naturaleza y Cultura para Todos.",
+    "description": "Ascenso en teleférico panorámico hasta los 1.405 msnm y acceso a la famosa confitería giratoria con vistas 360° de Bariloche y los lagos.",
     "fullDetails": "Confitería Giratoria:\nA 1.405 metros de altura s.n.m., la exclusiva Confitería gira en un radio de 360° en un tiempo de 20 o 40 minutos (sus dos velocidades pre establecidas) y a una velocidad casi imperceptible, mientras los pasajeros degustan alguna de las variadas opciones gastronómicas, al tiempo que se maravillan con una postal única y fascinante de todo el Parque Nacional Nahuel Huapi. Lleno de incomparables tesoros para los sentidos, el lugar ofrece a los visitantes imponentes espectáculos naturales los 365 días del año. Cada estación con su encanto particular y variadas actividades para la familia, convierten a este complejo en la excursión tradicional por excelencia de San Carlos de Bariloche.\nMontañas; lagos; bosques y cielos increíbles hacen de este lugar un verdadero paraíso terrenal.Sus actividades, diferentes según la época del año, permiten además divertirse en perfecta armonía con la naturaleza.\nTeleférico:\nAscenso confortable en cualquier época\nEstación Inferior: a 800 m.s.n.m., en el km 5,000 de Av. De los Pioneros.\nEstación Superior: a 1.405 m.s.n.m., en la cima del Cerro Otto. Este medio de elevación cubre el recorrido desde la Estación Inferior (a 800 m.s.n.m.), hasta la Estación Superior, ubicada en la cima del Cerro Otto (a 1.405 m.s.n.m.), sobre una distancia de 2.100 m., a una velocidad de 3 m./segundo aproximadamente, pudiendo transportar hasta 500 pasajeros/hora. Incomparables imágenes del entorno natural y del Lago Nahuel Huapi\nEl Deck Panorámico es uno de los espacios más visitados por los turistas, ya que desde el mismo se cuenta con una espectacular vista hacia el sector sur del lago Nahuel Huapi, la estepa patagónica, los cerros Ñireco, Carbón y Ventana y a toda la ciudad de San Carlos de Bariloche, en su mejor imagen. Actividades: \nEn Teleférico Cerro Otto se puede disfrutar de distintas actividades tanto en el interior como en el exterior, muchas de ellas con el ticket de ascenso/descenso. En el Interior: Exclusiva Confitería Giratoria, donde degustar exquisita gastronomía durante todo el día; \nGalería de Arte con calcos exactos en tamaño original de las tres obras más importantes del artista italiano M.A. Buonarroti: El David, La Piedad y El Moisés; Otto House Music: Disco y Microcine, en donde se vive la noche más divertida pero de día y en la que se proyectan distintos documentales de la región, sobre la historia de Teleférico Cerro Otto y su propietaria la Fundación Sara María Furman; vistosos locales de Merchandising y Regionales.Rincón Homenaje al creador de esta gran obra: Don Boris Furman. En el Exterior: Pistas de trineos para deslizarse por la pendiente de la montaña en época invernal, o en vistosos inflables (Otto Kart) el resto del año; Funicular de la Cumbre, único medio de transporte en la cima de la montaña; Caminatas con raquetas para nieve o trekking cuando la nieve se retira; Circuito Otto:  Puente Colgante, Laberinto del Bosque, Cabaña de los Espejos Deformantes y caminata guiada; Deck y Terrazas Panorámicas donde poder disfrutar de las espectaculares vistas del entorno  natural.",
     "highlights": [
       "Traslados desde el centro de la ciudad",
@@ -1914,8 +2945,10 @@ export const EXCURSIONS_DATA: Excursion[] = [
       "Actividades opcionales en la cumbre"
     ],
     "includes": [
-      "Traslado sin cargo",
-      "Ascenso en Teleférico"
+      "Traslado de cortesía desde el centro de Bariloche cada 40 minutos",
+      "Pase ida y vuelta en Teleférico (ascenso y descenso)",
+      "Acceso a la Confitería Giratoria",
+      "Acceso a la Galería de Arte con réplicas de Miguel Ángel"
     ],
     "notIncludes": [
       "Actividades opcionales en la cumbre",
@@ -1982,7 +3015,54 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {},
+    "translations": {
+      "en": {
+        "title": "Cerro Otto Cable Car & Rotating Cafeteria",
+        "description": "Ascend Cerro Otto in panoramic cable cars to 1,405 meters above sea level and enjoy 360-degree views from Bariloche’s iconic rotating cafeteria and art gallery.",
+        "fullDetails": "One of Bariloche's most classic and accessible excursions, located just 5 km from downtown. Board panoramic red gondolas at the base station and gently glide upward for 12 minutes over native cypress and lenga forests to the summit at 1,405 meters.\n\nAt the summit complex, enter the famous Rotating Cafeteria, which turns a full 360 degrees every 20 or 40 minutes, allowing you to admire Lake Nahuel Huapi, the city of Bariloche, Lake Gutiérrez, and the towering Andes while enjoying hot chocolate, regional pastries, or a light lunch. The complex also features an art gallery with exact cast replicas of Michelangelo's masterpieces (David, Pietà, and Moses), panoramic outdoor decks, and seasonal mountain activities.",
+        "highlights": [
+          "Panoramic cable car ride to 1,405 meters altitude.",
+          "World-famous Rotating Cafeteria with continuous 360-degree views.",
+          "Breathtaking lookouts over Lake Nahuel Huapi, Bariloche, and the Andes.",
+          "Art Gallery featuring exact full-scale replicas of Michelangelo’s sculptures.",
+          "Complimentary shuttle service from downtown Bariloche every 40 minutes."
+        ],
+        "includes": [
+          "Round-trip shuttle transfer from downtown Bariloche.",
+          "Round-trip Cable Car ascent and descent tickets.",
+          "Admission to the summit complex and Rotating Cafeteria.",
+          "Access to the Michelangelo Art Gallery."
+        ],
+        "notIncludes": [
+          "Food and drinks at the rotating cafeteria.",
+          "Optional summit activities (Otto Kart, snowshoeing in winter, ziplines)."
+        ],
+        "departureTime": "10:00 hs"
+      },
+      "pt": {
+        "title": "Teleférico Cerro Otto e Confeitaria Giratória",
+        "description": "Suba a 1.405 metros de altitude em gôndolas panorâmicas e desfrute de vistas 360° da famosa Confeitaria Giratória e galeria de arte de Bariloche.",
+        "fullDetails": "Um dos passeios mais tradicionais e encantadores de Bariloche, localizado a apenas 5 km do centro cívico. Na estação base, embarque nas famosas gôndolas vermelhas para uma subida suave e panorâmica de 12 minutos sobre florestas nativas até o cume do Cerro Otto, a 1.405 metros de altitude.\n\nNo topo, o destaque é a icônica Confeitaria Giratória, que completa uma volta lenta de 360 graus a cada 20 ou 40 minutos, permitindo apreciar o Lago Nahuel Huapi, a cidade de Bariloche, o Lago Gutiérrez e as cordilheiras andinas enquanto saboreia um chocolate quente ou delícias regionais. O complexo conta ainda com uma Galeria de Arte com réplicas exatas das esculturas de Michelangelo (David, Pietà e Moisés), mirantes ao ar livre e trilhas na montanha.",
+        "highlights": [
+          "Subida panorâmica de teleférico até 1.405 metros de altitude.",
+          "Acesso à famosa Confeitaria Giratória com vistas panorâmicas em 360°.",
+          "Mirantes espetaculares para o Lago Nahuel Huapi, Bariloche e a Cordilheira.",
+          "Galeria de arte com réplicas em tamanho real das obras de Michelangelo.",
+          "Traslado de cortesia partindo do centro de Bariloche a cada 40 minutos."
+        ],
+        "includes": [
+          "Traslado de cortesia ida e volta a partir do centro da cidade.",
+          "Passagem de ida e volta no Teleférico (subida e descida).",
+          "Acesso ao complexo do cume e à Confeitaria Giratória.",
+          "Entrada na Galeria de Arte Michelangelo."
+        ],
+        "notIncludes": [
+          "Consumo de alimentos e bebidas na confeitaria.",
+          "Atividades opcionais no topo (bóias Otto Kart, trilhas guiadas)."
+        ],
+        "departureTime": "10:00 hs"
+      }
+    },
     "priceChild": 30000,
     "childAgePolicy": "Menores hasta 12 años y mayores de 65 años"
   },
@@ -2076,7 +3156,50 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Sailing on Nahuel Huapi Lake (El Orgulloso)",
+        "description": "Sail the waters of Nahuel Huapi Lake and discover Bariloche from a different perspective. A relaxed experience that combines scenery, sailing and an afternoon snack on board.",
+        "fullDetails": "Enjoy a sailing experience from Puerto Petunia, on the waters of Nahuel Huapi Lake. The trip follows the Campanario Arm, along the San Pedro peninsula, with open views toward the Andes Mountains.\n\nFor two hours, the sailboat travels through areas of open lake and calm bays, always according to weather conditions. The route lets you appreciate the natural setting of the Bariloche shoreline, the forests surrounding the lake and various scenic points in the area.\n\nDuring a pause in the sailing, you will enjoy an afternoon snack on board. It is an ideal choice for those looking to experience Nahuel Huapi in a different, relaxed way, close to nature.",
+        "highlights": [
+          "You will sail on Nahuel Huapi Lake.",
+          "You will travel along the Campanario Arm.",
+          "You will enjoy views of the San Pedro peninsula and the Andean surroundings.",
+          "You will pause to share an afternoon snack on board."
+        ],
+        "includes": [
+          "Sailing on Nahuel Huapi Lake.",
+          "Professional crew.",
+          "Afternoon snack on board."
+        ],
+        "notIncludes": [
+          "Transfer to Puerto Petunia.",
+          "Personal expenses."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      },
+      "pt": {
+        "title": "Navegação de Veleiro pelo Lago Nahuel Huapi (El Orgulloso)",
+        "description": "Navegue pelas águas do Lago Nahuel Huapi de veleiro e descubra Bariloche a partir de uma perspectiva diferente. Uma experiência tranquila que combina paisagens, navegação e um lanche a bordo.",
+        "fullDetails": "Viva uma experiência de navegação a vela a partir de Puerto Petunia, sobre as águas do Lago Nahuel Huapi. A travessia percorre o Brazo Campanario, margeando a península de San Pedro e desfrutando de vistas abertas para a Cordilheira dos Andes.\n\nDurante duas horas, o veleiro navega por trechos de lago aberto e baías tranquilas, sempre de acordo com as condições climáticas. O percurso permite apreciar o entorno natural da costa de Bariloche, os bosques que cercam o lago e diferentes pontos panorâmicos da região.\n\nEm uma pausa da navegação, você desfrutará de um lanche a bordo. É uma proposta ideal para quem busca conhecer o Nahuel Huapi de uma forma diferente, relaxada e próxima da natureza.",
+        "highlights": [
+          "Você navegará a vela pelo Lago Nahuel Huapi.",
+          "Você percorrerá o Brazo Campanario.",
+          "Você aproveitará vistas da península de San Pedro e do entorno andino.",
+          "Você fará uma pausa para compartilhar um lanche a bordo."
+        ],
+        "includes": [
+          "Navegação de veleiro pelo Lago Nahuel Huapi.",
+          "Tripulação profissional.",
+          "Lanche a bordo."
+        ],
+        "notIncludes": [
+          "Traslado até Puerto Petunia.",
+          "Despesas pessoais."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      }
+    }
   },
   {
     "id": "villa-la-angostura-y-cerro-bayo",
@@ -2183,17 +3306,74 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Villa La Angostura and Cerro Bayo",
+        "description": "Discover Villa La Angostura, one of the most charming mountain villages in Patagonia, and explore the landscapes of Cerro Bayo. A full-day excursion among lakes, forests, Andean architecture and unforgettable views of the mountain range.",
+        "fullDetails": "Villa La Angostura and Cerro Bayo is a full-day excursion that combines Patagonian landscapes, mountain villages and views of the Andes Mountains. The route leaves Bariloche on National Route 40, following Nahuel Huapi Lake and passing through native forest and mountain settings.\n\nUpon arriving in Villa La Angostura, you will have time to explore its center, known for its architecture, shops, dining and relaxed atmosphere. The town is surrounded by lakes, forests and mountains, making it one of the most attractive destinations in the region.\n\nThe tour continues to Cerro Bayo, the ski resort of Villa La Angostura. There you can enjoy the surroundings, take in the views of Nahuel Huapi Lake and the mountain range, and choose to ride the available lifts.\n\nIt is an ideal choice for those who want to discover the beauty of Villa La Angostura and have a mountain experience during their stay in Bariloche.",
+        "highlights": [
+          "You will travel along National Route 40 beside Nahuel Huapi Lake.",
+          "You will see Villa La Angostura and its mountain architecture.",
+          "You will have free time to stroll through the town center and enjoy its shops and dining.",
+          "You will visit Cerro Bayo, one of the best-known ski resorts in the region.",
+          "You will enjoy landscapes of lakes, forests and mountains.",
+          "You can optionally ride the available lifts."
+        ],
+        "includes": [
+          "Round-trip transfer from Bariloche.",
+          "Tour guide.",
+          "Visit to Villa La Angostura.",
+          "Free time in the town center.",
+          "Visit to the Cerro Bayo area."
+        ],
+        "notIncludes": [
+          "Lift rides at Cerro Bayo.",
+          "Meals and drinks.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      },
+      "pt": {
+        "title": "Villa La Angostura e Cerro Bayo",
+        "description": "Conheça Villa La Angostura, um dos povoados de montanha mais encantadores da Patagônia, e descubra as paisagens do Cerro Bayo. Uma excursão de dia inteiro entre lagos, bosques, arquitetura andina e vistas inesquecíveis da Cordilheira.",
+        "fullDetails": "Villa La Angostura e Cerro Bayo é uma excursão de dia inteiro que combina paisagens patagônicas, povoados de montanha e vistas da Cordilheira dos Andes. O percurso parte de Bariloche pela Rota Nacional 40, margeando o Lago Nahuel Huapi e atravessando cenários de bosque nativo e montanha.\n\nAo chegar a Villa La Angostura, você terá tempo para conhecer seu centro, reconhecido por sua arquitetura, seus comércios, sua gastronomia e seu ambiente tranquilo. A localidade é cercada de lagos, bosques e montanhas, o que a torna um dos destinos mais atraentes da região.\n\nO passeio continua até o Cerro Bayo, o centro de esqui de Villa La Angostura. Ali você poderá aproveitar o entorno, contemplar as vistas para o Lago Nahuel Huapi e a Cordilheira, e optar por subir nos meios de elevação em funcionamento.\n\nÉ uma proposta ideal para quem deseja descobrir a beleza de Villa La Angostura e viver uma experiência de montanha durante sua estadia em Bariloche.",
+        "highlights": [
+          "Você percorrerá a Rota Nacional 40 ao lado do Lago Nahuel Huapi.",
+          "Você conhecerá Villa La Angostura e sua arquitetura de montanha.",
+          "Você terá tempo livre para caminhar pelo centro e aproveitar seus comércios ou sua gastronomia.",
+          "Você visitará o Cerro Bayo, um dos centros de esqui mais reconhecidos da região.",
+          "Você aproveitará paisagens de lagos, bosques e Cordilheira.",
+          "Você poderá fazer opcionalmente uma subida nos meios de elevação em funcionamento."
+        ],
+        "includes": [
+          "Traslado de ida e volta desde Bariloche.",
+          "Guia de turismo.",
+          "Visita a Villa La Angostura.",
+          "Tempo livre no centro da localidade.",
+          "Visita à área do Cerro Bayo."
+        ],
+        "notIncludes": [
+          "Subida nos meios de elevação do Cerro Bayo.",
+          "Refeições e bebidas.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "08:30 hs / 14:00 hs"
+      }
+    }
   },
   {
     "id": "winter-park",
-    "title": "Winter Park",
+    "title": "Winter Park — Escuela de Esquí y Parque de Nieve",
     "category": "Invierno",
     "season": "Invierno",
     "duration": "Día Completo (8h)",
     "difficulty": "Fácil",
     "image": "/images/excursiones/winter-park.webp",
-    "description": "Escuela de Esquí para principiantes",
+    "description": "Escuela de esquí exclusiva para principiantes y familias en Cerro Otto. Pistas suaves, clases personalizadas y garantía de nieve.",
     "fullDetails": "El cerro Otto\nse prepara de la mejor manera para el invierno que ya llegó. Una de las\nopciones que ofrece es Winter Park, sobre su ladera sur, en el complejo Piedras\nBlancas.\n\nWinter Park,\nubicado a sólo cinco kilómetros del Centro Cívico y en medio de un paisaje\nincomparable, rodeado de lengas y cipreses, cuenta con tres pistas de esquí\nalpino con leves pendientes pensadas para principiantes y para esquiadores\nrecién iniciados. \n\nAdemás, tiene\ndos medios de elevación, un pisanieve y cuatro máquinas que generan nieve\nartificial, lo que asegura un invierno a pura actividad todos los días.\n\nSe trata de\nuna excelente opción para los turistas y residentes de la ciudad que quieran\naprender los secretos del esquí. Al mismo tiempo es un lugar ideal y tranquilo\npara disfrutar en familia. Es importante señalar que cualquiera puede\nintentarlo, ya que las clases se imparten tanto a niños como adultos, de forma\ngrupal e individual.",
     "highlights": [
       "Cerro Otto",
@@ -2203,9 +3383,9 @@ export const EXCURSIONS_DATA: Excursion[] = [
       "Pistas de esquí alpino"
     ],
     "includes": [
-      "Equipo de ski",
-      "Clase d e2 hs",
-      "Pase de mediodía"
+      "Equipo de esquí completo (tablas, botas y bastones)",
+      "Clase de esquí de 2 horas con instructor profesional",
+      "Pase de medios de elevación de medio día"
     ],
     "notIncludes": [
       "Ropa de nieve",
@@ -2268,7 +3448,56 @@ export const EXCURSIONS_DATA: Excursion[] = [
         "enabled": true
       }
     ],
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Winter Park — Beginner Ski School & Snow Fun",
+        "description": "Learn to ski in a friendly, uncrowded alpine setting on Cerro Otto with gentle beginner slopes, dedicated instructors, and snowmaking guarantees.",
+        "fullDetails": "Located on the southern slopes of Cerro Otto within the Piedras Blancas mountain complex, Winter Park is Bariloche's premier boutique ski center specifically designed for beginners and families taking their very first steps on snow.\n\nSurrounded by ancient lenga and cypress forests just 5 km from downtown Bariloche, Winter Park features gentle, wide slopes, two dedicated surface ski lifts, snow grooming machines, and artificial snowmaking cannons that ensure excellent snow coverage throughout the winter season. Qualified instructors provide patient, personalized 2-hour group or private lessons, making learning to ski safe, easy, and fun for all ages without the crowds of larger ski resorts.",
+        "highlights": [
+          "Specialized beginner-friendly ski center on Cerro Otto.",
+          "Gentle, safe slopes with dedicated surface lifts.",
+          "2-hour ski lesson with certified professional instructors.",
+          "Complete ski equipment rental included (skis, boots, poles).",
+          "Ideal for children, adults, and families experiencing snow for the first time."
+        ],
+        "includes": [
+          "Complete ski gear rental (skis, boots, poles).",
+          "2-hour beginner ski lesson in small groups.",
+          "Half-day ski lift pass at Winter Park.",
+          "Access to beginner slope facilities."
+        ],
+        "notIncludes": [
+          "Winter clothing (waterproof jacket, pants, gloves, goggles).",
+          "Meals and drinks.",
+          "Round-trip transfers to Cerro Otto base (available upon request)."
+        ],
+        "departureTime": "12:30 hs"
+      },
+      "pt": {
+        "title": "Winter Park — Escola de Esqui para Iniciantes e Parque de Neve",
+        "description": "Aprenda a esquiar em um ambiente tranquilo e exclusivo no Cerro Otto, com pistas suaves para iniciantes, instrutores dedicados e garantia de neve.",
+        "fullDetails": "Situado na encosta sul do Cerro Otto, junto ao complexo Piedras Blancas, o Winter Park é o parque de neve ideal em Bariloche para quem deseja ter seu primeiro contato com o esqui alpino em um ambiente tranquilo, seguro e sem o ritmo agitado dos grandes centros de esqui.\n\nA apenas 5 km do centro da cidade, o complexo conta com pistas de inclinação suave projetadas especialmente para quem nunca esquiou, dois meios de elevação próprios, máquinas de pisar neve e canhões de neve artificial que garantem ótimas condições durante todo o inverno. Os experientes instrutores ministram aulas de 2 horas para adultos e crianças, garantindo um aprendizado prazeroso, divertido e com total segurança.",
+        "highlights": [
+          "Parque exclusivo para iniciantes e famílias no Cerro Otto.",
+          "Pistas suaves e seguras com meios de elevação exclusivos.",
+          "Aula de esqui de 2 horas com instrutores profissionais certificados.",
+          "Aluguel de equipamento completo de esqui incluso (esquis, botas e bastões).",
+          "Perfeito para quem quer aprender a esquiar de maneira divertida e sem estresse."
+        ],
+        "includes": [
+          "Equipamento completo de esqui (esquis, botas e bastões).",
+          "Aula de esqui para iniciantes de 2 horas.",
+          "Passe de meio dia para os meios de elevação do Winter Park.",
+          "Acesso às pistas exclusivas do complexo."
+        ],
+        "notIncludes": [
+          "Roupas impermeáveis de neve (jaqueta, calça, luvas e óculos).",
+          "Refeições e bebidas.",
+          "Traslado até a montanha (opcional sob consulta)."
+        ],
+        "departureTime": "12:30 hs"
+      }
+    }
   },
   {
     "id": "circuito-chico-y-colonia-suiza",
@@ -2341,7 +3570,64 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "blockedDates": [],
     "minBookingAdvanceHours": 24,
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Circuito Chico and Colonia Suiza",
+        "description": "Discover the most emblematic landscapes of Bariloche and the charm of Colonia Suiza on a full-day excursion. Explore lakes, forests and viewpoints, stop at Cerro Campanario and visit the historic San Eduardo Chapel, with views of the Llao Llao Hotel.",
+        "fullDetails": "Circuito Chico and Colonia Suiza brings together, in a single day, two of Bariloche's most representative experiences: its classic mountain landscapes and the charm of its first European settlement.\n\nThe excursion begins on Avenida Bustillo, following Nahuel Huapi Lake through a setting of forests, bays and mountains. There is a stop at Cerro Campanario, where those who wish can optionally take the chairlift up to enjoy one of the city's best-known panoramic views.\n\nThe tour continues to the Llao Llao area, Puerto Pañuelo and San Eduardo Chapel. There is a stop here to take in the Llao Llao Hotel, Nahuel Huapi Lake and the natural surroundings that characterize this region. Further along, the Punto Panorámico viewpoint offers one of Bariloche's most sought-after postcard views, overlooking Moreno Lake, the Llao Llao peninsula and the Andean mountains.\n\nThe excursion then heads to Colonia Suiza, a picturesque mountain village founded by European immigrants in the late nineteenth century. You will have free time to stroll its streets, see its traditional buildings, visit artisan fairs and enjoy regional cuisine. Depending on the day of your visit, you may also find the traditional curanto, a regional dish cooked underground.\n\nIt is an ideal choice for those who want to combine nature, history, culture and free time in one of the most authentic corners of Bariloche.",
+        "highlights": [
+          "You will travel along Avenida Bustillo beside Nahuel Huapi Lake.",
+          "You will stop at Cerro Campanario, with the option of taking the chairlift up.",
+          "You will see the Llao Llao area, Puerto Pañuelo and San Eduardo Chapel.",
+          "You will enjoy a stop with a view of the Llao Llao Hotel and its surroundings.",
+          "You will visit the Punto Panorámico viewpoint, with views of Moreno Lake and the Llao Llao peninsula.",
+          "You will have free time to explore Colonia Suiza, its fairs and its dining options."
+        ],
+        "includes": [
+          "Transportation throughout the entire tour.",
+          "Tour guide.",
+          "Scenic stops included in the itinerary.",
+          "Free time in Colonia Suiza."
+        ],
+        "notIncludes": [
+          "Chairlift ride up Cerro Campanario.",
+          "Meals and drinks.",
+          "Purchases in Colonia Suiza.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "09:00 hs"
+      },
+      "pt": {
+        "title": "Circuito Chico e Colonia Suiza",
+        "description": "Descubra as paisagens mais emblemáticas de Bariloche e o encanto de Colonia Suiza em uma excursão de dia inteiro. Percorra lagos, bosques e mirantes, faça uma parada no Cerro Campanario e conheça a histórica Capela San Eduardo, com vistas para o Hotel Llao Llao.",
+        "fullDetails": "O Circuito Chico e Colonia Suiza reúne em um só dia duas das experiências mais representativas de Bariloche: suas paisagens clássicas de montanha e o encanto do seu primeiro povoado europeu.\n\nA excursão começa pela Avenida Bustillo, margeando o Lago Nahuel Huapi e atravessando um cenário de bosques, baías e montanhas. Faz-se uma parada no Cerro Campanario, onde quem desejar poderá subir opcionalmente de teleférico para desfrutar de uma das vistas panorâmicas mais conhecidas da cidade.\n\nO percurso continua em direção à região de Llao Llao, Puerto Pañuelo e à Capela San Eduardo. Ali é feita uma parada para contemplar o Hotel Llao Llao, o Lago Nahuel Huapi e o entorno natural que caracteriza esta região. Mais adiante, o Punto Panorámico oferece um dos cartões-postais mais procurados de Bariloche, com vistas para o Lago Moreno, a península de Llao Llao e as montanhas andinas.\n\nEm seguida, a excursão segue para Colonia Suiza, um pitoresco povoado de montanha fundado por imigrantes europeus no final do século XIX. Você terá tempo livre para caminhar por suas ruas, conhecer suas construções tradicionais, visitar feiras de artesãos e desfrutar da gastronomia regional. Dependendo do dia da visita, também poderá encontrar o tradicional curanto, um preparo típico da região cozido sob a terra.\n\nÉ uma proposta ideal para quem deseja combinar natureza, história, cultura e tempo livre em um dos cantos mais autênticos de Bariloche.",
+        "highlights": [
+          "Você percorrerá a Avenida Bustillo ao lado do Lago Nahuel Huapi.",
+          "Você fará uma parada no Cerro Campanario, com possibilidade de subida opcional de teleférico.",
+          "Você conhecerá a região de Llao Llao, Puerto Pañuelo e a Capela San Eduardo.",
+          "Você aproveitará uma parada com vista para o Hotel Llao Llao e seu entorno.",
+          "Você visitará o Punto Panorámico, com vistas para o Lago Moreno e a península de Llao Llao.",
+          "Você terá tempo livre para conhecer Colonia Suiza, suas feiras e suas opções gastronômicas."
+        ],
+        "includes": [
+          "Traslado durante todo o percurso.",
+          "Guia de turismo.",
+          "Paradas panorâmicas previstas no roteiro.",
+          "Tempo livre em Colonia Suiza."
+        ],
+        "notIncludes": [
+          "Subida de teleférico ao Cerro Campanario.",
+          "Refeições e bebidas.",
+          "Consumos em Colonia Suiza.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "09:00 hs"
+      }
+    }
   },
   {
     "id": "colonia-suiza",
@@ -2413,7 +3699,62 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "blockedDates": [],
     "minBookingAdvanceHours": 24,
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Colonia Suiza",
+        "description": "Discover one of the most authentic corners of Bariloche on a half-day excursion to Colonia Suiza, the first European settlement in Patagonia. Stroll its mountain streets, learn about its history, visit fairs, enjoy local dining and admire the forest landscapes surrounding this traditional village.",
+        "fullDetails": "A few kilometers from Bariloche lies Colonia Suiza, a picturesque mountain village founded by European immigrants in the late nineteenth century. This half-day excursion reveals a different side of the city, where the history of its first settlers blends with forest landscapes, traditional architecture and a relaxed atmosphere.\n\nUpon arrival, you will have free time to walk its streets, see the typical buildings, visit artisan fairs and discover regional products. You can also enjoy the local food offerings at restaurants, breweries or traditional stands. Depending on the day of your visit and how each establishment operates, you may find curanto, a typical regional dish cooked underground.\n\nColonia Suiza is an ideal experience for those seeking a relaxed outing with local character, nature and time to enjoy at their own pace.",
+        "highlights": [
+          "You will visit Colonia Suiza, the first European settlement in Patagonia.",
+          "You will learn about the history and traditions of this mountain village.",
+          "You will stroll its streets and typical buildings.",
+          "You will visit artisan fairs and local shops.",
+          "You will enjoy regional dining options.",
+          "You will admire the forest landscapes surrounding the village."
+        ],
+        "includes": [
+          "Round-trip transfer from Bariloche.",
+          "Tour guide.",
+          "Free time in Colonia Suiza."
+        ],
+        "notIncludes": [
+          "Meals and drinks.",
+          "Curanto or other food and drink purchases.",
+          "Purchases at fairs, shops or artisan stands.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "09:00 hs"
+      },
+      "pt": {
+        "title": "Colonia Suiza",
+        "description": "Descubra um dos cantos mais autênticos de Bariloche em uma excursão de meio dia a Colonia Suiza, o primeiro povoado europeu da Patagônia. Percorra suas ruas de montanha, conheça sua história, visite feiras, desfrute de propostas gastronômicas locais e admire as paisagens de bosque que cercam este tradicional povoado.",
+        "fullDetails": "A poucos quilômetros de Bariloche encontra-se Colonia Suiza, um pitoresco povoado de montanha fundado por imigrantes europeus no final do século XIX. Esta excursão de meio dia propõe descobrir uma faceta diferente da cidade, onde a história dos seus primeiros habitantes se combina com paisagens de bosque, arquitetura tradicional e uma atmosfera descontraída.\n\nAo chegar, você terá tempo livre para percorrer suas ruas, observar as construções típicas, visitar feiras de artesãos e conhecer produtos regionais. Também poderá desfrutar das propostas gastronômicas do local em restaurantes, cervejarias ou barracas tradicionais. Dependendo do dia da visita e do funcionamento de cada estabelecimento, é possível encontrar o curanto, um preparo típico da região cozido sob a terra.\n\nColonia Suiza é uma experiência ideal para quem busca um passeio tranquilo, com identidade local, natureza e tempo para aproveitar no próprio ritmo.",
+        "highlights": [
+          "Você visitará Colonia Suiza, o primeiro povoado europeu da Patagônia.",
+          "Você conhecerá a história e as tradições deste povoado de montanha.",
+          "Você percorrerá suas ruas e construções típicas.",
+          "Você visitará feiras de artesãos e comércios locais.",
+          "Você desfrutará de propostas gastronômicas regionais.",
+          "Você admirará as paisagens de bosque que cercam o povoado."
+        ],
+        "includes": [
+          "Traslado de ida e volta desde Bariloche.",
+          "Guia de turismo.",
+          "Tempo livre em Colonia Suiza."
+        ],
+        "notIncludes": [
+          "Refeições e bebidas.",
+          "Curanto ou outros consumos gastronômicos.",
+          "Compras em feiras, comércios ou barracas de artesãos.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "09:00 hs"
+      }
+    }
   },
   {
     "id": "noche-nordica",
@@ -2487,10 +3828,68 @@ export const EXCURSIONS_DATA: Excursion[] = [
     ],
     "blockedDates": [],
     "minBookingAdvanceHours": 24,
-    "translations": {}
+    "translations": {
+      "en": {
+        "title": "Nordic Night — Adventure and Lodge Dinner",
+        "description": "Enjoy a different kind of night at the Nordic Ski Center with a guided ride through snowy forests and dinner at a lodge. Depending on snow conditions, the adventure is done by snowmobile or quad bike, always accompanied by specialized guides.",
+        "fullDetails": "Nordic Night is a winter experience that combines adventure, night-time landscapes and gastronomy at Bariloche's Nordic Ski Center. The experience begins with the transfer from the city to the resort, set in a forest and mountain environment.\n\nUpon arrival, you will receive safety instructions before starting a guided ride along snow trails and through lenga forests. Depending on terrain and snow conditions, the tour is done by snowmobile or quad bike. Each vehicle is shared by two passengers and the group is accompanied at all times by specialized guides.\n\nAfter the ride, you will arrive at the lodge to enjoy dinner in a warm and cozy setting. The combination of adventure, snow, night-time forest and gastronomy makes Nordic Night an ideal way to experience Bariloche differently.",
+        "highlights": [
+          "You will be transferred from Bariloche to the Nordic Ski Center.",
+          "You will receive safety and driving instructions.",
+          "You will take a guided ride by snowmobile or quad bike.",
+          "You will travel along snow trails and through lenga forests.",
+          "You will share a vehicle with another passenger.",
+          "You will enjoy dinner at a lodge."
+        ],
+        "includes": [
+          "Round-trip transfer from Bariloche.",
+          "Guided ride by snowmobile or quad bike, depending on operating conditions.",
+          "One two-seater vehicle for every two passengers.",
+          "Safety and driving instructions.",
+          "Specialized guides during the activity.",
+          "Dinner at the lodge."
+        ],
+        "notIncludes": [
+          "Drinks not specified in the dinner.",
+          "Snow clothing, unless expressly stated at the time of booking.",
+          "Personal expenses.",
+          "Gratuities.",
+          "Services not listed as included."
+        ],
+        "departureTime": "09:00 hs"
+      },
+      "pt": {
+        "title": "Noite Nórdica — Aventura e Jantar em Refúgio",
+        "description": "Viva uma noite diferente no Centro de Esqui Nórdico com um passeio guiado por bosques nevados e um jantar em refúgio. Conforme as condições de neve, a aventura é feita de moto de neve ou quadriciclo, sempre acompanhada por guias especializados.",
+        "fullDetails": "A Noite Nórdica é uma experiência de inverno que combina aventura, paisagens noturnas e gastronomia no Centro de Esqui Nórdico de Bariloche. A proposta começa com o traslado da cidade até o complexo, situado em um entorno de bosque e Cordilheira.\n\nAo chegar, você receberá as instruções de segurança antes de iniciar um passeio guiado por caminhos de neve e bosques de lengas. Conforme as condições do terreno e da neve, o percurso é feito de moto de neve ou quadriciclo. Cada veículo é compartilhado por dois passageiros e o grupo é acompanhado o tempo todo por guias especializados.\n\nDepois do passeio, você chegará ao refúgio para desfrutar de um jantar em um ambiente caloroso e aconchegante. A combinação de aventura, neve, bosque noturno e gastronomia faz da Noite Nórdica uma proposta ideal para viver Bariloche de uma maneira diferente.",
+        "highlights": [
+          "Você será levado de Bariloche ao Centro de Esqui Nórdico.",
+          "Você receberá instruções de segurança e de condução.",
+          "Você fará um passeio guiado de moto de neve ou quadriciclo.",
+          "Você percorrerá trilhas de neve e bosques de lengas.",
+          "Você compartilhará um veículo com outro passageiro.",
+          "Você desfrutará de um jantar em refúgio."
+        ],
+        "includes": [
+          "Traslado de ida e volta desde Bariloche.",
+          "Passeio guiado de moto de neve ou quadriciclo, conforme as condições operacionais.",
+          "Um veículo duplo para cada dois passageiros.",
+          "Instruções de segurança e de condução.",
+          "Guias especializados durante a atividade.",
+          "Jantar em refúgio."
+        ],
+        "notIncludes": [
+          "Bebidas não especificadas no jantar.",
+          "Roupa de neve, salvo se indicado expressamente no momento da reserva.",
+          "Despesas pessoais.",
+          "Gorjetas.",
+          "Serviços não mencionados como incluídos."
+        ],
+        "departureTime": "09:00 hs"
+      }
+    }
   }
 ];
-
 
 export function normalizeExcursion(e: Excursion): Excursion {
   // Mantener el precio exacto en ARS configurado por el usuario (respetando tarifa $0 para tours gratuitos)
@@ -2508,6 +3907,9 @@ export function normalizeExcursion(e: Excursion): Excursion {
 
   const priceChild = typeof e.priceChild === 'number' ? e.priceChild : undefined;
   const childAgePolicy = e.childAgePolicy || undefined;
+  const priceSenior = typeof e.priceSenior === 'number' ? e.priceSenior : undefined;
+  const seniorPolicy = e.seniorPolicy || undefined;
+  const infantAgePolicy = e.infantAgePolicy || 'Menores de 4 años sin cargo';
 
   const defaultShifts: ExcursionShift[] = [
     {
@@ -2544,6 +3946,9 @@ export function normalizeExcursion(e: Excursion): Excursion {
     priceEnglish,
     priceChild,
     childAgePolicy,
+    priceSenior,
+    seniorPolicy,
+    infantAgePolicy,
     hasEnglishGuide,
     isPublished,
     gallery,

@@ -83,3 +83,24 @@ export async function saveAllBookingsAsync(bookings: Booking[]): Promise<void> {
     console.error('[BookingsStorage] Error al persistir reservas en backend:', err);
   }
 }
+
+/**
+ * Elimina una reserva individual en el backend (/api/bookings/:id)
+ * y actualiza localStorage de inmediato.
+ */
+export async function deleteBookingAsync(id: string): Promise<boolean> {
+  try {
+    const current = loadBookings();
+    const filtered = current.filter(b => b.id !== id && b.code !== id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+
+    const res = await fetch(`/api/bookings/${id}`, {
+      method: 'DELETE'
+    });
+    return res.ok;
+  } catch (err) {
+    console.error('[BookingsStorage] Error al eliminar reserva en backend:', err);
+    return false;
+  }
+}
+
