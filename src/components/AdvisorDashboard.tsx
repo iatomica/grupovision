@@ -31,12 +31,14 @@ import {
   UserCheck,
   ChevronRight,
   Luggage,
-  CalendarDays
+  CalendarDays,
+  CreditCard
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TravelerUser } from '../data/usersData';
 import { Booking } from './JiraTicketModal';
 import { Excursion } from '../data/excursionsData';
+import { PaywayPaymentModal } from './PaywayPaymentModal';
 
 interface AdditionalPassenger {
   id: string;
@@ -125,6 +127,9 @@ export const AdvisorDashboard: React.FC<AdvisorDashboardProps> = ({
     pickup: string;
     emittedBy: string;
   } | null>(null);
+
+  // Modal de Pasarela de Pagos Payway (Cobro en Mostrador con Tarjeta)
+  const [isPaywayModalOpen, setIsPaywayModalOpen] = useState(false);
 
   // =========================================================================
   // DETECCIÓN INTELIGENTE EN VIVO DE LO QUE YA TIENE RESERVADO
@@ -1254,18 +1259,31 @@ export const AdvisorDashboard: React.FC<AdvisorDashboardProps> = ({
                 )}
 
                 {kioskStep === 4 && (
-                  <div className="space-y-1.5">
+                  <div className="space-y-2">
+                    {/* Botón Principal: Cobro con Pasarela Payway (Tarjeta Online) */}
+                    <button
+                      type="button"
+                      disabled={!leadPassenger.name.trim() || !selectedExcursion || !selectedDate}
+                      onClick={() => setIsPaywayModalOpen(true)}
+                      className="w-full py-3.5 bg-gradient-to-r from-[#00A896] via-[#028090] to-[#02c39a] hover:opacity-95 disabled:opacity-40 text-white font-black text-xs rounded-xl shadow-lg shadow-[#00A896]/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                    >
+                      <CreditCard className="w-4 h-4" />
+                      <span>COBRAR CON TARJETA (PAYWAY ONLINE)</span>
+                    </button>
+
+                    {/* Botón Secundario: Confirmar Reserva Manual en Mostrador (Efectivo / Caja) */}
                     <button
                       type="button"
                       disabled={!leadPassenger.name.trim() || !selectedExcursion || !selectedDate}
                       onClick={handleConfirmOrder}
-                      className="w-full py-3.5 bg-[#00A896] hover:bg-[#028090] disabled:opacity-40 text-white font-black text-xs rounded-xl shadow-lg shadow-[#00A896]/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                      className="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-40 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                     >
-                      <Check className="w-4 h-4" />
-                      <span>CONFIRMAR & EMITIR RESERVA</span>
+                      <Check className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Confirmar en Caja (Efectivo / Mostrador)</span>
                     </button>
+
                     <div className="text-[10px] text-center font-mono text-emerald-600 font-bold">
-                      Paso 4 de 4 • Flujo completado y listo para emitir
+                      Paso 4 de 4 • Seleccioná Payway Online para cobro con tarjeta o Confirmá en caja
                     </div>
                   </div>
                 )}
@@ -1450,6 +1468,90 @@ export const AdvisorDashboard: React.FC<AdvisorDashboardProps> = ({
           </div>
         )}
       </AnimatePresence>
+
+      {/* ========================================================================= */}
+      {/* PASARELA DE PAGOS DIRECTA CON PAYWAY (COBRO EN MOSTRADOR CON TARJETA) */}
+      {/* ========================================================================= */}
+      {selectedExcursion && (
+        <PaywayPaymentModal
+          isOpen={isPaywayModalOpen}
+          onClose={() => setIsPaywayModalOpen(false)}
+          amountARS={finalTotal}
+          emittedBy="Thomas González (Asesor Mostrador)"
+          bookingData={{
+            excursionTitle: selectedExcursion.title,
+            date: selectedDate,
+            shiftTime: selectedShift,
+            shiftName: selectedShift.includes('09:') ? 'Turno Mañana' : 'Turno Tarde',
+            guests: totalGuests,
+            paxBreakdown: {
+              adults: totalAdults,
+              children: totalChildren,
+              seniors: totalSeniors,
+              infants: totalInfants
+            },
+            passengerList: [
+              { name: leadPassenger.name.trim(), type: 'Adulto', dni: leadPassenger.dni.trim() || undefined },
+              ...additionalPassengers.filter(p => p.name.trim()).map(p => ({
+                name: p.name.trim(),
+                type: p.type,
+                dni: p.dni?.trim() || undefined
+              }))
+            ],
+            customerName: leadPassenger.name.trim(),
+            customerEmail: leadPassenger.email.trim() || `${leadPassenger.name.toLowerCase().replace(/\s+/g, '.')}@mostrador.com`,
+            customerPhone: leadPassenger.phone.trim() || '+54 9 294 400-0000',
+            pickupLocation: leadPassenger.hotel.trim() ? `Hotel: ${leadPassenger.hotel.trim()}` : pickupOption,
+            notes: [
+              advisorNotes.trim() ? `Observaciones: ${advisorNotes.trim()}` : null,
+              advisorDiscountPercent > 0 ? `Descuento Asesor: ${advisorDiscountPercent}%` : null
+            ].filter(Boolean).join(' | '),
+            totalPriceUSD: finalTotal
+          }}
+          onSuccess={(confirmedBooking) => {
+            // Sincronizar en el estado central para que impacte en App
+            onCreateBookingForTraveler({
+              customerName: confirmedBooking.customerName,
+              customerEmail: confirmedBooking.customerEmail,
+              customerPhone: confirmedBooking.customerPhone,
+              excursionTitle: confirmedBooking.excursionTitle,
+              date: confirmedBooking.date,
+              guests: confirmedBooking.guests,
+              paxBreakdown: confirmedBooking.paxBreakdown,
+              totalPriceUSD: confirmedBooking.totalPriceUSD,
+              pickupLocation: confirmedBooking.pickupLocation,
+              status: 'CONFIRMADA',
+              ticketType: 'Reserva',
+              priority: 'ALTA',
+              shiftTime: confirmedBooking.shiftTime,
+              shiftName: confirmedBooking.shiftName,
+              source: 'mostrador-san-martin-payway',
+              emittedBy: 'Thomas González (Asesor Mostrador)',
+              assignedGuide: 'Asignación Comercial Mostrador',
+              assignedVehicle: 'Minibus Habilitado',
+              operatorNotes: `Cobro Online Payway Aprobado (${confirmedBooking.paymentDetails?.transactionId || 'PWY'}) | Tarjeta ${confirmedBooking.paymentDetails?.cardBrand || 'Crédito'} ****${confirmedBooking.paymentDetails?.lastFourDigits || ''}`,
+              passengerList: confirmedBooking.passengerList,
+              paymentMethod: 'Payway Online',
+              paymentDetails: confirmedBooking.paymentDetails
+            });
+
+            setLastCreatedTicket({
+              code: confirmedBooking.code,
+              customerName: confirmedBooking.customerName,
+              customerPhone: confirmedBooking.customerPhone,
+              excursionTitle: confirmedBooking.excursionTitle,
+              date: confirmedBooking.date,
+              shift: confirmedBooking.shiftTime || '09:00 hs',
+              totalGuests: confirmedBooking.guests,
+              passengersList: confirmedBooking.passengerList?.map(p => `${p.name} (${p.type})`) || [`${confirmedBooking.customerName} (Titular)`],
+              total: confirmedBooking.totalPriceUSD,
+              pickup: confirmedBooking.pickupLocation,
+              emittedBy: 'Thomas González (Asesor Mostrador - Payway)'
+            });
+            setIsPaywayModalOpen(false);
+          }}
+        />
+      )}
 
     </div>
   );

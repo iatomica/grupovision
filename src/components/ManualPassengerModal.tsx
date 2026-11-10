@@ -620,6 +620,7 @@ export const ManualPassengerModal: React.FC<ManualPassengerModalProps> = ({
                 onChange={e => setPaymentMethod(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium focus:outline-none focus:border-[#00A896] text-xs"
               >
+                <option value="Payway Online (Tarjeta Aprobada)">Payway Online (Tarjeta Aprobada)</option>
                 <option value="Efectivo en Mostrador (ARS)">Efectivo en Mostrador (ARS)</option>
                 <option value="Efectivo en Dólares">Efectivo en Dólares</option>
                 <option value="Tarjeta de Débito / Crédito">Tarjeta de Débito / Crédito</option>

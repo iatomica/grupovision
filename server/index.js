@@ -5,6 +5,7 @@ import sharp from 'sharp';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { registerPaywayRoutes } from './payway.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -338,6 +339,11 @@ app.delete('/api/bookings/:id', (req, res) => {
     res.status(500).json({ error: 'Error al eliminar reserva' });
   }
 });
+
+// ==========================================
+// PAYWAY PAYMENT GATEWAY API (Direct & Tokenized)
+// ==========================================
+registerPaywayRoutes(app, { getBookings, saveBookings });
 
 // ==========================================
 // MEDIA LIBRARY API (WordPress Style)

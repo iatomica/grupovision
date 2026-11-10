@@ -24,7 +24,8 @@ import {
   Lock,
   ChevronLeft,
   UserCheck,
-  Trash2
+  Trash2,
+  CreditCard
 } from 'lucide-react';
 
 export interface TicketComment {
@@ -55,8 +56,21 @@ export interface Booking {
   shiftId?: string;
   shiftTime?: string;
   shiftName?: string;
-  source?: 'mostrador-san-martin' | 'web' | 'whatsapp' | 'telefono';
+  source?: 'mostrador-san-martin' | 'mostrador-san-martin-payway' | 'web' | 'whatsapp' | 'telefono';
   paymentMethod?: string;
+  paymentDetails?: {
+    gateway?: string;
+    transactionId?: string;
+    authorizationCode?: string;
+    installments?: number;
+    amount?: number;
+    currency?: string;
+    cardBrand?: string;
+    lastFour?: string;
+    lastFourDigits?: string;
+    status?: string;
+    timestamp?: string;
+  };
   assignedGuide: string;
   assignedVehicle: string;
   operatorNotes: string;
@@ -358,9 +372,34 @@ export const JiraTicketModal: React.FC<JiraTicketModalProps> = ({
                     </div>
                   </div>
                   <span className="px-3 py-1 bg-white border border-[#00A896]/30 rounded-xl text-[11px] font-mono font-bold text-[#00A896] shrink-0">
-                    {ticket.source === 'mostrador-san-martin' ? 'Mostrador San Martín' : 'Canal Receptivo'}
+                    {ticket.source === 'mostrador-san-martin' ? 'Mostrador San Martín' : (ticket.source === 'mostrador-san-martin-payway' ? 'Mostrador Payway' : 'Canal Receptivo')}
                   </span>
                 </div>
+
+                {/* Banner de Cobro Payway (Si fue cobrado online con tarjeta) */}
+                {(ticket.paymentMethod === 'Payway Online' || ticket.paymentDetails) && (
+                  <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-cyan-500/10 border border-emerald-500/30 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-sm shrink-0">
+                        <CreditCard className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="text-[10px] font-mono text-emerald-700 font-bold uppercase tracking-wider block">
+                          Cobro Payway Online Aprobado
+                        </span>
+                        <span className="font-extrabold text-sm text-slate-900">
+                          {ticket.paymentDetails?.cardBrand || 'Tarjeta'} •••• {ticket.paymentDetails?.lastFourDigits || '****'} ({ticket.paymentDetails?.installments || 1} {Number(ticket.paymentDetails?.installments) === 1 ? 'cuota' : 'cuotas'})
+                        </span>
+                      </div>
+                    </div>
+                    <div className="sm:text-right shrink-0">
+                      <span className="text-[10px] font-mono text-slate-500 block uppercase font-bold">ID Transacción</span>
+                      <span className="font-mono font-bold text-xs text-slate-800 bg-white/90 px-2.5 py-1 rounded-lg border border-emerald-200 inline-block shadow-2xs">
+                        {ticket.paymentDetails?.transactionId || 'PWY-APROBADO'}
+                      </span>
+                    </div>
+                  </div>
+                )}
 
                 {/* Nómina de Pasajeros si fue emitida con acompañantes */}
                 {ticket.passengerList && ticket.passengerList.length > 0 && (

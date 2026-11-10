@@ -18,6 +18,7 @@ import {
   Phone, 
   Mail, 
   Sparkles,
+  CreditCard,
   X,
   Clock,
   Award,
@@ -96,6 +97,7 @@ import { ManualPassengerModal } from './components/ManualPassengerModal';
 import { AdminCalendarOperations } from './components/AdminCalendarOperations';
 import { PickupMapSection } from './components/PickupMapSection';
 import { getNextAvailableDeparture } from './utils/calendarCapacity';
+import { PaywayPaymentModal } from './components/PaywayPaymentModal';
 
 interface SystemActivityLog {
   id: string;
@@ -386,6 +388,7 @@ export default function App() {
   const [modalActivePhoto, setModalActivePhoto] = useState<string | null>(null);
   const [modalStep, setModalStep] = useState<1 | 2 | 3>(1);
   const [isExcursionModalOpen, setIsExcursionModalOpen] = useState(false);
+  const [isPaywayModalOpen, setIsPaywayModalOpen] = useState(false);
   const [isBannerCollapsed, setIsBannerCollapsed] = useState(false);
   const [isOfficeModalOpen, setIsOfficeModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -2879,21 +2882,32 @@ export default function App() {
                         </div>
                       )}
 
-                      {/* Phase 3 WhatsApp Call To Action */}
+                      {/* Phase 3 Payment & Action Buttons */}
                       <div className="pt-4 border-t border-slate-200 space-y-2.5">
-                        <motion.a 
+                        <motion.button 
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
+                          type="button"
+                          onClick={() => setIsPaywayModalOpen(true)}
+                          className="w-full bg-gradient-to-r from-[#00A896] via-[#028090] to-slate-900 hover:opacity-95 text-white font-black py-4 px-6 rounded-2xl flex items-center justify-center gap-2.5 text-sm transition-all shadow-xl shadow-[#00A896]/25 cursor-pointer border border-emerald-400/30"
+                        >
+                          <CreditCard className="w-5 h-5 text-emerald-300" />
+                          <span>Pagar Online con Tarjeta ({totalPax} pax · {rateText})</span>
+                        </motion.button>
+
+                        <motion.a 
+                          whileHover={{ scale: 1.01 }}
+                          whileTap={{ scale: 0.99 }}
                           href={waUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-black font-extrabold py-4 px-6 rounded-2xl flex items-center justify-center gap-2.5 text-sm transition-all shadow-lg shadow-[#25D366]/20 cursor-pointer"
+                          className="w-full bg-white hover:bg-slate-50 text-slate-800 border-2 border-slate-200 font-bold py-3 px-6 rounded-2xl flex items-center justify-center gap-2 text-xs transition-all cursor-pointer shadow-xs"
                         >
-                          <MessageCircle className="w-5 h-5 fill-current" />
-                          <span>Enviar Consulta y Reservar por WhatsApp ({totalPax} pax · {rateText})</span>
+                          <MessageCircle className="w-4 h-4 text-[#25D366] fill-[#25D366]" />
+                          <span>O bien, coordinar y consultar por WhatsApp</span>
                         </motion.a>
 
-                        <div className="flex items-center justify-between gap-3 text-xs">
+                        <div className="flex items-center justify-between gap-3 text-xs pt-1">
                           <button
                             type="button"
                             onClick={() => setModalStep(2)}
@@ -2918,6 +2932,68 @@ export default function App() {
           );
         })()}
       </AnimatePresence>
+
+      {/* PAYWAY DIRECT PAYMENT GATEWAY MODAL (FOR UNREGISTERED GUEST TRAVELERS) */}
+      {isPaywayModalOpen && activeExcursion && (
+        <PaywayPaymentModal
+          isOpen={isPaywayModalOpen}
+          onClose={() => setIsPaywayModalOpen(false)}
+          bookingData={{
+            excursionId: activeExcursion.id,
+            excursionTitle: activeExcursion.title,
+            date: modalSelectedDate,
+            shiftId: selectedShiftId || undefined,
+            shiftTime: activeExcursion.shifts?.find(s => s.id === selectedShiftId)?.time || '09:00 hs',
+            shiftName: activeExcursion.shifts?.find(s => s.id === selectedShiftId)?.name || 'Salida Programada',
+            guests: modalPassengers + modalChildPassengers + modalSeniorPassengers + modalInfantPassengers,
+            paxBreakdown: {
+              adults: modalPassengers,
+              children: modalChildPassengers,
+              seniors: modalSeniorPassengers,
+              infants: modalInfantPassengers
+            },
+            customerName: '',
+            customerEmail: '',
+            customerPhone: '',
+            pickupLocation: '',
+            totalPriceUSD: Math.round(
+              modalPassengers * getExcursionPrice(activeExcursion!, currentLang) +
+              modalChildPassengers * (getExcursionChildPrice(activeExcursion!, currentLang) ?? 0) +
+              modalSeniorPassengers * (getExcursionSeniorPrice(activeExcursion!, currentLang) ?? 0)
+            )
+          }}
+          amountARS={Math.round(
+            modalPassengers * getExcursionPrice(activeExcursion!, currentLang) +
+            modalChildPassengers * (getExcursionChildPrice(activeExcursion!, currentLang) ?? 0) +
+            modalSeniorPassengers * (getExcursionSeniorPrice(activeExcursion!, currentLang) ?? 0)
+          )}
+          emittedBy="Web (Turista Sin Registro)"
+          onSuccess={(newBooking) => {
+            setBookings(prev => [newBooking, ...prev]);
+            setIsExcursionModalOpen(false);
+
+            // Notify staff & admin
+            handleAddNotification({
+              recipientEmail: 'admin@grupovision.tur.ar',
+              senderName: newBooking.customerName,
+              ticketCode: newBooking.code,
+              ticketId: newBooking.id,
+              message: `pagó online vía Payway su reserva de "${newBooking.excursionTitle}" (${newBooking.guests} pax) para el ${newBooking.date}. Ticket ${newBooking.code}.`
+            });
+
+            // Live Alert
+            setLiveAdminAlert({
+              code: newBooking.code,
+              customerName: newBooking.customerName,
+              excursionTitle: newBooking.excursionTitle,
+              date: newBooking.date,
+              guests: newBooking.guests,
+              total: newBooking.totalPriceUSD,
+              source: 'Payway Online'
+            });
+          }}
+        />
+      )}
 
       {/* MANUAL DESK PASSENGER LOAD MODAL (ANTI-OVERBOOKING) */}
       <AnimatePresence>
