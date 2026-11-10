@@ -209,13 +209,15 @@ export function registerPaywayRoutes(app, { getBookings, saveBookings }) {
         timeStyle: 'medium'
       });
 
+      const chargedAmount = Number(amount || req.body.amountARS || bookingData.totalPriceUSD || 0);
+
       const paymentDetails = {
         gateway: 'Payway',
         siteId: PAYWAY_CONFIG.siteId,
         templateId: PAYWAY_CONFIG.templateId,
         transactionId,
         authorizationCode,
-        amount: Number(amount) || bookingData.totalPriceUSD || 0,
+        amount: chargedAmount,
         currency: 'ARS',
         installments: Number(installments) || 1,
         cardBrand,
@@ -233,7 +235,7 @@ export function registerPaywayRoutes(app, { getBookings, saveBookings }) {
         excursionTitle: bookingData.excursionTitle || 'Excursión Grupo Visión',
         date: bookingData.date || new Date().toISOString().split('T')[0],
         guests: Number(bookingData.guests) || 1,
-        totalPriceUSD: Number(amount) || bookingData.totalPriceUSD || 0,
+        totalPriceUSD: chargedAmount,
         pickupLocation: bookingData.pickupLocation || 'Oficina Central (San Martín 398)',
         status: 'CONFIRMADA',
         ticketType: 'Reserva',
@@ -259,7 +261,7 @@ export function registerPaywayRoutes(app, { getBookings, saveBookings }) {
             authorName: 'Pasarela Payway',
             authorEmail: 'pagos@grupovision.tur.ar',
             avatar: 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=100&h=100&fit=crop',
-            content: `Pago aprobado por Payway. Cupón: ${authorizationCode} | Transacción: ${transactionId} | Monto: $${Number(amount).toLocaleString('es-AR')} ARS (${installments} ${installments === 1 ? 'pago' : 'cuotas'}).`,
+            content: `Pago aprobado por Payway. Cupón: ${authorizationCode} | Transacción: ${transactionId} | Monto: $${chargedAmount.toLocaleString('es-AR')} ARS (${installments} ${installments === 1 ? 'pago' : 'cuotas'}).`,
             createdAt: 'Justo ahora'
           }
         ],
@@ -271,7 +273,7 @@ export function registerPaywayRoutes(app, { getBookings, saveBookings }) {
       const updatedBookings = [newBooking, ...currentBookings];
       saveBookings(updatedBookings);
 
-      console.log(`[Payway] Successful payment & booking created: Ticket ${ticketCode} for ${newBooking.customerName} ($${amount} ARS via Payway)`);
+      console.log(`[Payway] Successful payment & booking created: Ticket ${ticketCode} for ${newBooking.customerName} ($${chargedAmount} ARS via Payway)`);
 
       res.status(201).json({
         success: true,
